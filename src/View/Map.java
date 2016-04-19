@@ -1,6 +1,10 @@
+package View;
+
+import Model.Game;
+import Model.Projectile;
+
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
@@ -45,15 +49,15 @@ public class Map extends JPanel{
 	//	this.mapMatrix = int[][] newMapMatrix;
 	//}
 
-	public void paint(Graphics g){
+	public void paint(Graphics g){	//TODO: Réécrire le système de commandes (TP9Ex3), contenant les références nécessaires aux action qui doivent être exécutées dans la vue -> créer méthodes de màj de la vue génériques
         if(toRefresh == 0){
         	for(int i = 0; i < mapMatrix.length; i++){
            		for(int j=0; j < mapMatrix[0].length; j++){
            			g.drawImage(img.get(mapMatrix[i][j]), i*TILESIZE, j*TILESIZE, null);                   	                    	
            		}
            		
-           		int x = Test.getHero().getHeroPos()[0];
-       			int y = Test.getHero().getHeroPos()[0];
+           		int x = Game.getHero().getHeroPos()[0];
+       			int y = Game.getHero().getHeroPos()[0];
            		
        			
        			g.drawImage(img.get(2 + orientation), x*TILESIZE, y*TILESIZE - (HEROHEIGHT - TILESIZE), null);
@@ -65,8 +69,8 @@ public class Map extends JPanel{
         else if(toRefresh == 1){
         	int oldX = oldHeroPos[0];
         	int oldY = oldHeroPos[1];
-        	int newX = Test.getHero().getHeroPos()[0];
-        	int newY = Test.getHero().getHeroPos()[1];
+        	int newX = Game.getHero().getHeroPos()[0];
+        	int newY = Game.getHero().getHeroPos()[1];
         	
         	g.drawImage(img.get(mapMatrix[oldX][oldY]), oldX*TILESIZE, oldY*TILESIZE, null);
         	g.drawImage(img.get(mapMatrix[oldX][oldY - 1]), oldX*TILESIZE, (oldY- 1)*TILESIZE, null);       		        		
@@ -77,7 +81,7 @@ public class Map extends JPanel{
         	g.fillRect(0, mapMatrix[0].length*TILESIZE, mapMatrix[0].length*TILESIZE, 2*TILESIZE);
         	
         	g.setColor(Color.GREEN);
-        	g.drawString(Test.getHero().getHP().toString(), 0, (mapMatrix[0].length+1)*TILESIZE);
+        	g.drawString(Game.getHero().getHP().toString(), 0, (mapMatrix[0].length+1)*TILESIZE);
         }
         else if(toRefresh == 3){
         	int x = ProjPos[0];

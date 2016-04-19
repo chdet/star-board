@@ -1,25 +1,26 @@
-import java.util.*;
+package Model;
 
 import java.awt.Color;
 
-public class Projectile implements Runnable{
-	private Test test;
+public class Projectile extends GameEntity implements Runnable{
+	private Game game;
 	private static int time = 250;
-	private int[] projPos;
 	private int projOrient;
+	private int[] pos;
 	private static Color color = Color.MAGENTA;
 
 
-	public Projectile(Test test, int[] projPos, int projOrient){
-		this.test = test;
-		this.projPos = projPos;
-		this.projOrient = projOrient;	
+	public Projectile(Game game, int[] projPos, int projOrient){
+		this.game = game;
+		this.pos = projPos;
+		this.projOrient = projOrient;
+        this.sprite = "";
 	}
 	
 	public void run(){
 		try{
 			for(int i = 0; i < 100; i++){
-				test.moveProj(this);
+				game.moveProj(this);
 				Thread.sleep(time);
 				System.out.println("Dans le run" + i);
 			}
@@ -29,11 +30,11 @@ public class Projectile implements Runnable{
 	}
 	
 	public int[] getProjPos() {
-		return projPos;
+		return pos;
 	}
 	
 	public void setProjPos(int[] newProjPos){
-		this.projPos = newProjPos;
+		this.pos = newProjPos;
 		System.out.println("Dans le setProjPos " + newProjPos[0]);
 	}
 	

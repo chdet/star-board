@@ -1,10 +1,15 @@
+package Controller;
+
+import Model.Game;
+import Model.Projectile;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Keyboard implements KeyListener{
-	private Test test;
-	public Keyboard(Test test){
-		this.test = test;
+	private Game game;
+	public Keyboard(Game game){
+		this.game = game;
 	}
 
 	@Override
@@ -14,25 +19,25 @@ public class Keyboard implements KeyListener{
 		switch (key){
 			case KeyEvent.VK_RIGHT: 
 				System.out.println("Right");
-				test.moveHeroRight();
+				game.moveHeroRight();
 				break;
 			case KeyEvent.VK_LEFT:
 				System.out.println("Left");
-				test.moveHeroLeft();
+				game.moveHeroLeft();
 				break;
 			case KeyEvent.VK_DOWN:
 				System.out.println("Down");
-				test.moveHeroDown();
+				game.moveHeroDown();
 				break;
 			case KeyEvent.VK_UP:
 				System.out.println("Up");
-				test.moveHeroUp();
+				game.moveHeroUp();
 				break;
 			case KeyEvent.VK_SPACE:
 				System.out.println("Do something...");
 				int[] newProjPos = {1,1};
-				Projectile proj = new Projectile(test, newProjPos, test.getHero().getOrient());
-				test.setProj(proj);
+				Projectile proj = new Projectile(game, newProjPos, game.getHero().getOrient());
+				game.setProj(proj);
 				Thread t1 = new Thread(proj);
 				t1.start();
 				break;

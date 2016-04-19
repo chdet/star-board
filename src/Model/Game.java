@@ -1,22 +1,33 @@
-public class Test {
+package Model;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class Game implements Iterable<GameEntity>{
 	private /*static final*/ int size = 50;
 	private int[][] mapMatrix = new int[size][size];
 	private static Hero hero;
 	private Projectile proj;
-	private Window window;
+    private ArrayList<GameEntity> entities = new ArrayList<>();	//TODO: Listes séparées pour le Terrain(qui ne doit pas être mis à jour mais qui est pris en compte dans les mouvements) et pour les Creatures (qui prennent des dégats -> calculs) ?
+	private View.Window window;
 	
 	
-	private final int LEFT = 0;
-	private final int RIGHT = 1;
-	private final int UP = 2;
-	private final int DOWN = 3;
+	public static final int LEFT = 0;
+	public static final int RIGHT = 1;
+	public static final int UP = 2;
+	public static final int DOWN = 3;
 	
-	public Test(Window window){
+	public Game(View.Window window){
 		this.window = window;
 		this.hero = new Hero(15);
 	}
-	
-	public int getSize() {
+
+    @Override
+    public Iterator<GameEntity> iterator() {
+        return entities.iterator();
+    }
+
+    public int getSize() {
 		return size;
 	}
 	
@@ -81,8 +92,7 @@ public class Test {
 			window.refreshHero(oldHeroPos,DOWN);
 	}
 	
-	public void moveProj(Projectile proj){
-		window.refreshProj(proj);
+	public void moveProj(Projectile proj){							//TODO:Déplacer méthodes pour les GameEntity autonomes dans leurs classses
 		System.out.println("dans le test" + proj.getProjPos()[0]);
 		
 		int x = proj.getProjPos()[0];
@@ -107,6 +117,8 @@ public class Test {
 		}
 		
 		proj.setProjPos(newProjPos);
+		window.refreshProj(proj);
+
 	}
 	
 }

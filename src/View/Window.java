@@ -1,5 +1,8 @@
+package View;
+
+import Model.Projectile;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyListener;
 
 public class Window {
@@ -7,7 +10,7 @@ public class Window {
 	/*private*/ public Map map = new Map();
 	
 	public Window(){	    
-	    JFrame frame = new JFrame("Game");
+	    JFrame frame = new JFrame("Model.Game");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setBounds(0, 0, 1000, 1020);
 	    //frame.getContentPane().setBackground(Color.gray);

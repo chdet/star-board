@@ -1,15 +1,19 @@
+import Controller.Keyboard;
+import Model.Game;
+import View.Window;
+
 public class Main {
 	public static void main(String[] args) {
 		
 		Window window = new Window();
-		Test test = new Test(window);
-		Keyboard keyboard = new Keyboard(test);
+		Game game = new Game(window);
+		Keyboard keyboard = new Keyboard(game);
 		window.setKeyListener(keyboard);
 		
 		
 		
-		int size = test.getSize();
-		int[][] newMapMatrix = test.getMapMatrix();
+		int size = game.getSize();
+		int[][] newMapMatrix = game.getMapMatrix();
 		
 		for(int i = 0; i < size; i++){
 			newMapMatrix[i][0] = 1;
@@ -21,8 +25,8 @@ public class Main {
 			}
 		}
 		
-		test.setMapMatrix(newMapMatrix);
-		window.refreshMap(newMapMatrix, test.getHero().getHP());
+		game.setMapMatrix(newMapMatrix);
+		window.refreshMap(newMapMatrix, game.getHero().getHP());
 		
 	}
 }

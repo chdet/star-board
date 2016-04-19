@@ -1,13 +1,15 @@
+package Model;
 
-public class Hero {
-	private  int[] heroPos = {1,1};
+public class Hero extends GameEntity {
+	private  int[] pos = {1,1};
 	private int heroOrient = 1;
 	private  Integer HP;
 	
 	public Hero(Integer HP){
 		this.HP = HP;
+        this.sprite = "Hero"; // + Down/Left/Right/Up + .png
 	}
-	
+
 	public  Integer getHP() {
 		return HP;
 	}
@@ -17,11 +19,11 @@ public class Hero {
 	}
 	
 	public int[] getHeroPos(){
-		return heroPos;
+		return pos;
 	}
 	
 	public void setHeroPos(int[] heroPos) {// à changer
-		this.heroPos = heroPos;
+		this.pos = heroPos;
 	}
 	
 	public void attack(){}
