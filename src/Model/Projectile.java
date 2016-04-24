@@ -4,42 +4,57 @@ import java.awt.Color;
 
 public class Projectile extends GameEntity implements Runnable{
 	private Game game;
-	private static int time = 250;
-	private int projOrient;
-	private int[] pos;
-	private static Color color = Color.MAGENTA;
+	private static int WAIT = 300;
+	private int direction;
+	private Color color = Color.RED;
 
+    private boolean collided = false;
 
-	public Projectile(Game game, int[] projPos, int projOrient){
+	public Projectile(Game game, int[] pos, int direction){
 		this.game = game;
-		this.pos = projPos;
-		this.projOrient = projOrient;
-        this.sprite = "";
+		setPos(pos);
+		this.direction = direction;
+        setSprite(null);
 	}
 	
 	public void run(){
 		try{
-			for(int i = 0; i < 100; i++){
-				game.moveProj(this);
-				Thread.sleep(time);
-				System.out.println("Dans le run" + i);
+			while(!collided){
+				this.move();
+				Thread.sleep(WAIT);
 			}
 		}
 		catch(Exception e){}
 		
 	}
-	
-	public int[] getProjPos() {
-		return pos;
-	}
-	
-	public void setProjPos(int[] newProjPos){
-		this.pos = newProjPos;
-		System.out.println("Dans le setProjPos " + newProjPos[0]);
-	}
-	
-	public int getProjOrient() {
-		return projOrient;
+
+    public void move(){
+        int[] pos = getPos();
+        int[] newPos = pos;
+        switch (direction){
+            case Game.LEFT: newPos = new int[]{pos[0]-1,pos[1]}; break;
+            case Game.RIGHT: newPos = new int[]{pos[0]+1,pos[1]}; break;
+            case Game.UP: newPos = new int[]{pos[0],pos[1]-1}; break; //Origine en haut à gauche
+            case Game.DOWN: newPos = new int[]{pos[0],pos[1]+1}; break;
+        }
+        if(!game.doesCollide(newPos)){
+            setPos(newPos);
+        }
+        else{
+            //TODO: Ajouter un check si le proj se trouver SUR un collidable(dans la cas où une Creature se déplace sur le projectile)
+            this.collided = true;
+            game.removeProjectile(this);
+            //TODO: Appeler la méthode de Game qui gère les dégats (newPos et Area of Damage en attribut)
+        }
+    }
+
+
+    public Color getColor() {
+        return color;
+    }
+
+    public int getDirection() {
+		return direction;
 	}
 
 }

@@ -1,15 +1,20 @@
 package View;
 
+import Model.GameEntity;
+import Model.Hero;
 import Model.Projectile;
+import Model.Terrain;
 
 import javax.swing.*;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
-public class Window {
+public class Window  implements  Runnable{
+	private Map map = new Map();
 
-	/*private*/ public Map map = new Map();
-	
-	public Window(){	    
+    private static final int FPS = 60; //Frames per second
+
+	public Window(){
 	    JFrame frame = new JFrame("Model.Game");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setBounds(0, 0, 1000, 1020);
@@ -22,20 +27,35 @@ public class Window {
 	    frame.setVisible(true);
 	    
 	}
-	
-	public void refreshMap(int[][] newMapMatrix, int HP){
-		this.map.refreshMap(newMapMatrix);
-		//this.map.refreshMenu(HP);
+
+    public void run(){
+        try {
+            while (true) {
+                refreshMap();
+                Thread.sleep(1000/FPS);
+            }
+        }catch (Exception e){}
+    }
+
+    public void buildMap(Terrain[][] terrainMatrix){
+		this.map.buildMap(terrainMatrix);
 	}
-	
-	public void refreshHero(int[] oldHeroPos, int orientation){
-		this.map.refreshHero(oldHeroPos, orientation);
+
+	public void setHero(Hero hero){
+		this.map.setHero(hero);
 	}
-	
-	public void refreshProj(Projectile proj){
-		this.map.refreshProj(proj);
-		System.out.println("Dans le window" + proj.getProjPos()[0]);
+
+    public void setCreatures(ArrayList<GameEntity> creatures){
+        this.map.setCreatures(creatures);
+    }
+
+	public void setProjectiles(ArrayList<Projectile> projectiles){
+		this.map.setProjectiles(projectiles);
 	}
+
+    public void refreshMap(){
+        this.map.refresh();
+    }
 	
 	public void setKeyListener(KeyListener keyboard){
 	    this.map.addKeyListener(keyboard);

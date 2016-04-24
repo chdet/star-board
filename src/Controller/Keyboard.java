@@ -18,28 +18,19 @@ public class Keyboard implements KeyListener{
 		
 		switch (key){
 			case KeyEvent.VK_RIGHT: 
-				System.out.println("Right");
-				game.moveHeroRight();
+				game.moveHero(Game.RIGHT);
 				break;
 			case KeyEvent.VK_LEFT:
-				System.out.println("Left");
-				game.moveHeroLeft();
+				game.moveHero(Game.LEFT);
 				break;
 			case KeyEvent.VK_DOWN:
-				System.out.println("Down");
-				game.moveHeroDown();
+				game.moveHero(Game.DOWN);
 				break;
 			case KeyEvent.VK_UP:
-				System.out.println("Up");
-				game.moveHeroUp();
+				game.moveHero(Game.UP);
 				break;
 			case KeyEvent.VK_SPACE:
-				System.out.println("Do something...");
-				int[] newProjPos = {1,1};
-				Projectile proj = new Projectile(game, newProjPos, game.getHero().getOrient());
-				game.setProj(proj);
-				Thread t1 = new Thread(proj);
-				t1.start();
+				game.addProjectile(new Projectile(game, game.getHero().getPos(), game.getHero().getOrient()));
 				break;
 		}
 	}

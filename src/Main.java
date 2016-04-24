@@ -1,32 +1,40 @@
 import Controller.Keyboard;
 import Model.Game;
 import View.Window;
+import Model.Game;
+import Model.Terrain;
+
+
 
 public class Main {
 	public static void main(String[] args) {
-		
-		Window window = new Window();
-		Game game = new Game(window);
-		Keyboard keyboard = new Keyboard(game);
-		window.setKeyListener(keyboard);
-		
-		
-		
-		int size = game.getSize();
-		int[][] newMapMatrix = game.getMapMatrix();
-		
-		for(int i = 0; i < size; i++){
-			newMapMatrix[i][0] = 1;
-			newMapMatrix[i][size-1]=1;
-			for(int j = 1;j < size-1; j++){
-				newMapMatrix[i][j] = 0;
-				newMapMatrix[0][j] = 1;
-				newMapMatrix[size-1][j] = 1;
+
+        final int SIZE = 25;
+        Terrain[][] terrainMatrix = new Terrain[SIZE][SIZE];
+
+        Terrain grass = new Terrain("Grass", false);
+        Terrain rock = new Terrain("Rock", true);
+
+		for(int i = 0; i < SIZE; i++){
+            terrainMatrix[i][0] = rock;
+            terrainMatrix[i][SIZE-1] = rock;
+			for(int j = 1;j < SIZE-1; j++){
+                terrainMatrix[i][j] = grass;
+                terrainMatrix[0][j] = rock;
+                terrainMatrix[SIZE-1][j] = rock;
 			}
 		}
-		
-		game.setMapMatrix(newMapMatrix);
-		window.refreshMap(newMapMatrix, game.getHero().getHP());
+
+		Window window = new Window();
+		Game game = new Game(window, terrainMatrix);
+		Keyboard keyboard = new Keyboard(game);
+		window.setKeyListener(keyboard);
+		Thread t = new Thread(window);
+		t.start();
+
+
+
+		/* window.refreshMap(newMapMatrix, game.getHero().getHP());*/
 		
 	}
 }

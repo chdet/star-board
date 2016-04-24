@@ -6,5 +6,21 @@ package Model;
  */
 public abstract class GameEntity {
     private int[] pos;
-    public String sprite;           //TODO : Retourné à Map quand elle met à jour cette GameEntity
+    private String sprite;
+
+    public int[] getPos(){
+        return this.pos;
+    }
+
+    protected void setPos(int[] pos) {
+        this.pos = pos;
+    }
+
+    public String getSprite(){
+        return sprite;
+    }
+
+    protected void setSprite(String sprite) {
+        this.sprite = sprite;
+    }
 }
