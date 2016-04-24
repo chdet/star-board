@@ -15,15 +15,13 @@ public class Window  implements  Runnable{
     private static final int FPS = 60; //Frames per second
 
 	public Window(){
-	    JFrame frame = new JFrame("Model.Game");
+	    JFrame frame = new JFrame("StarBoard");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.setBounds(0, 0, 1000, 1020);
-	    //frame.getContentPane().setBackground(Color.gray);
+	    frame.setBounds(0, 0, 815, 900);
 	    frame.add(this.map);
 	    
-	    
-	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-	    //frame.setUndecorated(true);
+//	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	    frame.setUndecorated(false);
 	    frame.setVisible(true);
 	    
 	}

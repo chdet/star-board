@@ -21,7 +21,7 @@ public class Game{
 	public Game(Window window, Terrain[][] terrainMatrix){
 		this.window = window;
         this.terrainMatrix = terrainMatrix;
-        this.collisionMap = new boolean[terrainMatrix[0].length][terrainMatrix.length];
+        this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
 		this.hero = new Hero(15);
         window.buildMap(getTerrainMatrix());
         window.setCreatures(creatures);
@@ -33,8 +33,8 @@ public class Game{
 
 
     public void updateColMap(){
-        for(int i = 0; i<terrainMatrix[0].length; i++){
-            for(int j = 0; j<terrainMatrix.length; j++){
+        for(int i = 0; i<terrainMatrix.length; i++){
+            for(int j = 0; j<terrainMatrix[0].length; j++){
                 collisionMap[i][j]= terrainMatrix[i][j].getCollision();
             }
         }

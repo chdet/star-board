@@ -19,26 +19,31 @@ public class Main {
         Terrain rock = new Terrain("Rock", true);
 
         try{
-            //TODO: Déplacer dans une autre classe ? Gérer l'exception du fichier vide(créer map par défaut)
+            //TODO: Déplacer dans une autre classe ?
             String line;
             int x = 0;
             int y = 0;
             BufferedReader tempfile = new BufferedReader(new FileReader("map.txt"));
-            if(((line = tempfile.readLine()) != null)){x = line.length(); y++;}
-            while((tempfile.readLine()) != null){y++;}
+            if(((line = tempfile.readLine()) != null)){
+                x = line.length();
+                y++;
+            }
+            while((tempfile.readLine()) != null){
+                y++;
+            }
             terrainMatrix = new Terrain[x][y];
 
             BufferedReader mapfile = new BufferedReader(new FileReader("map.txt"));
-            int i = 0;
+            int j = 0;
             while((line = mapfile.readLine()) != null){
-                for(int j = 0; i < x; i++){
+                for(int i = 0; i < x; i++){
                     char tile = line.charAt(i);
                     switch(tile){
                         case 'g': terrainMatrix[i][j] = grass; break;
                         case 'r': terrainMatrix[i][j] = rock; break;
                     }
                 }
-                i++;
+                j++;
             }
             Game game = new Game(window, terrainMatrix);
             Keyboard keyboard = new Keyboard(game);
@@ -46,23 +51,23 @@ public class Main {
         }
 
         catch(IOException e){
-            final int SIZE = 25;
-            terrainMatrix = new Terrain[SIZE][SIZE];
+            final int XSIZE = 25;
+            final int YSIZE = 25;
+            terrainMatrix = new Terrain[XSIZE][YSIZE];
 
-            for(int i = 0; i < SIZE; i++){
+            for(int i = 0; i < XSIZE; i++){
                 terrainMatrix[i][0] = rock;
-                terrainMatrix[i][SIZE-1] = rock;
-                for(int j = 1;j < SIZE-1; j++){
+                terrainMatrix[i][YSIZE-1] = rock;
+                for(int j = 1;j < YSIZE-1; j++){
                     terrainMatrix[i][j] = grass;
                     terrainMatrix[0][j] = rock;
-                    terrainMatrix[SIZE-1][j] = rock;
+                    terrainMatrix[XSIZE-1][j] = rock;
                 }
             }
             Game game = new Game(window, terrainMatrix);
             Keyboard keyboard = new Keyboard(game);
             window.setKeyListener(keyboard);
         }
-
         Thread t = new Thread(window);
         t.start();
 

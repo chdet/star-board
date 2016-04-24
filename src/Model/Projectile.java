@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class Projectile extends GameEntity implements Runnable{
 	private Game game;
-	private static int WAIT = 300;
+	private static int WAIT = 50;
 	private int direction;
 	private Color color = Color.RED;
 

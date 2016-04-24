@@ -50,8 +50,8 @@ public class Map extends JPanel{
 
 
 	public void paint(Graphics g) {
-        for (int i = 0; i < terrainMap[0].length; i++) {
-            for (int j = 0; j < terrainMap.length; j++) {
+        for (int i = 0; i < terrainMap.length; i++) {
+            for (int j = 0; j < terrainMap[0].length; j++) {
                 g.drawImage(img.get(terrainMap[i][j].getSprite()), i * SPRITESIZE * TILESIZE, j * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
             }
 
