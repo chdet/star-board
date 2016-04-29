@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Window  implements  Runnable{
 	private Map map = new Map();
-
+	
     private static final int FPS = 60; //Frames per second
     
 

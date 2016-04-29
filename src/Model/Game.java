@@ -10,7 +10,7 @@ public class Game{
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private Terrain[][] terrainMatrix;
     private boolean[][] collisionMap;
-    private View.Window window;
+    View.Window window;
 
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
@@ -91,15 +91,15 @@ public class Game{
     }
 
 	public void damage(Projectile projectile) {
-		for(IA ia : IAs){
+		for(int i = 0; i< IAs.size(); i++){
 			for(int[] pos : projectile.getAoe()){
 				System.out.println(pos[1]);
-				System.out.println(ia.getHP());
-				System.out.println(ia.getPos()[1]);
-				if(pos[0] == ia.getPos()[0] && pos[1] == ia.getPos()[1]){
+				System.out.println(IAs.get(i).getHP());
+				System.out.println(IAs.get(i).getPos()[1]);
+				if(pos[0] == IAs.get(i).getPos()[0] && pos[1] == IAs.get(i).getPos()[1]){
 					System.out.println("touché");
-					ia.setHP(ia.getHP() - projectile.getDamage());
-					System.out.println(ia.getHP());
+					IAs.get(i).setHP(IAs.get(i).getHP() - projectile.getDamage());
+					//System.out.println(IAs.get(i).getHP());
 					//TODO effet
 				}
 			}

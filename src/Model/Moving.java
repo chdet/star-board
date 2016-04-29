@@ -53,6 +53,7 @@ public abstract class Moving extends GameEntity{
         	if(this instanceof Projectile){
 	            //TODO: Ajouter un check si le proj se trouver SUR un collidable(dans la cas où une Creature se déplace sur le projectile)
 	            ((Projectile)(this)).endCourse();
+	            System.out.println("endCourse()");
 	            //TODO: Appeler la méthode de Game qui gère les dégats (newPos et Area of Damage en attribut)
 	        }
         }

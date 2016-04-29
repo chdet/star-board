@@ -15,14 +15,15 @@ public class IA extends Creature implements Runnable{
 	
 	@Override
 	public void run() {
-		try {
-			while(!dead){
+		while(!dead){
+			try{
 				this.move(getOrient());
 				Thread.sleep(WAIT);
 			}
-		} catch (Exception e) {
-			System.out.println("ERREUR");
-			e.printStackTrace();
+		 	catch (Exception e) {
+				System.out.println("ERREUR");
+				e.printStackTrace();
+			}
 		}
 	}
 		
