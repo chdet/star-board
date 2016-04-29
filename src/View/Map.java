@@ -1,6 +1,8 @@
 package View;
 
-import Model.*;
+import Model.Creature;
+import Model.Terrain;
+import Model.Projectile;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,11 +21,10 @@ public class Map extends JPanel{
     private Hashtable<String,BufferedImage> img = new Hashtable<>();
 
 	private final int SPRITESIZE = 16;
-	private final int HEROHEIGHT = 21;
+	private final int HEROHEIGHT = 18;
 
     private final int TILESIZE = 2;
 
-    private Hero hero;
     private ArrayList<Creature> creatures;
     private ArrayList<Projectile> projectiles;
 	
@@ -33,15 +34,18 @@ public class Map extends JPanel{
 		this.requestFocusInWindow();
 		
 		try{
-			this.img.put("Grass",ImageIO.read(new File("Grass.png")));
-			this.img.put("Rock",ImageIO.read(new File("Rock.png")));
-			this.img.put("HeroLeft",ImageIO.read(new File("HeroLeft.png")));
-			this.img.put("HeroRight",ImageIO.read(new File("HeroRight.png")));
-			this.img.put("HeroUp",ImageIO.read(new File("HeroUp.png")));
-			this.img.put("HeroDown",ImageIO.read(new File("HeroDown.png")));
+			this.img.put("Grass",ImageIO.read(new File("Floor.png")));
+			this.img.put("Rock",ImageIO.read(new File("Wall.png")));
+			this.img.put("HeroLeft",ImageIO.read(new File("JediLeft.png")));
+			this.img.put("HeroRight",ImageIO.read(new File("JediRight.png")));
+			this.img.put("HeroUp",ImageIO.read(new File("JediUp.png")));
+			this.img.put("HeroDown",ImageIO.read(new File("JediDown.png")));
 			
-			this.img.put("IADown",ImageIO.read(new File("IADown.png")));
-			
+			this.img.put("IADown",ImageIO.read(new File("TrooperDown.png")));
+            this.img.put("IAUp",ImageIO.read(new File("TrooperUp.png")));
+            this.img.put("IARight",ImageIO.read(new File("TrooperRight.png")));
+            this.img.put("IALeft",ImageIO.read(new File("TrooperLeft.png")));
+
 			this.img.put("FireBall",ImageIO.read(new File("FireBall.png")));
 		}
 		catch(IOException e){
@@ -87,9 +91,6 @@ public class Map extends JPanel{
         this.repaint();
     }
 
-    public void setHero(Hero hero){
-        this.hero = hero;
-    }
 
     public void setProjectiles(ArrayList<Projectile> projectiles){
         this.projectiles = projectiles;

@@ -10,13 +10,10 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Main {
-	public static void main(String[] args) {
-        Window window = new Window();
-
+    private static Terrain[][] generateTerrainMatrix(){
         Terrain[][] terrainMatrix;
         Terrain grass = new Terrain("Grass", false);
         Terrain rock = new Terrain("Rock", true);
-
         try{
             //TODO: Déplacer dans une autre classe ?
             String line;
@@ -44,9 +41,6 @@ public class Main {
                 }
                 j++;
             }
-            Game game = new Game(window, terrainMatrix);
-            Keyboard keyboard = new Keyboard(game);
-            window.setKeyListener(keyboard);
         }
 
         catch(IOException e){
@@ -63,10 +57,15 @@ public class Main {
                     terrainMatrix[XSIZE-1][j] = rock;
                 }
             }
-            Game game = new Game(window, terrainMatrix);
-            Keyboard keyboard = new Keyboard(game);
-            window.setKeyListener(keyboard);
         }
+        return terrainMatrix;
+    }
+
+	public static void main(String[] args) {
+        Game game = new Game(generateTerrainMatrix());
+        Keyboard keyboard = new Keyboard(game);
+        Window window = new Window(game);
+        window.setKeyListener(keyboard);
         Thread t = new Thread(window);
         t.start();
 	}

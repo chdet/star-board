@@ -43,14 +43,9 @@ public class Projectile extends Moving implements Runnable{
 	public void run(){
 		while(!collided){
 			try{
-				System.out.println(collided);
-				System.out.println("1");
 				move(getOrient());
-				System.out.println("2");
 				Thread.sleep(WAIT);
-				
 			}
-			
 			catch(Exception e){
 				e.printStackTrace();
 				System.out.println("ERREUR PROJECTILE");

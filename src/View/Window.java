@@ -1,7 +1,6 @@
 package View;
 
 import Model.*;
-import Model.Ennemy;
 
 import javax.swing.*;
 import java.awt.event.KeyListener;
@@ -11,9 +10,8 @@ public class Window  implements  Runnable{
 	private Map map = new Map();
 	
     private static final int FPS = 60; //Frames per second
-    
 
-	public Window(){
+	public Window(Game game){
 	    JFrame frame = new JFrame("StarBoard");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setBounds(0, 0, 815, 900);
@@ -22,24 +20,22 @@ public class Window  implements  Runnable{
 //	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	    frame.setUndecorated(false);
 	    frame.setVisible(true);
-	    
+	    buildMap(game.getTerrainMatrix());
+		setCreatures(game.getCreatures());
+		setProjectiles(game.getProjectiles());
 	}
 
     public void run(){
-        try {
-            while (true) {
-                refreshMap();
-                Thread.sleep(1000/FPS);
-            }
-        }catch (Exception e){}
-    }
+		while(true){
+			try {
+				refreshMap();
+				Thread.sleep(1000/FPS);
+			}catch (Exception e){}
+		}
+}
 
     public void buildMap(Terrain[][] terrainMatrix){
 		this.map.buildMap(terrainMatrix);
-	}
-
-	public void setHero(Hero hero){
-		this.map.setHero(hero);
 	}
 
     public void setCreatures(ArrayList<Creature> creatures){
