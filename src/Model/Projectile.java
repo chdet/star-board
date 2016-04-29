@@ -12,9 +12,7 @@ public class Projectile extends Moving implements Runnable{
 	//private int manaCost;
 	
 	//private Color color = Color.BLUE;
-	
-    
-    
+
     
 	public Projectile(Game game, int[] pos, int orient){
 		super(game, pos, orient);

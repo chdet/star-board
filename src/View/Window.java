@@ -1,10 +1,7 @@
 package View;
 
-import Model.GameEntity;
-import Model.Hero;
-import Model.IA;
-import Model.Projectile;
-import Model.Terrain;
+import Model.*;
+import Model.Ennemy;
 
 import javax.swing.*;
 import java.awt.event.KeyListener;
@@ -45,8 +42,8 @@ public class Window  implements  Runnable{
 		this.map.setHero(hero);
 	}
 
-    public void setIAs(ArrayList<IA> IAs){
-        this.map.setIAs(IAs);
+    public void setCreatures(ArrayList<Creature> creatures){
+        this.map.setCreatures(creatures);
     }
 
 	public void setProjectiles(ArrayList<Projectile> projectiles){

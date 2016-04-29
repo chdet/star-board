@@ -28,7 +28,7 @@ public abstract class Moving extends GameEntity{
             case Game.DOWN: setSprite("HeroDown"); break;
         	}
         }
-        else if (this instanceof IA){
+        else if (this instanceof Ennemy){
         	switch(orient){
             case Game.LEFT: setSprite("IALeft"); break;
             case Game.RIGHT: setSprite("IARight"); break;

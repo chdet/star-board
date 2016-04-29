@@ -1,12 +1,12 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
 import View.Window;
 
 public class Game{
     private Hero hero;
-    private ArrayList<IA> IAs = new ArrayList<>();
+    private ArrayList<Creature> creatures = new ArrayList<>();
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private Terrain[][] terrainMatrix;
     private boolean[][] collisionMap;
@@ -23,10 +23,11 @@ public class Game{
         this.terrainMatrix = terrainMatrix;
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
 		this.hero = new Hero(this, 15);
-		this.addIA(new IA(this, new int[]{1,1},15));
+        this.addCreature(hero);
+		this.addCreature(new Ennemy(this, new int[]{1,1},15));
         window.buildMap(getTerrainMatrix());
         window.setHero(hero);
-        window.setIAs(IAs);
+        window.setCreatures(creatures);
         window.setProjectiles(projectiles);
         updateColMap();        
 	}
@@ -38,8 +39,8 @@ public class Game{
             }    
         }
         
-        for(IA ia : IAs){
-            int[] pos = ia.getPos();
+        for(Creature creature : creatures){
+            int[] pos = creature.getPos();
             collisionMap[pos[0]][pos[1]] = true;
         }
         
@@ -65,14 +66,16 @@ public class Game{
 		return hero;
 	}
 	
-	public void addIA(IA ia){
-        this.IAs.add(ia);
-        Thread t = new Thread(ia);
-        t.start();
+	public void addCreature(Creature creature){
+        this.creatures.add(creature);
+        if(creature instanceof AICreature){
+            Thread t = new Thread((AICreature)creature);
+            t.start();
+        }
     }
 
-    void removeIA(IA ia){
-        this.IAs.remove(ia);
+    void removeCreature(Creature creature){
+        this.creatures.remove(creature);
     }
     
     public void addProjectile(Projectile projectile){
@@ -91,14 +94,14 @@ public class Game{
     }
 
 	public void damage(Projectile projectile) {
-		for(int i = 0; i< IAs.size(); i++){
+		for(int i = 0; i< creatures.size(); i++){
 			for(int[] pos : projectile.getAoe()){
 				System.out.println(pos[1]);
-				System.out.println(IAs.get(i).getHP());
-				System.out.println(IAs.get(i).getPos()[1]);
-				if(pos[0] == IAs.get(i).getPos()[0] && pos[1] == IAs.get(i).getPos()[1]){
+				System.out.println(creatures.get(i).getHP());
+				System.out.println(creatures.get(i).getPos()[1]);
+				if(pos[0] == creatures.get(i).getPos()[0] && pos[1] == creatures.get(i).getPos()[1]){
 					System.out.println("touché");
-					IAs.get(i).setHP(IAs.get(i).getHP() - projectile.getDamage());
+					creatures.get(i).setHP(creatures.get(i).getHP() - projectile.getDamage());
 					//System.out.println(IAs.get(i).getHP());
 					//TODO effet
 				}

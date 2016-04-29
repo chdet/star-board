@@ -1,10 +1,6 @@
 package View;
 
-import Model.GameEntity;
-import Model.Hero;
-import Model.IA;
-import Model.Projectile;
-import Model.Terrain;
+import Model.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -23,12 +19,12 @@ public class Map extends JPanel{
     private Hashtable<String,BufferedImage> img = new Hashtable<>();
 
 	private final int SPRITESIZE = 16;
-	private final int HEROHEIGHT = 18;
+	private final int HEROHEIGHT = 21;
 
     private final int TILESIZE = 2;
 
     private Hero hero;
-    private ArrayList<IA> IAs;
+    private ArrayList<Creature> creatures;
     private ArrayList<Projectile> projectiles;
 	
     
@@ -60,19 +56,14 @@ public class Map extends JPanel{
             }
         }
         
-        int x = hero.getPos()[0];
-        int y = hero.getPos()[1];
-        g.drawImage(img.get(hero.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
-
-        
         g.setColor(Color.BLACK);
         g.fillRect(0, terrainMap[0].length * SPRITESIZE * TILESIZE, terrainMap[0].length * SPRITESIZE * TILESIZE, 2 * SPRITESIZE * TILESIZE);
 
         
-        for (IA ia : IAs) {
-        	x = ia.getPos()[0];
-            y = ia.getPos()[1];
-            g.drawImage(img.get(ia.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);        	
+        for (Creature creature : creatures) {
+        	int x = creature.getPos()[0];
+            int y = creature.getPos()[1];
+            g.drawImage(img.get(creature.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
         }
         
         for (Projectile projectile : projectiles) {
@@ -83,8 +74,8 @@ public class Map extends JPanel{
             g.fillOval(pPos[0] * TILESIZE * SPRITESIZE, pPos[1] * TILESIZE * SPRITESIZE, TILESIZE * SPRITESIZE, TILESIZE * SPRITESIZE);
 			*/
         	
-        	x = projectile.getPos()[0];
-            y = projectile.getPos()[1];
+        	int x = projectile.getPos()[0];
+            int y = projectile.getPos()[1];
             g.drawImage(img.get(projectile.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
         }
         
@@ -104,8 +95,8 @@ public class Map extends JPanel{
         this.projectiles = projectiles;
     }
 
-    public void setIAs(ArrayList<IA> IAs){
-        this.IAs = IAs;
+    public void setCreatures(ArrayList<Creature> creatures){
+        this.creatures = creatures;
     }
 
 
