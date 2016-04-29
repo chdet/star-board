@@ -2,6 +2,7 @@ package View;
 
 import Model.GameEntity;
 import Model.Hero;
+import Model.IA;
 import Model.Projectile;
 import Model.Terrain;
 
@@ -27,49 +28,67 @@ public class Map extends JPanel{
     private final int TILESIZE = 2;
 
     private Hero hero;
-    private Projectile projectile;
-    private ArrayList<GameEntity> creatures;
+    private ArrayList<IA> IAs;
     private ArrayList<Projectile> projectiles;
 	
+    
 	public Map(){
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 		
 		try{
-			this.img.put("Grass",ImageIO.read(new File("Grass.png")));	//	0
-			this.img.put("Rock",ImageIO.read(new File("Rock.png")));	//	1
-			this.img.put("HeroLeft",ImageIO.read(new File("HeroLeft.png")));	//	2	0
-			this.img.put("HeroRight",ImageIO.read(new File("HeroRight.png")));	//	3	1
-			this.img.put("HeroUp",ImageIO.read(new File("HeroUp.png")));		//	4	2
-			this.img.put("HeroDown",ImageIO.read(new File("HeroDown.png")));	//	5	3
+			this.img.put("Grass",ImageIO.read(new File("Grass.png")));
+			this.img.put("Rock",ImageIO.read(new File("Rock.png")));
+			this.img.put("HeroLeft",ImageIO.read(new File("HeroLeft.png")));
+			this.img.put("HeroRight",ImageIO.read(new File("HeroRight.png")));
+			this.img.put("HeroUp",ImageIO.read(new File("HeroUp.png")));
+			this.img.put("HeroDown",ImageIO.read(new File("HeroDown.png")));
+			
+			this.img.put("IADown",ImageIO.read(new File("IADown.png")));
+			
+			this.img.put("FireBall",ImageIO.read(new File("FireBall.png")));
 		}
 		catch(IOException e){
         	e.printStackTrace();
         }
 	}
 
-
 	public void paint(Graphics g) {
         for (int i = 0; i < terrainMap.length; i++) {
             for (int j = 0; j < terrainMap[0].length; j++) {
                 g.drawImage(img.get(terrainMap[i][j].getSprite()), i * SPRITESIZE * TILESIZE, j * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
             }
-
-            int x = hero.getPos()[0];
-            int y = hero.getPos()[1];
-            g.drawImage(img.get(hero.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
-
-
         }
+        
+        int x = hero.getPos()[0];
+        int y = hero.getPos()[1];
+        g.drawImage(img.get(hero.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
+
+        
         g.setColor(Color.BLACK);
         g.fillRect(0, terrainMap[0].length * SPRITESIZE * TILESIZE, terrainMap[0].length * SPRITESIZE * TILESIZE, 2 * SPRITESIZE * TILESIZE);
 
+        
+        for (IA ia : IAs) {
+        	x = ia.getPos()[0];
+            y = ia.getPos()[1];
+            g.drawImage(img.get(ia.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);        	
+        }
+        
         for (Projectile projectile : projectiles) {
+        	
+            /*
             g.setColor(projectile.getColor());
             int[] pPos = projectile.getPos();
             g.fillOval(pPos[0] * TILESIZE * SPRITESIZE, pPos[1] * TILESIZE * SPRITESIZE, TILESIZE * SPRITESIZE, TILESIZE * SPRITESIZE);
-
+			*/
+        	
+        	x = projectile.getPos()[0];
+            y = projectile.getPos()[1];
+            g.drawImage(img.get(projectile.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
         }
+        
+        
     }
 
 	public void buildMap(Terrain[][] terrainMatrix){
@@ -85,8 +104,8 @@ public class Map extends JPanel{
         this.projectiles = projectiles;
     }
 
-    public void setCreatures(ArrayList<GameEntity> creatures){
-        this.creatures = creatures;
+    public void setIAs(ArrayList<IA> IAs){
+        this.IAs = IAs;
     }
 
 

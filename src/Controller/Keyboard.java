@@ -8,6 +8,8 @@ import java.awt.event.KeyListener;
 
 public class Keyboard implements KeyListener{
 	private Game game;
+	
+	
 	public Keyboard(Game game){
 		this.game = game;
 	}
@@ -30,7 +32,7 @@ public class Keyboard implements KeyListener{
 				game.getHero().move(Game.UP);
 				break;
 			case KeyEvent.VK_SPACE:
-				game.addProjectile(new Projectile(game, game.getHero().inFront(), game.getHero().getOrient()));
+				game.getHero().attack();
 				break;
 		}
 	}
@@ -42,4 +44,5 @@ public class Keyboard implements KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
+	
 }

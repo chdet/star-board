@@ -1,60 +1,59 @@
 package Model;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
-public class Projectile extends GameEntity implements Runnable{
-	private Game game;
+public class Projectile extends Moving implements Runnable{
 	private static int WAIT = 50;
-	private int direction;
-	private Color color = Color.RED;
-
-    private boolean collided = false;
-
-	public Projectile(Game game, int[] pos, int direction){
-		this.game = game;
-		setPos(pos);
-		this.direction = direction;
-        setSprite(null);
+	private boolean collided = false;
+	protected int damage;
+	protected String effect;
+	protected ArrayList<int[]> aoe = new ArrayList<int[]>();
+	//private int manaCost;
+	
+	//private Color color = Color.BLUE;
+	
+    
+    
+    
+	public Projectile(Game game, int[] pos, int orient){
+		super(game, pos, orient);
 	}
 	
+	public int getDamage() {
+		return damage;
+	}
+	
+	public String getEffect() {
+		return effect;
+	}
+	
+	public void setAoe(){};
+
+	public ArrayList<int[]> getAoe() {
+		return aoe;
+	}
+
+    public void endCourse(){
+    	setAoe();
+    	game.damage(this);
+    	game.moveColMap(getPos());
+    	collided = true;
+    	game.removeProjectile(this);
+    }
+    
 	public void run(){
 		try{
 			while(!collided){
-				this.move();
+				move(getOrient());
 				Thread.sleep(WAIT);
 			}
+			
 		}
-		catch(Exception e){}
-		
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println("ERREUR");
+		}
 	}
-
-    public void move(){
-        int[] pos = getPos();
-        int[] newPos = pos;
-        switch (direction){
-            case Game.LEFT: newPos = new int[]{pos[0]-1,pos[1]}; break;
-            case Game.RIGHT: newPos = new int[]{pos[0]+1,pos[1]}; break;
-            case Game.UP: newPos = new int[]{pos[0],pos[1]-1}; break; //Origine en haut à gauche
-            case Game.DOWN: newPos = new int[]{pos[0],pos[1]+1}; break;
-        }
-        if(!game.doesCollide(newPos)){
-            setPos(newPos);
-        }
-        else{
-            //TODO: Ajouter un check si le proj se trouver SUR un collidable(dans la cas où une Creature se déplace sur le projectile)
-            this.collided = true;
-            game.removeProjectile(this);
-            //TODO: Appeler la méthode de Game qui gère les dégats (newPos et Area of Damage en attribut)
-        }
-    }
-
-
-    public Color getColor() {
-        return color;
-    }
-
-    public int getDirection() {
-		return direction;
-	}
-
+    
 }
