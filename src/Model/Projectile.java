@@ -1,37 +1,59 @@
 package Model;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class Projectile extends Moving implements Runnable{
-	private Game game;
 	private static int WAIT = 50;
-	private Color color = Color.RED;
-
-    private boolean collided = false;
-
+	private boolean collided = false;
+	protected int damage;
+	protected String effect;
+	protected ArrayList<int[]> aoe = new ArrayList<int[]>();
+	//private int manaCost;
+	
+	//private Color color = Color.BLUE;
+	
+    
+    
+    
 	public Projectile(Game game, int[] pos, int orient){
-		this.game = game;
-		setPos(pos);
-		this.orient = orient;
-        setSprite(null);
+		super(game, pos, orient);
 	}
 	
-    public Color getColor() {
-        return color;
-    }
+	public int getDamage() {
+		return damage;
+	}
+	
+	public String getEffect() {
+		return effect;
+	}
+	
+	public void setAoe(){};
+
+	public ArrayList<int[]> getAoe() {
+		return aoe;
+	}
 
     public void endCourse(){
-    	this.collided = true;
-        game.removeProjectile(this);
+    	setAoe();
+    	game.damage(this);
+    	game.moveColMap(getPos());
+    	collided = true;
+    	game.removeProjectile(this);
     }
     
-    public void run(){
+	public void run(){
 		try{
 			while(!collided){
-				this.move(orient);
+				move(getOrient());
 				Thread.sleep(WAIT);
 			}
+			
 		}
-		catch(Exception e){}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println("ERREUR");
+		}
 	}
+    
 }

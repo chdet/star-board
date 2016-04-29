@@ -1,42 +1,61 @@
 package Model;
 
 public abstract class Moving extends GameEntity{
-	private Game game;
-	protected int orient;
+	protected Game game;
+	private int orient;
 	
+	
+	public Moving(Game game, int[] pos, int orient){
+		this.game = game;
+		setPos(pos);
+        setOrient(orient);
+	}
 	
 	public int getOrient() {
 		return orient;
 	}
 	
-	void setOrient(int orient) {
+	protected void setOrient(int orient) {
         this.orient = orient;
-		switch(orient){
+        if(this instanceof FireBall){
+        	setSprite("FireBall");
+        }
+        else if (this instanceof Hero) {
+        	switch(orient){
             case Game.LEFT: setSprite("HeroLeft"); break;
             case Game.RIGHT: setSprite("HeroRight"); break;
             case Game.UP: setSprite("HeroUp"); break;
             case Game.DOWN: setSprite("HeroDown"); break;
-		}
+        	}
+        }
+        else if (this instanceof IA){
+        	switch(orient){
+            case Game.LEFT: setSprite("IALeft"); break;
+            case Game.RIGHT: setSprite("IARight"); break;
+            case Game.UP: setSprite("IAUp"); break;
+            case Game.DOWN: setSprite("IADown"); break;
+        	}
+        }
+		
 	}
 	
 	public void move(int orient){
         setOrient(orient);
         int[] pos = getPos();
         int[] newPos = inFront();
-        System.out.println(game.doesCollide(newPos));
+        
         if(!game.doesCollide(newPos)){
             this.setPos(newPos);
             game.moveColMap(pos, newPos);
         }
                
         else{
-        	if(this.getClass().toString().equals("class Model.Projectile")){
+        	if(this instanceof Projectile){
 	            //TODO: Ajouter un check si le proj se trouver SUR un collidable(dans la cas où une Creature se déplace sur le projectile)
 	            ((Projectile)(this)).endCourse();
 	            //TODO: Appeler la méthode de Game qui gère les dégats (newPos et Area of Damage en attribut)
 	        }
         }
-        System.out.println(pos[0]);
     }
 	
 	public int[] inFront(){
@@ -50,4 +69,5 @@ public abstract class Moving extends GameEntity{
 	    }
 		return inFront;
 	}
+	
 }

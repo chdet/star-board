@@ -20,4 +20,5 @@ public class Terrain{
     public String getSprite(){
         return sprite;
     }
+    
 }

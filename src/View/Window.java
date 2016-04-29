@@ -2,6 +2,7 @@ package View;
 
 import Model.GameEntity;
 import Model.Hero;
+import Model.IA;
 import Model.Projectile;
 import Model.Terrain;
 
@@ -13,6 +14,7 @@ public class Window  implements  Runnable{
 	private Map map = new Map();
 
     private static final int FPS = 60; //Frames per second
+    
 
 	public Window(){
 	    JFrame frame = new JFrame("StarBoard");
@@ -43,8 +45,8 @@ public class Window  implements  Runnable{
 		this.map.setHero(hero);
 	}
 
-    public void setCreatures(ArrayList<GameEntity> creatures){
-        this.map.setCreatures(creatures);
+    public void setIAs(ArrayList<IA> IAs){
+        this.map.setIAs(IAs);
     }
 
 	public void setProjectiles(ArrayList<Projectile> projectiles){
