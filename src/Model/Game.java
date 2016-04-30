@@ -115,10 +115,11 @@ public class Game{
 			for(int i = 0; i< creatures.size(); i++){
 					if(pos[0] == creatures.get(i).getPos()[0] && pos[1] == creatures.get(i).getPos()[1]){
 					System.out.println("touché par un projectile");
-					creatures.get(i).setHP((int)(creatures.get(i).getHP() - projectile.getDamage()/creatures.get(i).getDefense()));
 					if(creatures.get(i) instanceof AICreature){
 						((AICreature)(creatures.get(i))).setHostility(AICreature.HOSTILE);
 					}
+					creatures.get(i).setHP((int)(creatures.get(i).getHP() - projectile.getDamage()/creatures.get(i).getDefense()));
+					
 										
 					switch(projectile.getEffect()){
 					case "push" :
