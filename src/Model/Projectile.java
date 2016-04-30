@@ -6,24 +6,22 @@ import java.util.ArrayList;
 public class Projectile extends Moving implements Runnable{
 	private static int WAIT = 50;
 	private boolean collided = false;
-	private int damage; //mettre un négatif pour faire un soin.
+	private float damage; //mettre un négatif pour faire un soin.
 	protected String effect;
 	//protected ArrayList<int[]> aoe = new ArrayList<int[]>();
 	private int aoe;
 	private int manaCost;
-	
-	//private Color color = Color.BLUE;
 
     
 	public Projectile(Game game, int[] pos, int orient){
 		super(game, pos, orient);
 	}
 	
-	public int getDamage() {
+	public float getDamage() {
 		return damage;
 	}
 	
-	public void setDamage(int damage) {
+	public void setDamage(float damage) {
 		this.damage = damage;
 	}
 	

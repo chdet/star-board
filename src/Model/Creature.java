@@ -4,19 +4,24 @@ import java.util.ArrayList;
 
 public abstract class Creature extends Moving{
 	boolean alive = true;
-	protected  Integer HP;
-	protected Integer HPMax;
-	protected  Integer mana;
-	protected Integer manaMax;
+	private  Integer HP;
+	private Integer HPMax;
+	private  Integer mana;
+	private Integer manaMax;
+	private Float attack;
+	private Float defense;
+	
 	private int currentSpell;
 	protected ArrayList<String> spellList = new ArrayList<String>();
     
-	public Creature(Game game, int[] pos, Integer HPMax, Integer manaMax){
+	public Creature(Game game, int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
 		super(game, pos, Game.DOWN);
 		setHPMax(HPMax);
 		setHP(this.HPMax);
 		setManaMax(manaMax);
 		setMana(this.manaMax);
+		setAttack(attack);
+		setDefense(defense);
 		
 		spellList.add("fireBall");
 		setCurrentSpell(0);
@@ -81,6 +86,37 @@ public abstract class Creature extends Moving{
 		}
 	}
 	
+	public Float getAttack() {
+		return attack;
+	}
+
+
+	public void setAttack(Float attack) {
+		if(attack >= 0){
+			this.attack = attack;
+		}
+		else{
+			System.out.println("attack doit être positif");
+			this.attack = 0f;
+		}
+	}
+
+
+	public Float getDefense() {
+		return defense;
+	}
+
+
+	public void setDefense(Float defense) {
+		if(defense > 0){
+			this.defense = defense;
+		}
+		else{
+			System.out.println("defense doit être positif et non-nul");
+			this.defense = 1f;
+		}
+	}
+	
 	public void setCurrentSpell(int currentSpell) {
 		if (currentSpell < spellList.size()){
 			this.currentSpell = currentSpell;
@@ -102,8 +138,7 @@ public abstract class Creature extends Moving{
     }
 	
 	public void attack(){
-		//game.addProjectile(new FireBall(game, getPos(), getOrient()));
-		System.out.println("attack"); //TODO Corps à corps
+		game.damage(this);
 	}
 	
 	public void useSpell(){
