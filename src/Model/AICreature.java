@@ -13,8 +13,8 @@ public abstract class AICreature extends Creature implements Runnable {
     public static final int FRIENDLY = 2;
 
 
-    public AICreature(Game game, int[] pos, Integer HP){
-        super(game, pos, HP);
+    public AICreature(Game game, int[] pos, Integer HPMax, Integer manaMax){
+        super(game, pos, HPMax, manaMax);
     }
 
     public int getHostility() {
