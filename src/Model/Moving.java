@@ -17,8 +17,9 @@ public abstract class Moving extends GameEntity{
 	
 	protected void setOrient(int orient) {
         this.orient = orient;
-        if(this instanceof FireBall){
-        	setSprite("FireBall");
+        if (getSprite() == "Laser"){
+        	switch(orient){
+        	}
         }
         else if (this instanceof Hero) {
         	switch(orient){

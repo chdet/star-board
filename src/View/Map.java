@@ -46,7 +46,8 @@ public class Map extends JPanel{
             this.img.put("IARight",ImageIO.read(new File("TrooperRight.png")));
             this.img.put("IALeft",ImageIO.read(new File("TrooperLeft.png")));
 
-			this.img.put("FireBall",ImageIO.read(new File("FireBall.png")));
+			this.img.put("LaserHorizontal",ImageIO.read(new File("LaserHorizontal.png")));
+			this.img.put("LaserVertical",ImageIO.read(new File("LaserVertical.png")));
 		}
 		catch(IOException e){
         	e.printStackTrace();
@@ -69,26 +70,17 @@ public class Map extends JPanel{
         g.setColor(Color.BLUE);
         g.drawString("Mana: " + creatures.get(0).getMana() + "/" + creatures.get(0).getManaMax(), 3*SPRITESIZE * TILESIZE, (terrainMap[0].length + 1)* SPRITESIZE * TILESIZE);
         
-        for (Creature creature : creatures) {
-        	int x = creature.getPos()[0];
-            int y = creature.getPos()[1];
-            g.drawImage(img.get(creature.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
+        for(int i = 0; i< creatures.size(); i++){
+        	int x = creatures.get(i).getPos()[0];
+            int y = creatures.get(i).getPos()[1];
+            g.drawImage(img.get(creatures.get(i).getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
         }
         
-        for (Projectile projectile : projectiles) {
-        	
-            /*
-            g.setColor(projectile.getColor());
-            int[] pPos = projectile.getPos();
-            g.fillOval(pPos[0] * TILESIZE * SPRITESIZE, pPos[1] * TILESIZE * SPRITESIZE, TILESIZE * SPRITESIZE, TILESIZE * SPRITESIZE);
-			*/
-        	
-        	int x = projectile.getPos()[0];
-            int y = projectile.getPos()[1];
-            g.drawImage(img.get(projectile.getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
-        }
-        
-        
+        for(int i = 0; i< projectiles.size(); i++){
+        	int x = projectiles.get(i).getPos()[0];
+            int y = projectiles.get(i).getPos()[1];
+            g.drawImage(img.get(projectiles.get(i).getSprite()), x * SPRITESIZE * TILESIZE, y * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
+        }      
     }
 
 	public void buildMap(Terrain[][] terrainMatrix){

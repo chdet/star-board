@@ -13,8 +13,13 @@ public class Projectile extends Moving implements Runnable{
 	private int manaCost;
 
     
-	public Projectile(Game game, int[] pos, int orient){
+	public Projectile(Game game, int[] pos, int orient, String sprite){
 		super(game, pos, orient);
+		setSprite(sprite);
+		setDamage(0);
+		setEffect("");
+		setAoe(1);
+		setManaCost(0);
 	}
 	
 	public float getDamage() {
@@ -27,6 +32,10 @@ public class Projectile extends Moving implements Runnable{
 	
 	public String getEffect() {
 		return effect;
+	}
+	
+	public void setEffect(String effect) {
+		this.effect = effect;
 	}
 	
 	public int getAoe() {
