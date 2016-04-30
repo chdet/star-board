@@ -114,9 +114,33 @@ public class Game{
 		for(int[] pos : aoePos){
 			for(int i = 0; i< creatures.size(); i++){
 					if(pos[0] == creatures.get(i).getPos()[0] && pos[1] == creatures.get(i).getPos()[1]){
-					System.out.println("touché");
+					System.out.println("touché par un projectile");
 					creatures.get(i).setHP((int)(creatures.get(i).getHP() - projectile.getDamage()/creatures.get(i).getDefense()));
-					//TODO effet
+					if(creatures.get(i) instanceof AICreature){
+						((AICreature)(creatures.get(i))).setHostility(AICreature.HOSTILE);
+					}
+										
+					switch(projectile.getEffect()){
+					case "push" :
+						for(int j = 0; j < 5; j++){
+							creatures.get(i).move(projectile.getOrient());
+						}
+						break;
+					
+					case "stunt" : break;
+					
+					case "snare" : break;
+					
+					case "DOT" : break;
+					
+					case "rally" : 
+						if(creatures.get(i) instanceof AICreature){
+							((AICreature)(creatures.get(i))).setHostility(AICreature.FRIENDLY);
+						}
+						break;
+					
+						
+					}
 				}
 			}
 		}
@@ -125,7 +149,7 @@ public class Game{
 	public void damage(Creature attacker){
 		for(int i = 0; i< creatures.size(); i++){
 			if(attacker.inFront()[0] == creatures.get(i).getPos()[0] && attacker.inFront()[1] == creatures.get(i).getPos()[1]){
-				System.out.println("touché");
+				System.out.println("touché au corps à corps");
 				creatures.get(i).setHP((int)(creatures.get(i).getHP() - attacker.getAttack()/creatures.get(i).getDefense()));
 				//TODO effet
 			}

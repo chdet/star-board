@@ -23,7 +23,8 @@ public abstract class Creature extends Moving{
 		setAttack(attack);
 		setDefense(defense);
 		
-		spellList.add("fireBall");
+		spellList.add("Laser");
+		spellList.add("Force");
 		setCurrentSpell(0);
 	}
 
@@ -133,6 +134,7 @@ public abstract class Creature extends Moving{
 			this.alive = false;
 	    	game.moveColMap(getPos());
 	    	game.removeCreature(this);
+	    	System.out.println("mort");
 			//TODO Retour au menu;
 		}	
     }
@@ -143,25 +145,33 @@ public abstract class Creature extends Moving{
 	
 	public void useSpell(){
 		String spell = spellList.get(currentSpell);
+		Projectile projectile = new Projectile(game, getPos(), getOrient(), spell);
+		
 		switch (spell){
-			case "fireBall" : fireBall(); break;
-			case "force" : force(); break;
-		}		
-	}
-	
-	private void fireBall(){
-		FireBall fire = new FireBall(game, getPos(), getOrient());
-		if(mana >= fire.getManaCost()){
-			mana -= fire.getManaCost();
-			game.addProjectile(fire);
+		case "Laser" : 
+			projectile.setDamage(/*level * */5);
+			projectile.setEffect("");
+			projectile.setAoe(1);
+			projectile.setManaCost(5);
+			break;
+			
+			
+		case "Force" :
+			projectile.setDamage(0);
+			projectile.setEffect("push");
+			projectile.setAoe(2);
+			projectile.setManaCost(5);
+			break;	
+		
+		}
+		
+		if(mana >= projectile.getManaCost()){
+			mana -= projectile.getManaCost();
+			game.addProjectile(projectile);
 		}
 		else{
-			fire = null;
+			projectile = null;
 		}
-	}
-	
-	private void force(){
-		//TODO
 	}
 	
 }

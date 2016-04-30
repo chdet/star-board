@@ -19,6 +19,10 @@ public abstract class Moving extends GameEntity{
         this.orient = orient;
         if (getSprite() == "Laser"){
         	switch(orient){
+        	case Game.LEFT : setSprite("LaserHorizontal"); break;
+        	case Game.RIGHT : setSprite("LaserHorizontal"); break;
+        	case Game.UP : setSprite("LaserVertical"); break;
+        	case Game.DOWN : setSprite("LaserVertical"); break;
         	}
         }
         else if (this instanceof Hero) {
