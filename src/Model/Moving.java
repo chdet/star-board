@@ -39,7 +39,7 @@ public abstract class Moving extends GameEntity{
 		
 	}
 	
-	public void move(int orient){
+	public synchronized void  move(int orient){
         setOrient(orient);
         int[] pos = getPos();
         int[] newPos = inFront();

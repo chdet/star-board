@@ -4,11 +4,12 @@ public class FireBall extends Projectile{
 
 	public FireBall(Game game, int[] pos, int orient/*, level*/) {
 		super(game, pos, orient);
-		this.damage = /*level * */15;
+		setDamage(/*level * */5);
 		this.effect = "";
-		pos = new int[] {2,2};
+		setAoe(2);
+		setManaCost(5);
 	}
-	public void setAoe(){
+	/*public void setAoe(){
 		this.aoe.add(inFront());
-	}
+	}*/
 }

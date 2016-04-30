@@ -6,10 +6,11 @@ import java.util.ArrayList;
 public class Projectile extends Moving implements Runnable{
 	private static int WAIT = 50;
 	private boolean collided = false;
-	protected int damage;
+	private int damage; //mettre un négatif pour faire un soin.
 	protected String effect;
-	protected ArrayList<int[]> aoe = new ArrayList<int[]>();
-	//private int manaCost;
+	//protected ArrayList<int[]> aoe = new ArrayList<int[]>();
+	private int aoe;
+	private int manaCost;
 	
 	//private Color color = Color.BLUE;
 
@@ -22,18 +23,37 @@ public class Projectile extends Moving implements Runnable{
 		return damage;
 	}
 	
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+	
 	public String getEffect() {
 		return effect;
 	}
 	
-	public void setAoe(){};
-
-	public ArrayList<int[]> getAoe() {
+	public int getAoe() {
 		return aoe;
 	}
+	
+	public void setAoe(int aoe) {
+		if(aoe > 0){
+			this.aoe = aoe;
+		}
+		else{}
+	}
+	
+	public Integer getManaCost() {
+		return manaCost;
+	}
+	
+	public void setManaCost(int manaCost) {
+		if(manaCost > 0){
+			this.manaCost = manaCost;
+		}
+		else{}
+	}
 
-    public void endCourse(){
-    	setAoe();
+	public void endCourse(){
     	game.damage(this);
     	game.moveColMap(getPos());
     	collided = true;

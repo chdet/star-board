@@ -2,8 +2,8 @@ package Model;
 
 public class Hero extends Creature {
 	
-	public Hero(Game game, Integer HP){
-		super(game,new int[]{2,2}, HP);
+	public Hero(Game game, Integer HPMax, Integer manaMax){
+		super(game,new int[]{1,10}, HPMax, manaMax);
 	}
 
 }

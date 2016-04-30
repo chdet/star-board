@@ -1,11 +1,9 @@
-
-
 package Model;
 
 public class Ennemy extends AICreature{
 
-	public Ennemy(Game game, int[] pos, Integer HP){
-		super(game, pos, HP);
+	public Ennemy(Game game, int[] pos, Integer HPMax, Integer manaMax){
+		super(game, pos, HPMax, manaMax);
 		setHostility(HOSTILE);
 		setSprite("IADown");
 	}
@@ -26,11 +24,11 @@ public class Ennemy extends AICreature{
 			if(dX == 0){
 				if(dY > 0){
 					this.setOrient(Game.DOWN);
-					this.attack();
+					this.useSpell();
 				}
 				else if(dY < 0){
 					this.setOrient(Game.UP);
-					this.attack();
+					this.useSpell();
 				}
 			}
 		}
@@ -44,11 +42,11 @@ public class Ennemy extends AICreature{
 			if(dY == 0){
 				if(dX > 0){
 					this.setOrient(Game.RIGHT);
-					this.attack();
+					this.useSpell();
 				}
 				else if(dX < 0){
 					this.setOrient(Game.LEFT);
-					this.attack();
+					this.useSpell();
 				}
 			}
 		}
