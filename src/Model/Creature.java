@@ -39,9 +39,9 @@ public abstract class Creature extends Moving{
 		}
 	}
     
-    /*public Integer getHPMax() {
+    public Integer getHPMax() {
 		return HPMax;
-	}*/
+	}
 
 	public void setHPMax(Integer HPMax) {
 		if(HPMax > 0){
@@ -53,9 +53,9 @@ public abstract class Creature extends Moving{
 		}
 	}
 	
-	/*public Integer getMana() {
+	public Integer getMana() {
 		return mana;
-	}*/
+	}
 	
 	public void setMana(Integer mana) {
 		if(mana > manaMax){
@@ -67,12 +67,12 @@ public abstract class Creature extends Moving{
 		//le mana n'est jamais sensé être négatif puisqu'on vérifie avant de lancer un sort.
 	}
 	
-	/*public Integer getManaMax() {
+	public Integer getManaMax() {
 		return manaMax;
-	}*/
+	}
 	
 	public void setManaMax(Integer manaMax) {
-		if(manaMax > 0){
+		if(manaMax >= 0){
 			this.manaMax = manaMax;
 		}
 		else{
@@ -94,6 +94,9 @@ public abstract class Creature extends Moving{
 	    	game.removeCreature(this);
 		}
 		else{
+			this.alive = false;
+	    	game.moveColMap(getPos());
+	    	game.removeCreature(this);
 			//TODO Retour au menu;
 		}	
     }

@@ -17,15 +17,15 @@ public class Game{
 	public Game(Terrain[][] terrainMatrix){
         this.terrainMatrix = terrainMatrix;
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
-		this.hero = new Hero(this, 15, 15);
+		this.hero = new Hero(this, 15, 150);
         this.addCreature(hero);
-		this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 15));
-		this.addCreature(new Ennemy(this, new int[]{2,1}, 15, 15));
-		this.addCreature(new Ennemy(this, new int[]{3,1}, 15, 15));
+		this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 0));
+		this.addCreature(new Ennemy(this, new int[]{2,1}, 15, 0));
+		this.addCreature(new Ennemy(this, new int[]{3,1}, 15, 0));
 		updateColMap();        
 	}
 
-    void updateColMap(){
+	void updateColMap(){
         for(int i = 0; i<terrainMatrix.length; i++){
             for(int j = 0; j<terrainMatrix[0].length; j++){
                 collisionMap[i][j]= terrainMatrix[i][j].getCollision();
@@ -112,17 +112,15 @@ public class Game{
 		}
 		//System.out.println("size");
 		//System.out.println(aoePos.size());
-		
-		for(int i = 0; i< creatures.size(); i++){
-			for(int[] pos : aoePos){
-				if(pos[0] == creatures.get(i).getPos()[0] && pos[1] == creatures.get(i).getPos()[1]){
+		for(int[] pos : aoePos){
+			for(int i = 0; i< creatures.size(); i++){
+					if(pos[0] == creatures.get(i).getPos()[0] && pos[1] == creatures.get(i).getPos()[1]){
 					System.out.println("touché");
 					creatures.get(i).setHP(creatures.get(i).getHP() - projectile.getDamage());
 					//TODO effet
 				}
 			}
 		}
-		
 	}
 
 }

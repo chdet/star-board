@@ -62,7 +62,12 @@ public class Map extends JPanel{
         
         g.setColor(Color.BLACK);
         g.fillRect(0, terrainMap[0].length * SPRITESIZE * TILESIZE, terrainMap[0].length * SPRITESIZE * TILESIZE, 2 * SPRITESIZE * TILESIZE);
-
+        
+        g.setColor(Color.RED);
+        g.drawString("HP: " + creatures.get(0).getHP() + "/" + creatures.get(0).getHPMax(), SPRITESIZE * TILESIZE, (terrainMap[0].length + 1) * SPRITESIZE * TILESIZE);
+        
+        g.setColor(Color.BLUE);
+        g.drawString("Mana: " + creatures.get(0).getMana() + "/" + creatures.get(0).getManaMax(), 3*SPRITESIZE * TILESIZE, (terrainMap[0].length + 1)* SPRITESIZE * TILESIZE);
         
         for (Creature creature : creatures) {
         	int x = creature.getPos()[0];
