@@ -3,6 +3,7 @@ package View;
 import Model.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
@@ -14,15 +15,17 @@ public class Window  implements  Runnable{
 	public Window(Game game){
 	    JFrame frame = new JFrame("StarBoard");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.setBounds(0, 0, 815, 900);
-	    frame.add(this.map);
-	    
+	    frame.getContentPane().add(this.map);
+
 //	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	    frame.setUndecorated(false);
+		frame.setResizable(false);
 	    frame.setVisible(true);
 	    buildMap(game.getTerrainMatrix());
 		setCreatures(game.getCreatures());
 		setProjectiles(game.getProjectiles());
+		setHero(game.getHero());
+		frame.pack();
 	}
 
     public void run(){
@@ -44,6 +47,10 @@ public class Window  implements  Runnable{
 
 	public void setProjectiles(ArrayList<Projectile> projectiles){
 		this.map.setProjectiles(projectiles);
+	}
+
+	public void setHero(Hero hero) {
+		this.map.setHero(hero);
 	}
 
     public void refreshMap(){

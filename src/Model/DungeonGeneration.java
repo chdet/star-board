@@ -59,7 +59,7 @@ public class DungeonGeneration {
     private static boolean intersectsPreviousRooms(Room[] roomList, int index){
         /* Checks if the Room at index intersects with the previous*/
         for(int i = 0; i < index; i++){
-            if(roomList[index].intersects(roomList[i])){System.out.println("int"); return true; }
+            if(roomList[index].intersects(roomList[i])){return true;}
         }
         return false;
     }
