@@ -5,7 +5,7 @@ public class Ennemy extends AICreature{
 	public Ennemy(Game game, int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
 		super(game, pos, HPMax, manaMax, attack, defense);
 		setHostility(HOSTILE);
-		setSprite("IADown");
+		setSprite("TrooperDown");
 	}
 
 	protected void nextAction(){

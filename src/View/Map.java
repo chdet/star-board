@@ -34,17 +34,17 @@ public class Map extends JPanel{
 		this.requestFocusInWindow();
 		
 		try{
-			this.img.put("Grass",ImageIO.read(new File("Floor.png")));
-			this.img.put("Rock",ImageIO.read(new File("Wall.png")));
-			this.img.put("HeroLeft",ImageIO.read(new File("JediLeft.png")));
-			this.img.put("HeroRight",ImageIO.read(new File("JediRight.png")));
-			this.img.put("HeroUp",ImageIO.read(new File("JediUp.png")));
-			this.img.put("HeroDown",ImageIO.read(new File("JediDown.png")));
+			this.img.put("Floor",ImageIO.read(new File("Floor.png")));
+			this.img.put("Wall",ImageIO.read(new File("Wall.png")));
+			this.img.put("JediLeft",ImageIO.read(new File("JediLeft.png")));
+			this.img.put("JediRight",ImageIO.read(new File("JediRight.png")));
+			this.img.put("JediUp",ImageIO.read(new File("JediUp.png")));
+			this.img.put("JediDown",ImageIO.read(new File("JediDown.png")));
 			
-			this.img.put("IADown",ImageIO.read(new File("TrooperDown.png")));
-            this.img.put("IAUp",ImageIO.read(new File("TrooperUp.png")));
-            this.img.put("IARight",ImageIO.read(new File("TrooperRight.png")));
-            this.img.put("IALeft",ImageIO.read(new File("TrooperLeft.png")));
+			this.img.put("TrooperDown",ImageIO.read(new File("TrooperDown.png")));
+            this.img.put("TrooperUp",ImageIO.read(new File("TrooperUp.png")));
+            this.img.put("TrooperRight",ImageIO.read(new File("TrooperRight.png")));
+            this.img.put("TrooperLeft",ImageIO.read(new File("TrooperLeft.png")));
 
 			this.img.put("LaserHorizontal",ImageIO.read(new File("LaserHorizontal.png")));
 			this.img.put("LaserVertical",ImageIO.read(new File("LaserVertical.png")));

@@ -4,22 +4,27 @@ import java.util.ArrayList;
 
 public class Game{
     private Hero hero;
-    private ArrayList<Creature> creatures = new ArrayList<>();
-    private ArrayList<Projectile> projectiles = new ArrayList<>();
+	private ArrayList<Projectile> projectiles = new ArrayList<>();
+	private boolean[][] collisionMap;
+
+	//Dungeon
+	private ArrayList<Creature> creatures;
     private Terrain[][] terrainMatrix;
-    private boolean[][] collisionMap;
 
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
 	public static final int UP = 2;
 	public static final int DOWN = 3;
 
-	public Game(Terrain[][] terrainMatrix){
-        this.terrainMatrix = terrainMatrix;
+	public Game(Dungeon dungeon){
+        this.terrainMatrix = dungeon.getTerrainMatrix();
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
 		this.hero = new Hero(this, 15, 150, 5f, 1500f);
+		this.hero.setPos(dungeon.getStartPoint());
+		this.creatures = dungeon.getCreatures();
         this.addCreature(hero);
-		this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 15,1f, 1500f));
+		startAI();
+//		this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 15,1f, 1500f));
 		//this.addCreature(new Ennemy(this, new int[]{2,1}, 15, 0,1f, 1f));
 		//this.addCreature(new Ennemy(this, new int[]{3,1}, 15, 0,1f, 1f));
 		updateColMap();        
@@ -70,7 +75,16 @@ public class Game{
     public Hero getHero() {
 		return hero;
 	}
-	
+
+	private void startAI(){
+		for(Creature creature : this.creatures){
+			if(creature instanceof AICreature){
+				Thread t = new Thread((AICreature)creature);
+				t.start();
+			}
+		}
+	}
+
 	void addCreature(Creature creature){
         this.creatures.add(creature);
         if(creature instanceof AICreature){
