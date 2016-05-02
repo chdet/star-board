@@ -5,9 +5,21 @@ public class Ennemy extends AICreature{
 	public Ennemy(Game game, int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
 		super(game, pos, HPMax, manaMax, attack, defense);
 		setHostility(HOSTILE);
-		setSprite("IADown");
+		setSprite("TrooperDown");
 	}
-
+	
+	protected void setOrient(int orient) {
+        this.orient = orient;
+        
+        switch(orient){
+        case Game.LEFT: setSprite("TrooperLeft"); break;
+        case Game.RIGHT: setSprite("TrooperRight"); break;
+        case Game.UP: setSprite("TrooperUp"); break;
+        case Game.DOWN: setSprite("TrooperDown"); break;
+    	}
+        	
+	}
+	
 	protected void nextAction(){
 		boolean[][] colMap = game.getCollisionMap();
 		int[] pos = getPos();
@@ -92,10 +104,6 @@ public class Ennemy extends AICreature{
 			if(Math.abs(dX - dY) == 1){
 				this.attack();
 			} 
-			
-			
-			
-			
 		}
 	}
 		

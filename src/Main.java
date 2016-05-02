@@ -2,6 +2,8 @@ import Controller.Keyboard;
 import Model.Game;
 import View.Window;
 import Model.Game;
+import Model.Dungeon;
+import Model.DungeonGeneration;
 import Model.Terrain;
 
 import java.io.BufferedReader;
@@ -12,8 +14,8 @@ import java.io.IOException;
 public class Main {
     private static Terrain[][] generateTerrainMatrix(){
         Terrain[][] terrainMatrix;
-        Terrain grass = new Terrain("Grass", false);
-        Terrain rock = new Terrain("Rock", true);
+        Terrain floor = new Terrain("Floor", false);
+        Terrain wall = new Terrain("Wall", true);
         try{
             //TODO: Déplacer dans une autre classe ?
             String line;
@@ -35,8 +37,8 @@ public class Main {
                 for(int i = 0; i < x; i++){
                     char tile = line.charAt(i);
                     switch(tile){
-                        case 'g': terrainMatrix[i][j] = grass; break;
-                        case 'r': terrainMatrix[i][j] = rock; break;
+                        case 'g': terrainMatrix[i][j] = floor; break;
+                        case 'r': terrainMatrix[i][j] = wall; break;
                     }
                 }
                 j++;
@@ -49,12 +51,12 @@ public class Main {
             terrainMatrix = new Terrain[XSIZE][YSIZE];
 
             for(int i = 0; i < XSIZE; i++){
-                terrainMatrix[i][0] = rock;
-                terrainMatrix[i][YSIZE-1] = rock;
+                terrainMatrix[i][0] = wall;
+                terrainMatrix[i][YSIZE-1] = wall;
                 for(int j = 1;j < YSIZE-1; j++){
-                    terrainMatrix[i][j] = grass;
-                    terrainMatrix[0][j] = rock;
-                    terrainMatrix[XSIZE-1][j] = rock;
+                    terrainMatrix[i][j] = floor;
+                    terrainMatrix[0][j] = wall;
+                    terrainMatrix[XSIZE-1][j] = wall;
                 }
             }
         }
@@ -62,7 +64,10 @@ public class Main {
     }
 
 	public static void main(String[] args) {
-        Game game = new Game(generateTerrainMatrix());
+
+        Dungeon dungeon = DungeonGeneration.generateRandomDungeon(5);
+
+        Game game = new Game(dungeon);
         Keyboard keyboard = new Keyboard(game);
         Window window = new Window(game);
         window.setKeyListener(keyboard);

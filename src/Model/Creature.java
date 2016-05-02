@@ -11,6 +11,11 @@ public abstract class Creature extends Moving{
 	private Float attack;
 	private Float defense;
 	
+	private String status = "";
+    private long statusBegin = 0;
+    private float statusDuration = 0;
+    private int DOTStep; // La nombre de fois que des HP ont été retiré par un même DOT
+	
 	private int currentSpell;
 	protected ArrayList<String> spellList = new ArrayList<String>();
     
@@ -24,7 +29,12 @@ public abstract class Creature extends Moving{
 		setDefense(defense);
 		
 		spellList.add("Laser");
-		spellList.add("Force");
+		if(this instanceof Hero){ //à changer
+			spellList.add("Force");
+			spellList.add("Rally");	
+			spellList.add("Spike");
+			spellList.add("Ice");
+		}
 		setCurrentSpell(0);
 	}
 
@@ -102,11 +112,9 @@ public abstract class Creature extends Moving{
 		}
 	}
 
-
 	public Float getDefense() {
 		return defense;
 	}
-
 
 	public void setDefense(Float defense) {
 		if(defense > 0){
@@ -116,6 +124,41 @@ public abstract class Creature extends Moving{
 			System.out.println("defense doit être positif et non-nul");
 			this.defense = 1f;
 		}
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public long getStatusBegin() {
+		return statusBegin;
+	}
+
+	public void setStatusBegin(long statusBegin) {
+		this.statusBegin = statusBegin;
+	}
+
+	public float getStatusDuration() {
+		return statusDuration;
+	}
+
+	public void setStatusDuration(float statusDuration) {
+		if (statusDuration >= 0){
+			this.statusDuration = statusDuration;
+		}
+	}
+	
+	public int getDOTStep() {
+		return DOTStep;
+	}
+
+
+	public void setDOTStep(int DOTStep) {
+		this.DOTStep = DOTStep;
 	}
 	
 	public void setCurrentSpell(int currentSpell) {
@@ -149,20 +192,41 @@ public abstract class Creature extends Moving{
 		
 		switch (spell){
 		case "Laser" : 
-			projectile.setDamage(/*level * */5);
-			projectile.setEffect("");
+			projectile.setDamage(/*level * */0);
+			projectile.setEffect("DOT");
 			projectile.setAoe(1);
 			projectile.setManaCost(5);
 			break;
 			
-			
 		case "Force" :
+			projectile.setWAIT(0);
 			projectile.setDamage(0);
 			projectile.setEffect("push");
 			projectile.setAoe(2);
 			projectile.setManaCost(5);
-			break;	
+			break;
+			
+		case "Rally":
+			projectile.setDamage(0);
+			projectile.setEffect("");
+			projectile.setAoe(2);
+			projectile.setManaCost(5);
+			break;
 		
+		case "Spike":
+			projectile.setDamage(3);
+			projectile.setEffect("stun");
+			projectile.setAoe(1);
+			projectile.setManaCost(5);
+			break;
+		
+		case "Ice":
+			projectile.setDamage(0);
+			projectile.setEffect("snare");
+			projectile.setAoe(2);
+			projectile.setManaCost(5);
+			break;
+			
 		}
 		
 		if(mana >= projectile.getManaCost()){
