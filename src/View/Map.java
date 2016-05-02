@@ -52,6 +52,13 @@ public class Map extends JPanel{
 
 			this.img.put("LaserHorizontal",ImageIO.read(new File("LaserHorizontal.png")));
 			this.img.put("LaserVertical",ImageIO.read(new File("LaserVertical.png")));
+			
+			this.img.put("SpikeLeft",ImageIO.read(new File("SpikeLeft.png")));
+			this.img.put("SpikeRight",ImageIO.read(new File("SpikeRight.png")));
+			this.img.put("SpikeUp",ImageIO.read(new File("SpikeUp.png")));
+			this.img.put("SpikeDown",ImageIO.read(new File("SpikeDown.png")));
+			
+			this.img.put("Ice",ImageIO.read(new File("Ice.png")));
 		}
 		catch(IOException e){
         	e.printStackTrace();

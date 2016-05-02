@@ -7,7 +7,19 @@ public class Ennemy extends AICreature{
 		setHostility(HOSTILE);
 		setSprite("TrooperDown");
 	}
-
+	
+	protected void setOrient(int orient) {
+        this.orient = orient;
+        
+        switch(orient){
+        case Game.LEFT: setSprite("TrooperLeft"); break;
+        case Game.RIGHT: setSprite("TrooperRight"); break;
+        case Game.UP: setSprite("TrooperUp"); break;
+        case Game.DOWN: setSprite("TrooperDown"); break;
+    	}
+        	
+	}
+	
 	protected void nextAction(){
 		boolean[][] colMap = game.getCollisionMap();
 		int[] pos = getPos();
@@ -92,10 +104,6 @@ public class Ennemy extends AICreature{
 			if(Math.abs(dX - dY) == 1){
 				this.attack();
 			} 
-			
-			
-			
-			
 		}
 	}
 		

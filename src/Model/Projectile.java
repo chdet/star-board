@@ -1,10 +1,7 @@
 package Model;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
 public class Projectile extends Moving implements Runnable{
-	private static int WAIT = 50;
+	private int WAIT = 50;
 	private boolean collided = false;
 	private float damage; //mettre un négatif pour faire un soin.
 	protected String effect;
@@ -20,6 +17,33 @@ public class Projectile extends Moving implements Runnable{
 		setEffect("");
 		setAoe(1);
 		setManaCost(0);
+	}
+	
+	protected void setOrient(int orient) {
+        this.orient = orient;
+        
+        if (getSprite() == "Laser"){
+        	switch(orient){
+        	case Game.LEFT : setSprite("LaserHorizontal"); break;
+        	case Game.RIGHT : setSprite("LaserHorizontal"); break;
+        	case Game.UP : setSprite("LaserVertical"); break;
+        	case Game.DOWN : setSprite("LaserVertical"); break;
+        	}
+        }
+        else if (getSprite() == "Spike"){
+        	switch(orient){
+        	case Game.LEFT : setSprite("SpikeLeft"); break;
+        	case Game.RIGHT : setSprite("SpikeRight"); break;
+        	case Game.UP : setSprite("SpikeUp"); break;
+        	case Game.DOWN : setSprite("SpikeDown"); break;
+        	}
+        }
+	}
+	
+	public void setWAIT(int WAIT){// TODO Ramener dans Moving
+		if(WAIT >= 0){
+			this.WAIT = WAIT;
+		}
 	}
 	
 	public float getDamage() {
@@ -46,7 +70,6 @@ public class Projectile extends Moving implements Runnable{
 		if(aoe > 0){
 			this.aoe = aoe;
 		}
-		else{}
 	}
 	
 	public Integer getManaCost() {
@@ -57,7 +80,6 @@ public class Projectile extends Moving implements Runnable{
 		if(manaCost > 0){
 			this.manaCost = manaCost;
 		}
-		else{}
 	}
 
 	public void endCourse(){

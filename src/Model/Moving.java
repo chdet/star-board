@@ -2,7 +2,7 @@ package Model;
 
 public abstract class Moving extends GameEntity{
 	protected Game game;
-	private int orient;
+	protected int orient;
 	
 	
 	public Moving(Game game, int[] pos, int orient){
@@ -15,34 +15,7 @@ public abstract class Moving extends GameEntity{
 		return orient;
 	}
 	
-	protected void setOrient(int orient) {		//TODO: Changement de sprite dynamique en fonction de la sprite "basique" (ex: Jedi, Trooper, Laser)
-        this.orient = orient;
-        if (getSprite() == "Laser"){
-        	switch(orient){
-        	case Game.LEFT : setSprite("LaserHorizontal"); break;
-        	case Game.RIGHT : setSprite("LaserHorizontal"); break;
-        	case Game.UP : setSprite("LaserVertical"); break;
-        	case Game.DOWN : setSprite("LaserVertical"); break;
-        	}
-        }
-        else if (this instanceof Hero) {
-        	switch(orient){
-            case Game.LEFT: setSprite("JediLeft"); break;
-            case Game.RIGHT: setSprite("JediRight"); break;
-            case Game.UP: setSprite("JediUp"); break;
-            case Game.DOWN: setSprite("JediDown"); break;
-        	}
-        }
-        else if (this instanceof Ennemy){
-        	switch(orient){
-            case Game.LEFT: setSprite("TrooperLeft"); break;
-            case Game.RIGHT: setSprite("TrooperRight"); break;
-            case Game.UP: setSprite("TrooperUp"); break;
-            case Game.DOWN: setSprite("TrooperDown"); break;
-        	}
-        }
-		
-	}
+	protected abstract void setOrient(int orient);		//TODO: Changement de sprite dynamique en fonction de la sprite "basique" (ex: Jedi, Trooper, Laser)
 	
 	public synchronized void  move(int orient){
         setOrient(orient);
