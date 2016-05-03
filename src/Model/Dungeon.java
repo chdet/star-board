@@ -52,8 +52,17 @@ public class Dungeon {
         return terrainMatrix;
     }
 
-    public ArrayList<Creature> getCreatures() {
+    public ArrayList<Creature> getCreatures(Game game) {    //Called when Game loads Dungeon
+        for(Creature creature : this.creatures){
+            creature.setGame(game);
+        }
         return creatures;
+    }
+
+    public void addCreatures(Creature[] creatures) {
+        for(Creature creature : creatures){
+            this.creatures.add(creature);
+        }
     }
 
     public int[] getStartPoint() {

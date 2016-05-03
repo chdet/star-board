@@ -1,14 +1,17 @@
 package Model;
 
 public abstract class Moving extends GameEntity{
-	protected Game game;
 	protected int orient;
 	
-	
 	public Moving(Game game, int[] pos, int orient){
-		this.game = game;
+		setGame(game);
 		setPos(pos);
-        setOrient(orient);
+		setOrient(orient);
+	}
+
+	public Moving(int[] pos, int orient){
+		setPos(pos);
+		setOrient(orient);
 	}
 	
 	public int getOrient() {

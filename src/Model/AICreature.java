@@ -18,6 +18,10 @@ public abstract class AICreature extends Creature implements Runnable {
     public AICreature(Game game, int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
         super(game, pos, HPMax, manaMax, attack, defense);
     }
+
+    public AICreature(int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
+        super(pos, HPMax, manaMax, attack, defense);
+    }
     
     public int getWAIT() {
 		return WAIT;

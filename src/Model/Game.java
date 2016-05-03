@@ -21,11 +21,10 @@ public class Game implements Runnable{
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
 		this.hero = new Hero(this, 15, 150000, 5f, 1500f);
 		this.hero.setPos(dungeon.getStartPoint());
-		this.creatures = dungeon.getCreatures();
+		this.creatures = dungeon.getCreatures(this);	//Sets the Creatures "Game" attribute to this instance
 		int[] pos = {dungeon.getStartPoint()[0], dungeon.getStartPoint()[1] +4};
         this.addCreature(hero);
-        this.addCreature(new Ennemy(this, pos, 15, 0,1f, 1f));
-        
+
         //this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 15,1f, 1500f));
 		//this.addCreature(new Ennemy(this, new int[]{2,1}, 15, 0,1f, 1f));
 		//this.addCreature(new Ennemy(this, new int[]{3,1}, 15, 0,1f, 1f));
@@ -47,9 +46,6 @@ public class Game implements Runnable{
             int[] pos = creature.getPos();
             collisionMap[pos[0]][pos[1]] = true;
         }
-        
-        int[] posHero = hero.getPos();
-        collisionMap[posHero[0]][posHero[1]] = true;
     }
 
     void moveColMap(int[] pos, int[] newPos){
