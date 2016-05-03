@@ -64,15 +64,8 @@ public class Main {
     }
 
 	public static void main(String[] args) {
-
-        Dungeon dungeon = DungeonGeneration.generateRandomDungeon(5);
-
-        Game game = new Game(dungeon);
-        Keyboard keyboard = new Keyboard(game);
-        Window window = new Window(game);
-        window.setKeyListener(keyboard);
-        Thread t = new Thread(window);
-        t.start();
+		Window window = new Window();
+        System.out.println("fin du main");
 	}
 	
 }

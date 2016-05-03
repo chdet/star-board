@@ -40,10 +40,16 @@ public class Map extends JPanel{
 		try{
 			this.img.put("Floor",ImageIO.read(new File("Floor.png")));
 			this.img.put("Wall",ImageIO.read(new File("Wall.png")));
+			
 			this.img.put("JediLeft",ImageIO.read(new File("JediLeft.png")));
 			this.img.put("JediRight",ImageIO.read(new File("JediRight.png")));
 			this.img.put("JediUp",ImageIO.read(new File("JediUp.png")));
 			this.img.put("JediDown",ImageIO.read(new File("JediDown.png")));
+			
+			this.img.put("SithLeft",ImageIO.read(new File("SithLeft.png")));
+			this.img.put("SithRight",ImageIO.read(new File("SithRight.png")));
+			this.img.put("SithUp",ImageIO.read(new File("SithUp.png")));
+			this.img.put("SithDown",ImageIO.read(new File("SithDown.png")));
 			
 			this.img.put("TrooperDown",ImageIO.read(new File("TrooperDown.png")));
             this.img.put("TrooperUp",ImageIO.read(new File("TrooperUp.png")));

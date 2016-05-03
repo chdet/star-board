@@ -1,20 +1,35 @@
 package Model;
 
-public class Hero extends Creature {
+public abstract class Hero extends Creature {
 	
-	public Hero(Game game, Integer HPMax, Integer manaMax, Float attack, Float defense){
-		super(game,new int[]{1,1}, HPMax, manaMax, attack, defense);
+	private int level = 1;
+	private int exp = 0;
+	
+	public Hero(Game game,int[] pos){
+		super(game,pos);
+		setCurrentSpell(0);
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		if(level >=1){
+			this.level = level;
+		}
 	}
 	
-	protected void setOrient(int orient) {
-        this.orient = orient;
-        
-        switch(orient){
-        case Game.LEFT: setSprite("JediLeft"); break;
-        case Game.RIGHT: setSprite("JediRight"); break;
-        case Game.UP: setSprite("JediUp"); break;
-        case Game.DOWN: setSprite("JediDown"); break;
-        }
+	public abstract void levelUp();
+
+	public int getExp() {
+		return exp;
+	}
+	
+	public void setExp(int exp){
+		if(exp >= 0){
+			this.exp = exp;
+		}
 	}
 
 }
