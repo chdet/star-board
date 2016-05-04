@@ -119,7 +119,7 @@ public class DungeonGeneration {
                 int y = random.nextInt(room.getH())+room.getY1();
                 pos = new int[]{x,y};
             }while(room.isOccupied(pos));
-            creatures[i] = new Ennemy(pos, 15,0,1f,1f);
+            creatures[i] = new Ennemy(pos, 3,0,1f,1f);
         }
         room.setCreatures(creatures);
     }

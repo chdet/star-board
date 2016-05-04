@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class Window  implements  Runnable{
 	private Map map = new Map();
+	private Game game;
+	private Dungeon currentDungeon;
 	
     private static final int FPS = 60; //Frames per second
 
@@ -21,6 +23,8 @@ public class Window  implements  Runnable{
 	    frame.setUndecorated(false);
 		frame.setResizable(false);
 	    frame.setVisible(true);
+		this.game = game;
+		this.currentDungeon = game.getDungeon();
 	    buildMap(game.getTerrainMatrix());
 		setCreatures(game.getCreatures());
 		setProjectiles(game.getProjectiles());
@@ -31,6 +35,11 @@ public class Window  implements  Runnable{
     public void run(){
 		while(true){
 			try {
+				if(this.currentDungeon != game.getDungeon()){
+					this.currentDungeon= game.getDungeon();
+					buildMap(game.getTerrainMatrix());
+					setCreatures(game.getCreatures());
+				}
 				refreshMap();
 				Thread.sleep(1000/FPS);
 			}catch (Exception e){}

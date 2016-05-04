@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * Date : 01-05-16
  */
 public class Dungeon {
+    private boolean opened = false;
     private Terrain[][] terrainMatrix;
     private int[] startPoint; //Position the hero starts at
     private ArrayList<Creature> creatures = new ArrayList<>();

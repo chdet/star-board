@@ -3,6 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 public class Game implements Runnable{
+	private Dungeon dungeon;
     private Hero hero;
 	private ArrayList<Projectile> projectiles = new ArrayList<>();
 	private boolean[][] collisionMap;
@@ -17,12 +18,12 @@ public class Game implements Runnable{
 	public static final int DOWN = 3;
 
 	public Game(Dungeon dungeon){
+		this.dungeon = dungeon;
         this.terrainMatrix = dungeon.getTerrainMatrix();
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
-		this.hero = new Hero(this, 15, 150000, 5f, 1500f);
+		this.hero = new Hero(this, 150, 150000, 5f, 1500f);
 		this.hero.setPos(dungeon.getStartPoint());
 		this.creatures = dungeon.getCreatures(this);	//Sets the Creatures "Game" attribute to this instance
-		int[] pos = {dungeon.getStartPoint()[0], dungeon.getStartPoint()[1] +4};
         this.addCreature(hero);
 
         //this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 15,1f, 1500f));
@@ -48,6 +49,19 @@ public class Game implements Runnable{
         }
     }
 
+	public void changeDungeon(Dungeon dungeon){
+		stopAI();
+		this.dungeon = dungeon;
+		this.removeCreature(this.hero);
+		this.terrainMatrix = dungeon.getTerrainMatrix();
+		this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
+		this.hero.setPos(dungeon.getStartPoint());
+		this.creatures = dungeon.getCreatures(this);
+		this.addCreature(hero);
+		startAI();
+		updateColMap();
+	}
+
     void moveColMap(int[] pos, int[] newPos){
         collisionMap[pos[0]][pos[1]] = terrainMatrix[pos[0]][pos[1]].getCollision();
         //Il ne faut pas générer un moving sur une entité, sinon elle n'est plus pris en compte après.
@@ -57,6 +71,10 @@ public class Game implements Runnable{
     void moveColMap(int[] pos){
     	collisionMap[pos[0]][pos[1]] = terrainMatrix[pos[0]][pos[1]].getCollision();
     }
+
+	public Dungeon getDungeon() {
+		return dungeon;
+	}
 
 	public Terrain[][] getTerrainMatrix(){
         return terrainMatrix;
@@ -81,8 +99,17 @@ public class Game implements Runnable{
 	private void startAI(){
 		for(Creature creature : this.creatures){
 			if(creature instanceof AICreature){
+				((AICreature) creature).setActive(true);
 				Thread t = new Thread((AICreature)creature);
 				t.start();
+			}
+		}
+	}
+
+	private void stopAI(){
+		for(Creature creature : this.creatures){
+			if(creature instanceof AICreature){
+				((AICreature) creature).setActive(false);
 			}
 		}
 	}
@@ -97,6 +124,9 @@ public class Game implements Runnable{
 
     void removeCreature(Creature creature){
         this.creatures.remove(creature);
+		if(this.creatures.size() == 1 && this.creatures.contains(this.hero)){
+			changeDungeon(DungeonGeneration.generateRandomDungeon(5));
+		}
     }
     
     void addProjectile(Projectile projectile){
