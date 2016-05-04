@@ -18,8 +18,8 @@ public class Game{
 	public static final int UP = 2;
 	public static final int DOWN = 3;
 
-	public Game(String heroClass){
-		Dungeon dungeon = DungeonGeneration.generateRandomDungeon(5);
+	public Game(String heroClass, int roomNumber){
+		Dungeon dungeon = DungeonGeneration.generateRandomDungeon(roomNumber);
         this.terrainMatrix = dungeon.getTerrainMatrix();
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
         

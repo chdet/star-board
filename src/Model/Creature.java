@@ -192,7 +192,7 @@ public abstract class Creature extends Moving{
 		if(!(this instanceof Hero)){
 	    	game.moveColMap(getPos());
 	    	game.removeCreature(this);
-	    	game.getHero().setExp((int)(game.getHero().getExp() + Math.random()*25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp
+	    	game.getHero().setExp((int)(game.getHero().getExp() + 25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp
 	    	if (game.getHero().getExp() > 100/* * game.getHero().getLevel() */){
 	    		System.out.println("Taille AVANT: " + game.getHero().getSpellList().size());
 	    		game.getHero().levelUp();

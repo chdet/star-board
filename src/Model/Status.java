@@ -19,6 +19,7 @@ public class Status implements Runnable{
 		for(int i = 1 /*0*/; i < creatures.size(); i++){
 			if(creatures.get(i).getStatus() != ""){
 				if(creatures.get(i).getStatusDuration() + 50 >= System.currentTimeMillis() - creatures.get(i).getStatusBegin()){
+					//for, attaquant
 					switch(creatures.get(i).getStatus()){
 					case "stun": 
 						((AICreature) creatures.get(i)).setWAIT((int) (((AICreature) creatures.get(i)).getWAITMin()*5));
