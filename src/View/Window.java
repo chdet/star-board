@@ -4,9 +4,6 @@ import Model.*;
 
 import javax.swing.*;
 
-import Controller.Keyboard;
-
-import java.awt.*;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
@@ -15,8 +12,7 @@ public class Window  implements  Runnable{
 	private Game game;
 	private Menu menu = new Menu(this);
 	private Map map = new Map();
-	private int roomNumber = 0;
-	
+
     private static final int FPS = 60; //Frames per second
 
 	public Window(){
@@ -28,41 +24,6 @@ public class Window  implements  Runnable{
 		
 	    frame.setContentPane(menu);
 	    frame.pack();
-	}
-
-	public void setGame(String whichGame/*,int roomNumber*/){
-		if(whichGame == "Load Game"){
-			System.out.println("Load Game");
-		}
-		else{
-			if(roomNumber != 0){
-				game = new Game(whichGame, roomNumber);
-			    Keyboard keyboard = new Keyboard(game);
-			    
-			    menu.removeAll();
-			    frame.remove(menu);
-			    
-			    frame.getContentPane().add(this.map);
-			    this.map.requestFocusInWindow(); //Ne pas oublier
-	
-			    frame.setPreferredSize(map.getPreferredSize());
-			    buildMap(game.getTerrainMatrix());
-			    setCreatures(game.getCreatures());
-			    setProjectiles(game.getProjectiles());
-			    setHero(game.getHero());
-			    this.setKeyListener(keyboard);
-			    frame.pack();
-			          
-			    Thread t = new Thread(this);
-			    t.start();
-		    }
-		}
-	}
-	
-	public void setRoomNumber(int roomNumber) {
-    	if(roomNumber > 0){
-    		this.roomNumber = roomNumber;
-    	}
 	}
 	
     public void run(){
@@ -78,7 +39,19 @@ public class Window  implements  Runnable{
 		this.map.buildMap(terrainMatrix);
 	}
 
-    public void setCreatures(ArrayList<Creature> creatures){
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public Map getMap() {
+		return map;
+	}
+
+	public void setCreatures(ArrayList<Creature> creatures){
         this.map.setCreatures(creatures);
     }
 
