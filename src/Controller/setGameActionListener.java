@@ -1,6 +1,10 @@
-package View;
+package Controller;
 
 import java.awt.event.ActionListener;
+
+import View.Button;
+import View.Window;
+
 import java.awt.event.ActionEvent;
 
 public class setGameActionListener implements ActionListener{

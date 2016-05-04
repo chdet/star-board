@@ -1,8 +1,10 @@
-package View;
+package Controller;
 
 import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
+
+import View.Window;
 
 import java.awt.event.ActionEvent;
 

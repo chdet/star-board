@@ -1,15 +1,16 @@
 package View;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import Controller.setGameActionListener;
+import Controller.setRoomNumberActionListener;
+
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-
-import Model.Game;
 
 public class Menu extends JPanel{
 		
