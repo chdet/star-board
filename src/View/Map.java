@@ -92,6 +92,13 @@ public class Map extends JPanel{
         	int x = creatures.get(i).getPos()[0];
             int y = creatures.get(i).getPos()[1];
             g.drawImage(img.get(creatures.get(i).getSprite()), (x-heroPos[0]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, (y-heroPos[1]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
+            g.setColor(Color.RED);
+            g.fillRect((x-heroPos[0]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, (y-heroPos[1]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE) - 15, SPRITESIZE*TILESIZE*(creatures.get(i).getHP())/(creatures.get(i).getHPMax()), 5);
+            g.setColor(Color.BLUE);
+            if(creatures.get(i).getManaMax() > 0){
+                g.fillRect((x-heroPos[0]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, (y-heroPos[1]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE) - 10, SPRITESIZE*TILESIZE*(creatures.get(i).getMana())/(creatures.get(i).getManaMax()), 5);
+
+            }
         }
         
         for(int i = 0; i< projectiles.size(); i++){
