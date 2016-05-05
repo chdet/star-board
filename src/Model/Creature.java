@@ -63,6 +63,17 @@ public abstract class Creature extends Moving{
 		super(game, pos, Game.DOWN);
 		setCurrentSpell(0);
 	}
+
+	public synchronized void  move(int orient){
+		setOrient(orient);
+		int[] pos = getPos();
+		int[] newPos = inFront();
+
+		if(!game.doesCollide(newPos)){
+			this.setPos(newPos);
+			game.moveColMap(pos, newPos);
+		}
+	}
 	
     public  Integer getHP() {
 		return HP;
@@ -235,7 +246,7 @@ public abstract class Creature extends Moving{
 	
 	public void useSpell(){
 		String spell = spellList.get(currentSpell);
-		Projectile projectile = new Projectile(game, getPos(), getOrient(), spell);
+		Projectile projectile = new Projectile(game, inFront(), getOrient(), spell);
 		
 		switch (spell){
 		case "Laser" : 

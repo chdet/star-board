@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 public class Menu extends JPanel{
 	private JTextField textField = new JTextField(20);;
 
-
 	public Menu(Window window){
 		this.setFocusable(true);
         this.setPreferredSize(new Dimension(401,220));

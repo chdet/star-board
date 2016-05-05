@@ -16,10 +16,8 @@ public class Window  implements  Runnable{
 
     private static final int FPS = 60; //Frames per second
 
-	public Window(Game game){
-	    JFrame frame = new JFrame("StarBoard");
+	public Window(){
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.getContentPane().add(this.map);
 
 //	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	    frame.setUndecorated(false);
@@ -40,7 +38,9 @@ public class Window  implements  Runnable{
 				}
 				refreshMap();
 				Thread.sleep(1000/FPS);
-			}catch (Exception e){}
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 }
 
@@ -58,6 +58,14 @@ public class Window  implements  Runnable{
 
 	public Map getMap() {
 		return map;
+	}
+
+	public  void setGame(Game game){
+		this.game = game;
+	}
+
+	public void setCurrentDungeon(Dungeon dungeon){
+		this.currentDungeon = dungeon;
 	}
 
 	public void setCreatures(ArrayList<Creature> creatures){

@@ -33,7 +33,7 @@ public class Game{
         	break;
         }
 
-		this.creatures = dungeon.getCreatures();
+		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
 
 		status = new Status(this.creatures);
