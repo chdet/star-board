@@ -38,7 +38,6 @@ public class launchGameActionListener implements ActionListener{
 				window.getFrame().getContentPane().add(window.getMap(), BorderLayout.WEST);
 				window.getFrame().getContentPane().add(window.getInventory(), BorderLayout.EAST);
 				window.getMap().requestFocusInWindow(); //Ne pas oublier
-				window.getInventory().requestFocusInWindow();
 
 				window.setGame(game);
 				window.setCurrentDungeon(game.getDungeon());
