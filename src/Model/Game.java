@@ -29,8 +29,8 @@ public class Game implements Runnable{
         //this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 15,1f, 1500f));
 		//this.addCreature(new Ennemy(this, new int[]{2,1}, 15, 0,1f, 1f));
 		//this.addCreature(new Ennemy(this, new int[]{3,1}, 15, 0,1f, 1f));
-        startAI();
-        updateColMap();
+		updateColMap();
+		startAI();
         
         Thread t = new Thread(this);
         t.start();
@@ -58,8 +58,9 @@ public class Game implements Runnable{
 		this.hero.setPos(dungeon.getStartPoint());
 		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
-		startAI();
 		updateColMap();
+		startAI();
+
 	}
 
     void moveColMap(int[] pos, int[] newPos){
@@ -143,6 +144,42 @@ public class Game implements Runnable{
 	boolean doesCollide(int[] pos){
         return collisionMap[pos[0]][pos[1]];
     }
+
+	int[] closestEnemy(AICreature aiCreature){
+		/*	Return the position of the closest enemy to the AICreature, if there is none,
+		*  returns the creatures' own position */
+		int[] pos = aiCreature.getPos();
+		int range = 10; //TODO: AJOUTER RANGE DANS LE CONSTRUCTEUR DE CREATURE
+		int behavior= aiCreature.getHostility();
+		int[] enemyPos;
+		if(behavior == AICreature.HOSTILE && getHero().distanceTo(pos) < range) {
+			enemyPos = new int[]{getHero().getPos()[0],getHero().getPos()[1]};
+			return  enemyPos;
+		}
+		else if(behavior == AICreature.FRIENDLY) {
+			double[] temp;    //Holds the position of the current ennemy and its distance.
+			double[] tempClosest = null; //Holds the position of the current closest ennemy and its distance.
+			try {
+				for (Creature creature : this.creatures) {
+					temp = new double[]{creature.getPos()[0], creature.getPos()[1], creature.distanceTo(pos)};
+					if (temp[2] < range) {    //temp[2] is the distance to pos
+						if (tempClosest == null) {
+							tempClosest = temp;
+						} else if (temp[2] < tempClosest[2]) {
+							tempClosest = temp;
+						}
+					}
+				}
+				enemyPos = new int[]{(int) tempClosest[0], (int) tempClosest[1]};
+				return enemyPos;
+			} catch (NullPointerException e) {    //In case there are no enemies close and tempClosest is null
+				return pos;
+			}
+		}
+		else{
+			return pos;		//In this case no movement is made
+		}
+		}
 
 	public void damage(Projectile projectile) {
 		ArrayList<int[]> aoePos = new ArrayList<int[]>();

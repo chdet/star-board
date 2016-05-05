@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.lang.Math;
 
 public abstract class Creature extends Moving{
 	boolean alive = true;
@@ -10,6 +11,7 @@ public abstract class Creature extends Moving{
 	private Integer manaMax;
 	private Float attack;
 	private Float defense;
+	private int range; //Vision range
 	
 	private String status = "";
     private long statusBegin = 0;
@@ -255,6 +257,10 @@ public abstract class Creature extends Moving{
 		else{
 			projectile = null;
 		}
+	}
+
+	public double distanceTo(int[] pos){
+		return(Math.sqrt((this.getPos()[0]-pos[0])^2+(this.getPos()[1]-pos[1])^2));
 	}
 	
 }
