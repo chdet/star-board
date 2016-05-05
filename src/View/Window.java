@@ -3,15 +3,17 @@ package View;
 import Model.*;
 
 import javax.swing.*;
-import java.awt.*;
+
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class Window  implements  Runnable{
-	private Map map = new Map();
+	private JFrame frame = new JFrame("StarBoard");
 	private Game game;
+	private Menu menu = new Menu(this);
+	private Map map = new Map();
 	private Dungeon currentDungeon;
-	
+
     private static final int FPS = 60; //Frames per second
 
 	public Window(Game game){
@@ -22,14 +24,10 @@ public class Window  implements  Runnable{
 //	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	    frame.setUndecorated(false);
 		frame.setResizable(false);
-	    frame.setVisible(true);
-		this.game = game;
-		this.currentDungeon = game.getDungeon();
-	    buildMap(game.getTerrainMatrix());
-		setCreatures(game.getCreatures());
-		setProjectiles(game.getProjectiles());
-		setHero(game.getHero());
-		frame.pack();
+		frame.setVisible(true);
+
+	    frame.setContentPane(menu);
+	    frame.pack();
 	}
 
     public void run(){
@@ -50,7 +48,19 @@ public class Window  implements  Runnable{
 		this.map.buildMap(terrainMatrix);
 	}
 
-    public void setCreatures(ArrayList<Creature> creatures){
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public Map getMap() {
+		return map;
+	}
+
+	public void setCreatures(ArrayList<Creature> creatures){
         this.map.setCreatures(creatures);
     }
 
@@ -69,4 +79,5 @@ public class Window  implements  Runnable{
 	public void setKeyListener(KeyListener keyboard){
 	    this.map.addKeyListener(keyboard);
 	}
+
 }

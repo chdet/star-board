@@ -16,7 +16,9 @@ public class Ennemy extends AICreature{
 
 	
 	protected void setOrient(int orient) {
-        this.orient = orient;
+		if(0 <= orient && orient < 4){
+			this.orient = orient;
+		}
         
         switch(orient){
         case Game.LEFT: setSprite("TrooperLeft"); break;
