@@ -5,8 +5,8 @@ public abstract class Hero extends Creature {
 	private int level = 1;
 	private int exp = 0;
 	
-	public Hero(Game game,int[] pos){
-		super(game,pos);
+	public Hero(Game game,int[] pos, int hpMax, int manaMax, float attack, float defense){
+		super(game,pos, hpMax, manaMax, attack, defense);
 		setCurrentSpell(0);
 	}
 

@@ -3,15 +3,11 @@ package Model;
 public class Jedi extends Hero{
 	
 	public Jedi(Game game, int[] pos){
-		super(game, pos);
+		super(game, pos, 250, 200, 5f,10f);	//hpMax, manaMax, attack, defense
 		addToSpellList("Laser");
 		
-		setHPMax(250);
 		setHP(this.getHPMax());
-		setManaMax(200);
 		setMana(this.getManaMax());
-		setAttack(5f);
-		setDefense(10f);
 	}
 	
 	protected void setOrient(int orient) {

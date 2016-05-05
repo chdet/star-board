@@ -73,9 +73,7 @@ public class DungeonGeneration {
 
         void populate(Dungeon dun){
             if(creatures != null){
-                for(Creature creature : creatures){
-                    dun.addCreatures(creatures);
-                }
+                dun.addCreatures(creatures);
             }
         }
     }
@@ -163,7 +161,7 @@ public class DungeonGeneration {
         }
 
         setStart(rooms, dun);
-
+        dun.setRoomCount(numberOfRooms);
         return dun;
     }
 }

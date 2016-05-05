@@ -3,15 +3,11 @@ package Model;
 public class Sith extends Hero{
 		
 	public Sith(Game game, int[] pos){
-		super(game, pos);
+		super(game, pos, 250, 200, 5f,10f);	//hpMax, manaMax, attack, defense
 		addToSpellList("Laser");
-		
-		setHPMax(250);
+
 		setHP(this.getHPMax());
-		setManaMax(175);
 		setMana(this.getManaMax());
-		setAttack(10f);
-		setDefense(5f);
 	}
 	
 	protected void setOrient(int orient) {

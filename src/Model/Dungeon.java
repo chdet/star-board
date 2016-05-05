@@ -7,10 +7,10 @@ import java.util.ArrayList;
  * Date : 01-05-16
  */
 public class Dungeon {
-    private boolean opened = false;
     private Terrain[][] terrainMatrix;
     private int[] startPoint; //Position the hero starts at
     private ArrayList<Creature> creatures = new ArrayList<>();
+    private int roomCount;
 
     public Dungeon(int[] size){
         Terrain wall = new Terrain("Wall", true);
@@ -47,6 +47,14 @@ public class Dungeon {
                 }
             }
         }
+    }
+
+    public int getRoomCount() {
+        return roomCount;
+    }
+
+    public void setRoomCount(int roomCount) {
+        this.roomCount = roomCount;
     }
 
     public Terrain[][] getTerrainMatrix() {

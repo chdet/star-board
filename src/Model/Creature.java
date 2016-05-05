@@ -31,16 +31,10 @@ public abstract class Creature extends Moving{
 		setDefense(defense);
 
 		spellList.add("Laser");
-		if(this instanceof Hero){ //à changer
-			spellList.add("Force");
-			spellList.add("Rally");
-			spellList.add("Spike");
-			spellList.add("Ice");
-		}
 		setCurrentSpell(0);
 	}
 
-	public Creature(int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
+	public Creature(int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){	//Used to generate dungeons
 		super(pos, Game.DOWN);
 		setHPMax(HPMax);
 		setHP(this.HPMax);
@@ -50,17 +44,6 @@ public abstract class Creature extends Moving{
 		setDefense(defense);
 
 		spellList.add("Laser");
-		if(this instanceof Hero){ //à changer
-			spellList.add("Force");
-			spellList.add("Rally");
-			spellList.add("Spike");
-			spellList.add("Ice");
-		}
-		setCurrentSpell(0);
-	}
-
-	public Creature(Game game, int[] pos){ // pour le héros
-		super(game, pos, Game.DOWN);
 		setCurrentSpell(0);
 	}
 

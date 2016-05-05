@@ -19,8 +19,8 @@ public class Game{
 	public static final int UP = 2;
 	public static final int DOWN = 3;
 
-	public Game(String heroClass, int roomNumber){
-		dungeon = DungeonGeneration.generateRandomDungeon(roomNumber);
+	public Game(String heroClass, int roomCount){
+		dungeon = DungeonGeneration.generateRandomDungeon(roomCount);
         this.terrainMatrix = dungeon.getTerrainMatrix();
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
 
@@ -132,7 +132,7 @@ public class Game{
     void removeCreature(Creature creature){
         this.creatures.remove(creature);
 		if(this.creatures.size() == 1 && this.creatures.contains(this.hero)){
-			changeDungeon(DungeonGeneration.generateRandomDungeon(5));
+			changeDungeon(DungeonGeneration.generateRandomDungeon(dungeon.getRoomCount()+1));
 		}
     }
     
