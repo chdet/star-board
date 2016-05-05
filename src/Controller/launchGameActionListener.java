@@ -1,5 +1,6 @@
 package Controller;
 
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 import Model.Game;
@@ -32,13 +33,13 @@ public class launchGameActionListener implements ActionListener{
 				Game game = new Game(whichGame, window.getMenu().getRoomCount());
 				Keyboard keyboard = new Keyboard(game);
 
-				window.getMenu().removeAll();
-				window.getFrame().remove(window.getMenu());
+				window.getFrame().getContentPane().remove(window.getMenu());
 
-				window.getFrame().getContentPane().add(window.getMap());
+				window.getFrame().getContentPane().add(window.getMap(), BorderLayout.WEST);
+				window.getFrame().getContentPane().add(window.getInventory(), BorderLayout.EAST);
 				window.getMap().requestFocusInWindow(); //Ne pas oublier
+				window.getInventory().requestFocusInWindow();
 
-				window.getFrame().setPreferredSize(window.getMap().getPreferredSize());
 				window.setGame(game);
 				window.setCurrentDungeon(game.getDungeon());
 				window.buildMap(game.getTerrainMatrix());

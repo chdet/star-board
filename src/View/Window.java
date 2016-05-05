@@ -12,6 +12,7 @@ public class Window  implements  Runnable{
 	private Game game;
 	private Menu menu = new Menu(this);
 	private Map map = new Map();
+	private Inventory inventory = new Inventory();
 	private Dungeon currentDungeon;
 
     private static final int FPS = 60; //Frames per second
@@ -24,7 +25,7 @@ public class Window  implements  Runnable{
 		frame.setResizable(false);
 		frame.setVisible(true);
 
-	    frame.setContentPane(menu);
+	    frame.getContentPane().add(getMenu());
 	    frame.pack();
 	}
 
@@ -54,6 +55,10 @@ public class Window  implements  Runnable{
 
 	public Menu getMenu() {
 		return menu;
+	}
+
+	public Inventory getInventory() {
+		return inventory;
 	}
 
 	public Map getMap() {
