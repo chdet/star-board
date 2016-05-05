@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.lang.Math;
 
 public abstract class Creature extends Moving{
 	boolean alive = true;
@@ -10,6 +11,7 @@ public abstract class Creature extends Moving{
 	private Integer manaMax;
 	private Float attack;
 	private Float defense;
+	private int range; //Vision range
 	
 	private String status = "";
     private long statusBegin = 0;
@@ -27,11 +29,30 @@ public abstract class Creature extends Moving{
 		setMana(this.manaMax);
 		setAttack(attack);
 		setDefense(defense);
-		
+
 		spellList.add("Laser");
 		if(this instanceof Hero){ //à changer
 			spellList.add("Force");
-			spellList.add("Rally");	
+			spellList.add("Rally");
+			spellList.add("Spike");
+			spellList.add("Ice");
+		}
+		setCurrentSpell(0);
+	}
+
+	public Creature(int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
+		super(pos, Game.DOWN);
+		setHPMax(HPMax);
+		setHP(this.HPMax);
+		setManaMax(manaMax);
+		setMana(this.manaMax);
+		setAttack(attack);
+		setDefense(defense);
+
+		spellList.add("Laser");
+		if(this instanceof Hero){ //à changer
+			spellList.add("Force");
+			spellList.add("Rally");
 			spellList.add("Spike");
 			spellList.add("Ice");
 		}
@@ -41,6 +62,17 @@ public abstract class Creature extends Moving{
 	public Creature(Game game, int[] pos){ // pour le héros
 		super(game, pos, Game.DOWN);
 		setCurrentSpell(0);
+	}
+
+	public synchronized void  move(int orient){
+		setOrient(orient);
+		int[] pos = getPos();
+		int[] newPos = inFront();
+
+		if(!game.doesCollide(newPos)){
+			this.setPos(newPos);
+			game.moveColMap(pos, newPos);
+		}
 	}
 	
     public  Integer getHP() {
@@ -214,7 +246,7 @@ public abstract class Creature extends Moving{
 	
 	public void useSpell(){
 		String spell = spellList.get(currentSpell);
-		Projectile projectile = new Projectile(game, getPos(), getOrient(), spell);
+		Projectile projectile = new Projectile(game, inFront(), getOrient(), spell);
 		
 		switch (spell){
 		case "Laser" : 
@@ -263,6 +295,10 @@ public abstract class Creature extends Moving{
 		else{
 			projectile = null;
 		}
+	}
+
+	public double distanceTo(int[] pos){
+		return(Math.sqrt((this.getPos()[0]-pos[0])^2+(this.getPos()[1]-pos[1])^2));
 	}
 	
 }

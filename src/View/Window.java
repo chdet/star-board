@@ -12,28 +12,37 @@ public class Window  implements  Runnable{
 	private Game game;
 	private Menu menu = new Menu(this);
 	private Map map = new Map();
+	private Dungeon currentDungeon;
 
     private static final int FPS = 60; //Frames per second
 
 	public Window(){
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+//	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	    frame.setUndecorated(false);
 		frame.setResizable(false);
 		frame.setVisible(true);
-		
+
 	    frame.setContentPane(menu);
 	    frame.pack();
 	}
-	
+
     public void run(){
 		while(true){
 			try {
+				if(this.currentDungeon != game.getDungeon()){
+					this.currentDungeon= game.getDungeon();
+					buildMap(game.getTerrainMatrix());
+					setCreatures(game.getCreatures());
+				}
 				refreshMap();
 				Thread.sleep(1000/FPS);
-			}catch (Exception e){}
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 		}
-    }
+}
 
     public void buildMap(Terrain[][] terrainMatrix){
 		this.map.buildMap(terrainMatrix);
@@ -49,6 +58,14 @@ public class Window  implements  Runnable{
 
 	public Map getMap() {
 		return map;
+	}
+
+	public  void setGame(Game game){
+		this.game = game;
+	}
+
+	public void setCurrentDungeon(Dungeon dungeon){
+		this.currentDungeon = dungeon;
 	}
 
 	public void setCreatures(ArrayList<Creature> creatures){

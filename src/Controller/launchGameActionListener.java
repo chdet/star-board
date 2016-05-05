@@ -39,6 +39,8 @@ public class launchGameActionListener implements ActionListener{
 				window.getMap().requestFocusInWindow(); //Ne pas oublier
 
 				window.getFrame().setPreferredSize(window.getMap().getPreferredSize());
+				window.setGame(game);
+				window.setCurrentDungeon(game.getDungeon());
 				window.buildMap(game.getTerrainMatrix());
 				window.setCreatures(game.getCreatures());
 				window.setProjectiles(game.getProjectiles());
