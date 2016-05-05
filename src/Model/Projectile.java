@@ -28,6 +28,7 @@ public class Projectile extends Moving implements Runnable{
 		}
 
 		else{
+			this.setPos(newPos);
 			this.endCourse();
 		}
 	}
