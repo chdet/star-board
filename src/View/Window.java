@@ -36,8 +36,10 @@ public class Window  implements  Runnable{
 					this.currentDungeon= game.getDungeon();
 					buildMap(game.getTerrainMatrix());
 					setCreatures(game.getCreatures());
+					setItems(game.getItems());
 				}
 				refreshMap();
+				refreshInventory();
 				Thread.sleep(1000/FPS);
 			}catch (Exception e){
 				e.printStackTrace();
@@ -83,10 +85,19 @@ public class Window  implements  Runnable{
 
 	public void setHero(Hero hero) {
 		this.map.setHero(hero);
+		this.inventory.setHero(hero);
+	}
+	
+	public void setItems(ArrayList<Item> items) {
+		this.map.setItems(items);
 	}
 
     public void refreshMap(){
         this.map.refresh();
+    }
+    
+    public void refreshInventory(){
+        this.inventory.refresh();
     }
 	
 	public void setKeyListener(KeyListener keyboard){

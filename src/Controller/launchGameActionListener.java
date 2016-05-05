@@ -38,12 +38,13 @@ public class launchGameActionListener implements ActionListener{
 				window.getFrame().getContentPane().add(window.getMap(), BorderLayout.WEST);
 				window.getFrame().getContentPane().add(window.getInventory(), BorderLayout.EAST);
 				window.getMap().requestFocusInWindow(); //Ne pas oublier
-
+				
 				window.setGame(game);
 				window.setCurrentDungeon(game.getDungeon());
 				window.buildMap(game.getTerrainMatrix());
 				window.setCreatures(game.getCreatures());
 				window.setProjectiles(game.getProjectiles());
+				window.setItems(game.getItems());
 				window.setHero(game.getHero());
 				window.setKeyListener(keyboard);
 				window.getFrame().pack();

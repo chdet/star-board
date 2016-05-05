@@ -58,9 +58,14 @@ public abstract class AICreature extends Creature implements Runnable {
 
     protected abstract void nextAction();       //Problème d'accès ici. Pour redéfinir nextAction dans les sous-classes, la méthode doit être au plus protected -> tout Model peut acceder à nextAction -> Problème
 
+    public void walkOn(Item item){
+    	item.act(this);
+		getGame().removeItem(item);
+	}
+    
     @Override
     public void run(){
-        while(alive && active){
+        while(isAlive() && active){
             try{
                 nextAction();
                 Thread.sleep(WAIT);

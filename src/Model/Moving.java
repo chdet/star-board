@@ -20,7 +20,7 @@ public abstract class Moving extends GameEntity{
 	
 	protected abstract void setOrient(int orient);		//TODO: Changement de sprite dynamique en fonction de la sprite "basique" (ex: Jedi, Trooper, Laser)
 	
-	public synchronized void  move(int orient){
+	public abstract  void  move(int orient);/*{
         setOrient(orient);
         int[] pos = getPos();
         int[] newPos = inFront();
@@ -37,7 +37,7 @@ public abstract class Moving extends GameEntity{
 	            //TODO: Appeler la méthode de Game qui gère les dégats (newPos et Area of Damage en attribut)
 	        }
         }
-    }
+    }*/
 	
 	public int[] inFront(){
 		int[] pos = getPos();

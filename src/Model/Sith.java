@@ -4,7 +4,6 @@ public class Sith extends Hero{
 		
 	public Sith(Game game, int[] pos){
 		super(game, pos, 250, 200, 5f,10f);	//hpMax, manaMax, attack, defense
-		addToSpellList("Laser");
 
 		setHP(this.getHPMax());
 		setMana(this.getManaMax());

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 public abstract class Creature extends Moving{
-	boolean alive = true;
+	private boolean alive = true;
 	private  Integer HP;
 	private Integer HPMax;
 	private  Integer mana;
@@ -52,9 +52,15 @@ public abstract class Creature extends Moving{
 		int[] pos = getPos();
 		int[] newPos = inFront();
 
-		if(!game.doesCollide(newPos)){
+		if(!getGame().doesCollide(newPos)){
 			this.setPos(newPos);
-			game.moveColMap(pos, newPos);
+			getGame().moveColMap(pos, newPos);
+			for(int i = 0; i< getGame().getItems().size(); i++){            	
+            	if (this instanceof Creature && getGame().getItems().get(i).getPos()[0] == newPos[0] && getGame().getItems().get(i).getPos()[1] == newPos[1]){
+            		walkOn(getGame().getItems().get(i));
+            		System.out.println("OBJET RENCONTRE");
+            	}
+            }
 		}
 	}
 	
@@ -202,34 +208,48 @@ public abstract class Creature extends Moving{
 		}
 	}
 	
+	public boolean isAlive() {
+		return alive;
+	}
+	
 	public void die(){
 		this.alive = false;
-		if(!(this instanceof Hero)){
-	    	game.moveColMap(getPos());
-	    	game.removeCreature(this);
-	    	game.getHero().setExp((int)(game.getHero().getExp() + 25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp
-	    	if (game.getHero().getExp() > 100/* * game.getHero().getLevel() */){
-	    		System.out.println("Taille AVANT: " + game.getHero().getSpellList().size());
-	    		game.getHero().levelUp();
-	    		System.out.println("LEVEL UP: " + game.getHero().getLevel());
-	    		System.out.println("Taille APRES: " + game.getHero().getSpellList().size());
+		if(!(this instanceof Hero)){	    	
+	    	getGame().getHero().setExp((int)(getGame().getHero().getExp() + 25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp
+	    	drop();
+	    	if (getGame().getHero().getExp() > 100/* * game.getHero().getLevel() */){
+	    		System.out.println("Taille AVANT: " + getGame().getHero().getSpellList().size());
+	    		getGame().getHero().levelUp();
+	    		System.out.println("LEVEL UP: " + getGame().getHero().getLevel());
+	    		System.out.println("Taille APRES: " + getGame().getHero().getSpellList().size());
 	    	}
 		}
 		else{
-	    	game.moveColMap(getPos());
-	    	game.removeCreature(this);
 	    	System.out.println("mort");
 			//TODO Retour au menu;
-		}	
+		}
+		getGame().moveColMap(getPos());
+		getGame().removeCreature(this);
     }
 	
+	private void drop() {
+		System.out.println("DROP");
+		double x = Math.random();
+		if (x < 0.25){
+			this.getGame().addItem(new Potion(this.getPos(), "PotionHP", 50));
+		}
+		else if (0.25 < x && x < 0.5){
+			this.getGame().addItem(new Potion(this.getPos(), "PotionMana", 50));
+		}
+	}
+	
 	public void attack(){
-		game.damage(this);
+		getGame().damage(this);
 	}
 	
 	public void useSpell(){
 		String spell = spellList.get(currentSpell);
-		Projectile projectile = new Projectile(game, inFront(), getOrient(), spell);
+		Projectile projectile = new Projectile(getGame(), inFront(), getOrient(), spell);
 		
 		switch (spell){
 		case "Laser" : 
@@ -256,7 +276,7 @@ public abstract class Creature extends Moving{
 			break;
 		
 		case "Spike":
-			projectile.setDamage(5);
+			projectile.setDamage(0);
 			projectile.setEffect("stun");
 			projectile.setAoe(1);
 			projectile.setManaCost(5);
@@ -273,12 +293,14 @@ public abstract class Creature extends Moving{
 		
 		if(mana >= projectile.getManaCost()){
 			mana -= projectile.getManaCost();
-			game.addProjectile(projectile);
+			getGame().addProjectile(projectile);
 		}
 		else{
 			projectile = null;
 		}
 	}
+	
+	public abstract void walkOn(Item item);
 
 	public double distanceTo(int[] pos){
 		return(Math.sqrt((this.getPos()[0]-pos[0])^2+(this.getPos()[1]-pos[1])^2));

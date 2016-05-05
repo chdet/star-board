@@ -3,6 +3,10 @@ package Model;
 import java.util.ArrayList;
 
 public class Status implements Runnable{
+	public void setCreatures(ArrayList<Creature> creatures) {
+		this.creatures = creatures;
+	}
+
 	private ArrayList<Creature> creatures;
 	
 	public Status(ArrayList<Creature> creatures){
@@ -16,8 +20,8 @@ public class Status implements Runnable{
 	}
 	
 	private void checkStatus() { //TODO Si on veut que le hero subisse aussi des statuts faut que ce soit un thread (on implement Runnable dans Moving et y met tous les getWAIT,... et on rtire les cast)
-		for(int i = 1 /*0*/; i < creatures.size(); i++){
-			if(creatures.get(i).getStatus() != ""){
+		for(int i = 0; i < creatures.size(); i++){
+			if(creatures.get(i).getStatus() != "" && !(creatures.get(i) instanceof Hero)){
 				if(creatures.get(i).getStatusDuration() + 50 >= System.currentTimeMillis() - creatures.get(i).getStatusBegin()){
 					//for, attaquant
 					switch(creatures.get(i).getStatus()){

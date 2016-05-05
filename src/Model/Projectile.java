@@ -22,13 +22,8 @@ public class Projectile extends Moving implements Runnable{
 	public synchronized void  move(int orient){
 		setOrient(orient);
 		int[] newPos = inFront();
-
-		if(!game.doesCollide(newPos)){
-			this.setPos(newPos);
-		}
-
-		else{
-			this.setPos(newPos);
+		this.setPos(newPos);
+		if(getGame().doesCollide(newPos)){
 			this.endCourse();
 		}
 	}
@@ -97,15 +92,15 @@ public class Projectile extends Moving implements Runnable{
 	}
 
 	public void endCourse(){
-    	game.damage(this);
+    	getGame().damage(this);
     	collided = true;
-    	game.removeProjectile(this);
+    	getGame().removeProjectile(this);
     }
     
 	public void run(){
 		while(!collided){
 			try{
-				if(game.doesCollide(getPos())){
+				if(getGame().doesCollide(getPos())){
 					//TODO: ATTENTION DEGATS APPLIQUES DEVANT A CHANGER
 					endCourse();
 				}

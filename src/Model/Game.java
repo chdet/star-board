@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Game{
     private Hero hero;
 	private ArrayList<Projectile> projectiles = new ArrayList<>();
+	private ArrayList<Item> items = new ArrayList<>();
 	private boolean[][] collisionMap;
 
 	//Dungeon
@@ -35,9 +36,12 @@ public class Game{
 
 		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
+		
+		int[] pos = {dungeon.getStartPoint()[0], dungeon.getStartPoint()[1] - 2};
+		this.addItem(new Trap(pos, 1, "snare"));
 
 		status = new Status(this.creatures);
-
+		
 		updateColMap();
         startAI();
 	}
@@ -64,9 +68,10 @@ public class Game{
 		this.hero.setPos(dungeon.getStartPoint());
 		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
+		status.setCreatures(this.creatures);
+		this.items.clear();
 		updateColMap();
 		startAI();
-
 	}
 
     void moveColMap(int[] pos, int[] newPos){
@@ -123,10 +128,6 @@ public class Game{
 
 	void addCreature(Creature creature){
         this.creatures.add(creature);
-        /*if(creature instanceof AICreature){	// On en a plus besoin vu que c'est fait dans startAI?
-            Thread t = new Thread((AICreature)creature);
-            t.start();
-        }*/
     }
 
     void removeCreature(Creature creature){
@@ -146,7 +147,18 @@ public class Game{
         this.projectiles.remove(projectile);
     }
     
+    public ArrayList<Item> getItems() {
+		return items;
+	}
 
+	public void addItem(Item item) {
+		this.items.add(item);
+	}
+	
+	public void removeItem(Item item) {
+		this.items.remove(item);
+	}
+    
 	boolean doesCollide(int[] pos){
         return collisionMap[pos[0]][pos[1]];
     }
@@ -189,14 +201,17 @@ public class Game{
 
 	public void damage(Projectile projectile) {
 		ArrayList<int[]> aoePos = new ArrayList<int[]>();
-		int[] center = projectile.inFront();
+		int[] center = projectile.getPos();
 		
 		for(int i = -projectile.getAoe() + 1; i < projectile.getAoe(); i++){
 			for(int j = -projectile.getAoe() + 1; j < projectile.getAoe(); j++){
 				int x = center[0] + i;
 				int y = center[1] + j;
 				int[] pos = new int[] {x,y};
-				aoePos.add(pos);
+				
+				if( !(x == hero.getPos()[0] && y == hero.getPos()[1])){
+					aoePos.add(pos);
+				}
 			}
 		}
 		
@@ -247,6 +262,35 @@ public class Game{
 		}
 	}
 	
+	public void damage(Trap trap, Creature creature) {
+		if(trap.getPos()[0] == creature.getPos()[0] && trap.getPos()[1] == creature.getPos()[1]){
+			System.out.println("pris dans un piège");
+			if (creature.getStatus() == ""){
+				switch(trap.getEffect()){						
+				case "stun" : 
+					creature.setStatus("stun");
+					creature.setStatusBegin(System.currentTimeMillis());
+					creature.setStatusDuration(5000f);
+					break;
+				
+				case "snare" :
+					creature.setStatus("snare");
+					creature.setStatusBegin(System.currentTimeMillis());
+					creature.setStatusDuration(5000f);
+					break;
+				
+				case "DOT" :
+					creature.setStatus("DOT");
+					creature.setStatusBegin(System.currentTimeMillis());
+					creature.setStatusDuration(5000f);
+					break;
+					
+				}
+			}
+			creature.setHP((int)(creature.getHP() - trap.getDamage()/creature.getDefense()));
+		}
+	}
+	
 	public void damage(Creature attacker){
 		for(int i = 0; i< creatures.size(); i++){
 			if(attacker.inFront()[0] == creatures.get(i).getPos()[0] && attacker.inFront()[1] == creatures.get(i).getPos()[1]){
@@ -254,6 +298,14 @@ public class Game{
 				creatures.get(i).setHP((int)(creatures.get(i).getHP() - attacker.getAttack()/creatures.get(i).getDefense()));
 			}
 		}
+	}
+	
+	public void heal(Potion potion, Creature creature){
+		switch(potion.getStat()){
+		case "PotionHP": creature.setHP(creature.getHP() + potion.getQuantity()); break;
+		case "PotionMana": creature.setMana(creature.getMana() + potion.getQuantity()); break;
+		}
+		
 	}
 
 }

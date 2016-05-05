@@ -5,10 +5,16 @@ package Model;
  * Date : 18-04-16
  */
 public abstract class GameEntity {
-    protected Game game;
-    private int[] pos;
+    private Game game;
+    
+	private int[] pos;
     private String sprite;
 
+    
+    public Game getGame() {
+		return game;
+	}
+    
     public int[] getPos(){
         return this.pos;
     }

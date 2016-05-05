@@ -4,7 +4,11 @@ public class Jedi extends Hero{
 	
 	public Jedi(Game game, int[] pos){
 		super(game, pos, 250, 200, 5f,10f);	//hpMax, manaMax, attack, defense
-		addToSpellList("Laser");
+
+		addToSpellList("Rally");
+		addToSpellList("Force");
+		addToSpellList("Spike");
+		addToSpellList("Ice");
 		
 		setHP(this.getHPMax());
 		setMana(this.getManaMax());

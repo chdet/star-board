@@ -30,9 +30,9 @@ public class Ennemy extends AICreature{
 	}
 	
 	protected void nextAction(){
-		boolean[][] colMap = game.getCollisionMap();
+		boolean[][] colMap = getGame().getCollisionMap();
 		int[] pos = getPos();
-		int[] heroPos = game.getHero().getPos(); //Temporaire, Ennemy ne devrait pas avoir accès à Hero
+		int[] heroPos = getGame().getHero().getPos(); //Temporaire, Ennemy ne devrait pas avoir accès à Hero
 		int dX = heroPos[0] - pos[0];
 		int dY = heroPos[1] - pos[1];
 		
