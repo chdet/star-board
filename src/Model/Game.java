@@ -3,6 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 public class Game implements Runnable{
+	private Dungeon dungeon;
     private Hero hero;
 	private ArrayList<Projectile> projectiles = new ArrayList<>();
 	private boolean[][] collisionMap;
@@ -17,21 +18,21 @@ public class Game implements Runnable{
 	public static final int DOWN = 3;
 
 	public Game(Dungeon dungeon){
+		this.dungeon = dungeon;
         this.terrainMatrix = dungeon.getTerrainMatrix();
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
-		this.hero = new Hero(this, 15, 150000, 5f, 1500f);
+		this.hero = new Hero(this, 150, 150000, 5f, 1500f);
 		this.hero.setPos(dungeon.getStartPoint());
-		this.creatures = dungeon.getCreatures();
-		int[] pos = {dungeon.getStartPoint()[0], dungeon.getStartPoint()[1] +4};
+		this.creatures = dungeon.getCreatures(this);	//Sets the Creatures "Game" attribute to this instance
         this.addCreature(hero);
-        this.addCreature(new Ennemy(this, pos, 15, 0,1f, 1f));
-        
+
         //this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 15,1f, 1500f));
 		//this.addCreature(new Ennemy(this, new int[]{2,1}, 15, 0,1f, 1f));
 		//this.addCreature(new Ennemy(this, new int[]{3,1}, 15, 0,1f, 1f));
-        startAI();
+
         updateColMap();
-        
+		startAI();  //ATTENTION startAI APRES updateColMap sinon les IA marchent dans les murs
+
         Thread t = new Thread(this);
         t.start();
 	}
@@ -47,20 +48,34 @@ public class Game implements Runnable{
             int[] pos = creature.getPos();
             collisionMap[pos[0]][pos[1]] = true;
         }
-        
-        int[] posHero = hero.getPos();
-        collisionMap[posHero[0]][posHero[1]] = true;
     }
+
+	public void changeDungeon(Dungeon dungeon){
+		stopAI();
+		this.dungeon = dungeon;
+		this.removeCreature(this.hero);
+		this.terrainMatrix = dungeon.getTerrainMatrix();
+		this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
+		this.hero.setPos(dungeon.getStartPoint());
+		this.creatures = dungeon.getCreatures(this);
+		this.addCreature(hero);
+		updateColMap();
+        startAI(); //ATTENTION startAI APRES updateColMap sinon les IA marchent dans les murs
+	}
 
     void moveColMap(int[] pos, int[] newPos){
         collisionMap[pos[0]][pos[1]] = terrainMatrix[pos[0]][pos[1]].getCollision();
-        //Il ne faut pas générer un moving sur une entité, sinon elle n'est plus pris en compte après.
+        //Il ne faut pas gï¿½nï¿½rer un moving sur une entitï¿½, sinon elle n'est plus pris en compte aprï¿½s.
         collisionMap[newPos[0]][newPos[1]] = true;
     }
     
     void moveColMap(int[] pos){
     	collisionMap[pos[0]][pos[1]] = terrainMatrix[pos[0]][pos[1]].getCollision();
     }
+
+	public Dungeon getDungeon() {
+		return dungeon;
+	}
 
 	public Terrain[][] getTerrainMatrix(){
         return terrainMatrix;
@@ -85,8 +100,17 @@ public class Game implements Runnable{
 	private void startAI(){
 		for(Creature creature : this.creatures){
 			if(creature instanceof AICreature){
+				((AICreature) creature).setActive(true);
 				Thread t = new Thread((AICreature)creature);
 				t.start();
+			}
+		}
+	}
+
+	private void stopAI(){
+		for(Creature creature : this.creatures){
+			if(creature instanceof AICreature){
+				((AICreature) creature).setActive(false);
 			}
 		}
 	}
@@ -101,6 +125,9 @@ public class Game implements Runnable{
 
     void removeCreature(Creature creature){
         this.creatures.remove(creature);
+		if(this.creatures.size() == 1 && this.creatures.contains(this.hero)){
+			changeDungeon(DungeonGeneration.generateRandomDungeon(5));
+		}
     }
     
     void addProjectile(Projectile projectile){
@@ -134,7 +161,7 @@ public class Game implements Runnable{
 		for(int[] pos : aoePos){
 			for(int i = 0; i< creatures.size(); i++){
 					if(pos[0] == creatures.get(i).getPos()[0] && pos[1] == creatures.get(i).getPos()[1]){
-					System.out.println("touché par un projectile");
+					System.out.println("touchï¿½ par un projectile");
 					if(creatures.get(i) instanceof AICreature){
 						((AICreature)(creatures.get(i))).setHostility(AICreature.HOSTILE);
 					}
@@ -182,7 +209,7 @@ public class Game implements Runnable{
 	public void damage(Creature attacker){
 		for(int i = 0; i< creatures.size(); i++){
 			if(attacker.inFront()[0] == creatures.get(i).getPos()[0] && attacker.inFront()[1] == creatures.get(i).getPos()[1]){
-				System.out.println("touché au corps à corps");
+				System.out.println("touchï¿½ au corps ï¿½ corps");
 				creatures.get(i).setHP((int)(creatures.get(i).getHP() - attacker.getAttack()/creatures.get(i).getDefense()));
 			}
 		}
@@ -202,7 +229,7 @@ public class Game implements Runnable{
 						break;
 					
 					case "DOT":
-						float x = 3f; //nombre de fois qu'on va subir des dégâts
+						float x = 3f; //nombre de fois qu'on va subir des dï¿½gï¿½ts
 						if(creatures.get(i).getDOTStep() < x){
 							if((System.currentTimeMillis() - creatures.get(i).getStatusBegin())/creatures.get(i).getStatusDuration() >= (creatures.get(i).getDOTStep() + 1)/x){
 								creatures.get(i).setDOTStep(creatures.get(i).getDOTStep() + 1);
@@ -210,7 +237,7 @@ public class Game implements Runnable{
 								try{
 									System.out.println("HP: " + creatures.get(i).getHP());
 									System.out.println("STEP: " + creatures.get(i).getDOTStep());
-									System.out.println("Ecoulé: " + ( System.currentTimeMillis() - creatures.get(i).getStatusBegin() ));
+									System.out.println("Ecoulï¿½: " + ( System.currentTimeMillis() - creatures.get(i).getStatusBegin() ));
 									System.out.println("Portion: " + ( System.currentTimeMillis() - creatures.get(i).getStatusBegin() )/creatures.get(i).getStatusDuration());
 									System.out.println("Duration: " + creatures.get(i).getStatusDuration());
 								}
