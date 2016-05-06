@@ -2,6 +2,7 @@ package Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Creator :  Charles
@@ -51,44 +52,43 @@ public class Dungeon implements Serializable{
         }
     }
 
-    public int getRoomCount() {
+    int getRoomCount() {
         return roomCount;
     }
 
-    public void setRoomCount(int roomCount) {
+    void setRoomCount(int roomCount) {
         this.roomCount = roomCount;
     }
 
-    public Terrain[][] getTerrainMatrix() {
+    Terrain[][] getTerrainMatrix() {
         return terrainMatrix;
     }
 
-    public ArrayList<Creature> getCreatures(Game game) {    //Called when Game loads Dungeon
+    ArrayList<Creature> getCreatures(Game game) {    //Called when Game loads Dungeon
         for(Creature creature : this.creatures){
             creature.setGame(game);
         }
         return creatures;
     }
 
-    public ArrayList<Trap> getTraps() {    //Called when Game loads Dungeon
+    ArrayList<Trap> getTraps() {    //Called when Game loads Dungeon
         return traps;
     }
 
-    public void addCreatures(Creature[] creatures) {
-        for(Creature creature : creatures){
-            this.creatures.add(creature);
-        }
+    void addCreatures(Creature[] creatures) {
+        this.creatures.addAll(Arrays.asList(creatures));
+
     }
 
-    public void addTrap(Trap trap) {
+    void addTrap(Trap trap) {
         this.traps.add(trap);
     }
 
-    public int[] getStartPoint() {
+    int[] getStartPoint() {
         return startPoint;
     }
 
-    public void setStartPoint(int[] startPoint) {
+    void setStartPoint(int[] startPoint) {
         this.startPoint = startPoint;
     }
 }

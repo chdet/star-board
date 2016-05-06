@@ -18,7 +18,7 @@ public abstract class Hero extends Creature {
 		return level;
 	}
 
-	public void setLevel(int level) {
+	void setLevel(int level) {
 		if(level >=1){
 			this.level = level;
 		}
@@ -26,11 +26,11 @@ public abstract class Hero extends Creature {
 	
 	public abstract void levelUp();
 
-	public int getExp() {
+	int getExp() {
 		return exp;
 	}
 	
-	public void setExp(int exp){
+	void setExp(int exp){
 		if(exp >= 0){
 			this.exp = exp;
 		}
@@ -39,25 +39,24 @@ public abstract class Hero extends Creature {
 	public ArrayList<Item> getInventory() {
 		return inventory;
 	}
-	
-	public void storeInventory(int x) {
-		if (x == -1){ 
-			ArrayList<Item> newInventory = (ArrayList<Item>) inventory.clone();
-			for(int i = 0; i < inventory.size() - 1; i++){
-				newInventory.set(i + 1, inventory.get(i));
-			}
-			newInventory.set(0, inventory.get(inventory.size() - 1));
-			inventory = newInventory;
-		}
-		else if (x == 1){
-			ArrayList<Item> newInventory = (ArrayList<Item>) inventory.clone();
-			for(int i = inventory.size() - 1; i > 0; i--){
-				newInventory.set(i - 1, inventory.get(i));
-			}
-			newInventory.set(inventory.size() - 1 , inventory.get(0));
-			inventory = newInventory;
-		}
+
+	public int getCurrentItemIndex() {
+		return currentItemIndex;
 	}
+
+	public void setCurrentItemIndex(int currentItemIndex) {
+		if(currentItemIndex >= 0){
+			if(currentItemIndex < inventory.size()){
+				this.currentItemIndex = currentItemIndex;
+			}else if(currentItemIndex >= inventory.size()){
+				this.currentItemIndex = 0;
+			}
+		}else if(currentItemIndex < 0){
+			this.currentItemIndex = inventory.size()+currentItemIndex;
+		}
+
+	}
+
 
 	public void walkOn(Item item){
 		if(item instanceof Trap){
@@ -75,6 +74,7 @@ public abstract class Hero extends Creature {
 		try{
 			inventory.get(currentItemIndex).act(this);
 			inventory.remove(currentItemIndex);
+			setCurrentItemIndex(currentItemIndex+1);
 		}
 		
 		catch(IndexOutOfBoundsException e){

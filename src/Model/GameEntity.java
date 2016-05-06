@@ -29,7 +29,7 @@ public abstract class GameEntity implements Serializable{
         return sprite;
     }
 
-    protected void setSprite(String sprite) {
+    void setSprite(String sprite) {
         this.sprite = sprite;
     }
 

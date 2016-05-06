@@ -56,9 +56,8 @@ public abstract class Creature extends Moving{
 			this.setPos(newPos);
 			getGame().moveColMap(pos, newPos);
 			for(int i = 0; i< getGame().getItems().size(); i++){
-            	if (this instanceof Creature && getGame().getItems().get(i).getPos()[0] == newPos[0] && getGame().getItems().get(i).getPos()[1] == newPos[1]){
+            	if (getGame().getItems().get(i).getPos()[0] == newPos[0] && getGame().getItems().get(i).getPos()[1] == newPos[1]){
             		walkOn(getGame().getItems().get(i));
-            		System.out.println("OBJET RENCONTRE");
             	}
             }
 		}
@@ -84,7 +83,7 @@ public abstract class Creature extends Moving{
 		return HPMax;
 	}
 
-	public void setHPMax(Integer HPMax) {
+	private void setHPMax(Integer HPMax) {
 		if(HPMax > 0){
 			this.HPMax = HPMax;
 		}
@@ -98,7 +97,7 @@ public abstract class Creature extends Moving{
 		return mana;
 	}
 	
-	public void setMana(Integer mana) {
+	void setMana(Integer mana) {
 		if(mana > manaMax){
 			this.mana = manaMax;
 		}
@@ -112,7 +111,7 @@ public abstract class Creature extends Moving{
 		return manaMax;
 	}
 	
-	public void setManaMax(Integer manaMax) {
+	private void setManaMax(Integer manaMax) {
 		if(manaMax >= 0){
 			this.manaMax = manaMax;
 		}
@@ -122,11 +121,11 @@ public abstract class Creature extends Moving{
 		}
 	}
 	
-	public Float getAttack() {
+	Float getAttack() {
 		return attack;
 	}
 
-	public void setAttack(Float attack) {
+	private void setAttack(Float attack) {
 		if(attack >= 0){
 			this.attack = attack;
 		}
@@ -136,11 +135,11 @@ public abstract class Creature extends Moving{
 		}
 	}
 
-	public Float getDefense() {
+	Float getDefense() {
 		return defense;
 	}
 
-	public void setDefense(Float defense) {
+	private void setDefense(Float defense) {
 		if(defense > 0){
 			this.defense = defense;
 		}
@@ -150,45 +149,45 @@ public abstract class Creature extends Moving{
 		}
 	}
 
-	public String getStatus() {
+	String getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	void setStatus(String status) {
 		this.status = status;
 	}
 
-	public long getStatusBegin() {
+	long getStatusBegin() {
 		return statusBegin;
 	}
 
-	public void setStatusBegin(long statusBegin) {
+	void setStatusBegin(long statusBegin) {
 		this.statusBegin = statusBegin;
 	}
 
-	public float getStatusDuration() {
+	float getStatusDuration() {
 		return statusDuration;
 	}
 
-	public void setStatusDuration(float statusDuration) {
+	void setStatusDuration(float statusDuration) {
 		if (statusDuration >= 0){
 			this.statusDuration = statusDuration;
 		}
 	}
 
-	public int getDOTDamage() {
+	int getDOTDamage() {
 		return DOTDamage;
 	}
 
-	public void setDOTDamage(int DOTDamage) {
+	void setDOTDamage(int DOTDamage) {
 		this.DOTDamage = DOTDamage;
 	}
 
-	public int getDOTStep() {
+	int getDOTStep() {
 		return DOTStep;
 	}
 
-	public void setDOTStep(int DOTStep) {
+	void setDOTStep(int DOTStep) {
 		if(DOTStep >= 0){
 			this.DOTStep = DOTStep;
 		}
@@ -211,7 +210,7 @@ public abstract class Creature extends Moving{
 		return spellList;
 	}
 
-	public void addToSpellList(String spell) {
+	void addToSpellList(String spell) {
 		if(spell.equals("Laser" )|| spell.equals("Force") || spell.equals("Rally") || spell.equals("Spike") || spell.equals("Ice")){
             System.out.println("Sort ajouté");
             spellList.add(spell);
@@ -225,7 +224,7 @@ public abstract class Creature extends Moving{
 		return alive;
 	}
 
-	public void die(){
+	private void die(){
 		this.alive = false;
 		if(!(this instanceof Hero)){
 	    	getGame().getHero().setExp((int)(getGame().getHero().getExp() + 25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp

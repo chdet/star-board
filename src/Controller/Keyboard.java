@@ -57,16 +57,16 @@ public class Keyboard implements KeyListener{
 				game.getHero().useItem();
 				break;
 			case KeyEvent.VK_W:
-				game.getHero().storeInventory(1);
+				game.getHero().setCurrentItemIndex(game.getHero().getCurrentItemIndex()+1);
 				break;
 			case KeyEvent.VK_X:
-				game.getHero().storeInventory(-1);
+				game.getHero().setCurrentItemIndex(game.getHero().getCurrentItemIndex()-1);
 				break;
 			case KeyEvent.VK_F5:
 				game.changeDungeon(DungeonGeneration.generateRandomDungeon(5));
 				break;
 			case KeyEvent.VK_S:
-				game.save("Save.txt", game);
+				game.save("Save.txt");
 				break;
 		}
 	}

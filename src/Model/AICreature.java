@@ -11,9 +11,9 @@ public abstract class AICreature extends Creature implements Runnable {
 	
     private int hostility;          //0 is neutral; 1 is hostile; 2 is friendly
 
-    public static final int NEUTRAL = 0;
-    public static final int HOSTILE = 1;
-    public static final int FRIENDLY = 2;
+    static final int NEUTRAL = 0;
+    static final int HOSTILE = 1;
+    static final int FRIENDLY = 2;
 
 
     public AICreature(Game game, int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
@@ -28,13 +28,13 @@ public abstract class AICreature extends Creature implements Runnable {
 		return WAIT;
 	}
 
-	public void setWAIT(int WAIT) {
+	void setWAIT(int WAIT) {
 		if (WAIT > 0){
 			this.WAIT = WAIT;
 		}
 	}
 
-	public int getWAITMin() {
+	int getWAITMin() {
 		return WAITMin;
 	}
 
@@ -44,15 +44,15 @@ public abstract class AICreature extends Creature implements Runnable {
 		}
 	}
 
-    public int getHostility() {
+    int getHostility() {
         return hostility;
     }
 
-    public void setHostility(int hostility) {
+    void setHostility(int hostility) {
         this.hostility = hostility;
     }
 
-    public void setActive(boolean active){
+    void setActive(boolean active){
         this.active = active;
     }
 

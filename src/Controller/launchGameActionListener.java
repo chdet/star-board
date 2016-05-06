@@ -31,8 +31,8 @@ public class launchGameActionListener implements ActionListener{
 		launchGame(whichGame);
 	}
 
-	void launchGame(String whichGame){
-		if(whichGame == "Load Game"){
+	private void launchGame(String whichGame){
+		if(whichGame.equals("Load Game")){
 			Game game = load("Save.txt");
 			System.out.println("Load Game");
 			Keyboard keyboard = new Keyboard(game);
@@ -88,7 +88,7 @@ public class launchGameActionListener implements ActionListener{
 			}
 		}
 	}
-	public Game load(String filename){
+	private Game load(String filename){
 		FileInputStream file;
 		ObjectInputStream i;
 		Game game = null;
@@ -99,11 +99,7 @@ public class launchGameActionListener implements ActionListener{
 			
 			
 			
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e) {
+		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
 		

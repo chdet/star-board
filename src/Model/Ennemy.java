@@ -93,7 +93,7 @@ public class Ennemy extends AICreature{
 
 	}
 
-	public boolean pathBlocked(int dX, int dY){
+	private boolean pathBlocked(int dX, int dY){
 		if(dX !=0){
 			for(int i = 1; i < Math.abs(dX); i++){
 				if(dX > 0){

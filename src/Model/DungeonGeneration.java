@@ -29,23 +29,23 @@ public class DungeonGeneration {
             this.center = new int[]{(int)((x1+x2)/2),(int)((y1+y2)/2)};
         }
 
-        public int[] getCenter() {
+         int[] getCenter() {
             return center;
         }
 
-        public int getX1() {
+         int getX1() {
             return x1;
         }
 
-        public int getY1() {
+         int getY1() {
             return y1;
         }
 
-        public int getW() {
+         int getW() {
             return w;
         }
 
-        public int getH() {
+         int getH() {
             return h;
         }
 

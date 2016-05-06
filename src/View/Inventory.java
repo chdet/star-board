@@ -55,7 +55,11 @@ public class Inventory extends JPanel{
 	        g.drawString("Mana: " + hero.getMana() + "/" + hero.getManaMax(), SPRITESIZE * TILESIZE, 2 * SPRITESIZE * TILESIZE);
 	    
 	        for(int i = 0; i < hero.getInventory().size(); i++){
-	        	g.drawImage(img.get(hero.getInventory().get(i).getSprite()), 2 * SPRITESIZE * TILESIZE, (3 + i) * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
+                int index = i+hero.getCurrentItemIndex();
+                if(index >= hero.getInventory().size()){
+                    index = i+hero.getCurrentItemIndex()-hero.getInventory().size();
+                }
+	        	g.drawImage(img.get(hero.getInventory().get(index).getSprite()), 2 * SPRITESIZE * TILESIZE, (3 + i) * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
 	        }
 
             g.setColor(Color.WHITE);

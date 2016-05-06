@@ -49,7 +49,7 @@ public class Game implements Serializable{
         startAI();
 	}
 
-	void updateColMap(){
+	private void updateColMap(){
         for(int i = 0; i<terrainMatrix.length; i++){
             for(int j = 0; j<terrainMatrix[0].length; j++){
                 collisionMap[i][j]= terrainMatrix[i][j].getCollision();
@@ -138,7 +138,7 @@ public class Game implements Serializable{
 		}
 	}
 
-	void addCreature(Creature creature){
+	private void addCreature(Creature creature){
         this.creatures.add(creature);
     }
 
@@ -163,11 +163,11 @@ public class Game implements Serializable{
 		return items;
 	}
 
-	public void addItem(Item item) {
+	void addItem(Item item) {
 		this.items.add(item);
 	}
 
-	public void removeItem(Item item) {
+	void removeItem(Item item) {
 		this.items.remove(item);
 	}
 
@@ -210,7 +210,7 @@ public class Game implements Serializable{
 		}
 	}
 
-	public void damage(Projectile projectile) {
+	void damage(Projectile projectile) {
 		ArrayList<int[]> aoePos = new ArrayList<int[]>();
 		int[] center = projectile.getPos();
 		
@@ -288,7 +288,7 @@ public class Game implements Serializable{
 		}
 	}
 	
-	public void damage(Trap trap, Creature creature) {
+	void damage(Trap trap, Creature creature) {
 		if(trap.getPos()[0] == creature.getPos()[0] && trap.getPos()[1] == creature.getPos()[1]){
 			System.out.println("pris dans un pi�ge");
 			if (creature.getStatus() == ""){
@@ -318,7 +318,7 @@ public class Game implements Serializable{
 		}
 	}
 	
-	public void damage(Creature attacker){
+	void damage(Creature attacker){
 		for(int i = 0; i< creatures.size(); i++){
 			if(attacker.inFront()[0] == creatures.get(i).getPos()[0] && attacker.inFront()[1] == creatures.get(i).getPos()[1]){
 				System.out.println("touch� au corps � corps");
@@ -327,7 +327,7 @@ public class Game implements Serializable{
 		}
 	}
 	
-	public void heal(Potion potion, Creature creature){
+	void heal(Potion potion, Creature creature){
 		switch(potion.getStat()){
 		case "PotionHP": creature.setHP(creature.getHP() + potion.getQuantity()); break;
 		case "PotionMana": creature.setMana(creature.getMana() + potion.getQuantity()); break;
@@ -335,14 +335,14 @@ public class Game implements Serializable{
 		
 	}
 
-	public static void save(String filename, Game game) {
+	public void save(String filename) {
 		FileOutputStream file;
 		ObjectOutputStream o;
 
 		try {
 			file = new FileOutputStream(filename);
 			o = new ObjectOutputStream(file);
-			o.writeObject(game);
+			o.writeObject(this);
 			o.close();
 			System.out.println("sauv�");
 		} catch (IOException e) {
