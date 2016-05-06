@@ -1,5 +1,8 @@
 package Model;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -271,31 +274,31 @@ public class Game implements Serializable{
 		if(trap.getPos()[0] == creature.getPos()[0] && trap.getPos()[1] == creature.getPos()[1]){
 			System.out.println("pris dans un pi�ge");
 			if (creature.getStatus() == ""){
-				switch(trap.getEffect()){
-				case "stun" :
+				switch(trap.getEffect()){						
+				case "stun" : 
 					creature.setStatus("stun");
 					creature.setStatusBegin(System.currentTimeMillis());
 					creature.setStatusDuration(5000f);
 					break;
-
+				
 				case "snare" :
 					creature.setStatus("snare");
 					creature.setStatusBegin(System.currentTimeMillis());
 					creature.setStatusDuration(5000f);
 					break;
-
+				
 				case "DOT" :
 					creature.setStatus("DOT");
 					creature.setStatusBegin(System.currentTimeMillis());
 					creature.setStatusDuration(5000f);
 					break;
-
+					
 				}
 			}
 			creature.setHP((int)(creature.getHP() - trap.getDamage()/creature.getDefense()));
 		}
 	}
-
+	
 	public void damage(Creature attacker){
 		for(int i = 0; i< creatures.size(); i++){
 			if(attacker.inFront()[0] == creatures.get(i).getPos()[0] && attacker.inFront()[1] == creatures.get(i).getPos()[1]){
@@ -304,13 +307,28 @@ public class Game implements Serializable{
 			}
 		}
 	}
-
+	
 	public void heal(Potion potion, Creature creature){
 		switch(potion.getStat()){
 		case "PotionHP": creature.setHP(creature.getHP() + potion.getQuantity()); break;
 		case "PotionMana": creature.setMana(creature.getMana() + potion.getQuantity()); break;
 		}
+		
+	}
 
+	public static void save(String filename, Game game) {
+		FileOutputStream file;
+		ObjectOutputStream o;
+
+		try {
+			file = new FileOutputStream(filename);
+			o = new ObjectOutputStream(file);
+			o.writeObject(game);
+			o.close();
+			System.out.println("sauv�");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

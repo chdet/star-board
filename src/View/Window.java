@@ -36,7 +36,7 @@ public class Window  implements  Runnable{
 	}
 
     public void run(){
-		while(true){
+		while(game.getHero().isAlive()){
 			try {
 				if(this.currentDungeon != game.getDungeon()){
 					this.currentDungeon= game.getDungeon();
@@ -51,6 +51,16 @@ public class Window  implements  Runnable{
 				e.printStackTrace();
 			}
 		}
+		map.refresh();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		getFrame().getContentPane().remove(getMap());
+		getFrame().getContentPane().remove(getInventory());
+		getFrame().getContentPane().add(getMenu());
+		getFrame().pack();
 }
 
     public void buildMap(Terrain[][] terrainMatrix){
@@ -112,48 +122,6 @@ public class Window  implements  Runnable{
 	
 	public void setKeyListener(KeyListener keyboard){
 	    this.map.addKeyListener(keyboard);
-	}
-	
-	
-	public Game load(String filename){
-		FileInputStream file;
-		ObjectInputStream i;
-		try {
-			file = new FileInputStream(filename);
-			i = new ObjectInputStream(file);
-			game = (Game) i.readObject();
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		game.startAI();
-		/*for(Projectile projectile: game.getProjectiles()){
-			Thread t = new Thread(projectile);
-			t.start();
-		}*/
-		
-		Thread t = new Thread(game.getStatus());
-		t.start();
-		
-		return game;
-	}
-
-	public static void save(String filename, Game game) {
-		FileOutputStream file;
-		ObjectOutputStream o;
-		
-		try {
-			file = new FileOutputStream(filename);
-			o = new ObjectOutputStream(file);
-			o.writeObject(game);
-			o.close();
-			System.out.println("sauvé");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

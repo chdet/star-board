@@ -2,6 +2,12 @@ package Controller;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import Model.Game;
@@ -27,9 +33,8 @@ public class launchGameActionListener implements ActionListener{
 
 	void launchGame(String whichGame){
 		if(whichGame == "Load Game"){
-			window.load("Save.txt");
+			Game game = load("Save.txt");
 			System.out.println("Load Game");
-			Game game = window.getGame();
 			Keyboard keyboard = new Keyboard(game);
 
 			window.getFrame().getContentPane().remove(window.getMenu());
@@ -45,14 +50,17 @@ public class launchGameActionListener implements ActionListener{
 			
 			ArrayList<Projectile> projectiles = new ArrayList<>();
 			game.setProjectiles(projectiles);
-			window.setProjectiles(new ArrayList<>());
+			window.setProjectiles(projectiles);
 			window.setItems(game.getItems());
 			window.setHero(game.getHero());
 			window.setKeyListener(keyboard);
 			window.getFrame().pack();
-
-			Thread t = new Thread(window);
+			
+			game.startAI();
+			Thread t = new Thread(game.getStatus());
 			t.start();
+			Thread t2 = new Thread(window);
+			t2.start();
 		}
 		else{
 			if(window.getMenu().getRoomCount() > 0){
@@ -80,4 +88,32 @@ public class launchGameActionListener implements ActionListener{
 			}
 		}
 	}
+	public Game load(String filename){
+		FileInputStream file;
+		ObjectInputStream i;
+		Game game = null;
+		try {
+			file = new FileInputStream(filename);
+			i = new ObjectInputStream(file);
+			game = (Game) i.readObject();
+			
+			
+			
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/*for(Projectile projectile: game.getProjectiles()){
+			Thread t = new Thread(projectile);
+			t.start();
+		}*/
+		
+		return game;
+	}
+
+	
 }

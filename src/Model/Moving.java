@@ -5,10 +5,19 @@ import java.io.Serializable;
 public abstract class Moving extends GameEntity{
 	protected int orient;
 	
+	public Moving(Game game, int[] pos, int orient, String sprite){
+		setGame(game);
+		setPos(pos);
+		setSprite(sprite);
+		setOrient(orient);
+
+	}
+
 	public Moving(Game game, int[] pos, int orient){
 		setGame(game);
 		setPos(pos);
 		setOrient(orient);
+
 	}
 
 	public Moving(int[] pos, int orient){
@@ -23,8 +32,6 @@ public abstract class Moving extends GameEntity{
 	protected abstract void setOrient(int orient);		//TODO: Changement de sprite dynamique en fonction de la sprite "basique" (ex: Jedi, Trooper, Laser)
 	
 	public abstract  void  move(int orient);
-        }
-    }*/
 	
 	public int[] inFront(){
 		int[] pos = getPos();
