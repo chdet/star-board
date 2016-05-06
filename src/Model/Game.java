@@ -1,10 +1,15 @@
 package Model;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Game{
+public class Game implements Serializable{
     private Hero hero;
-	private ArrayList<Projectile> projectiles = new ArrayList<>();
+	private transient ArrayList<Projectile> projectiles = new ArrayList<>();
+	private ArrayList<Item> items = new ArrayList<>();
 	private boolean[][] collisionMap;
 
 	//Dungeon
@@ -36,6 +41,8 @@ public class Game{
 		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
 
+		this.items.addAll(dungeon.getTraps());
+
 		status = new Status(this.creatures);
 
 		updateColMap();
@@ -64,14 +71,16 @@ public class Game{
 		this.hero.setPos(dungeon.getStartPoint());
 		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
+		status.setCreatures(this.creatures);
+		this.items.clear();
+        this.items.addAll(dungeon.getTraps());
 		updateColMap();
 		startAI();
-
 	}
 
     void moveColMap(int[] pos, int[] newPos){
         collisionMap[pos[0]][pos[1]] = terrainMatrix[pos[0]][pos[1]].getCollision();
-        //Il ne faut pas générer un moving sur une entité, sinon elle n'est plus pris en compte après.
+        //Il ne faut pas gï¿½nï¿½rer un moving sur une entitï¿½, sinon elle n'est plus pris en compte aprï¿½s.
         collisionMap[newPos[0]][newPos[1]] = true;
     }
     
@@ -95,6 +104,10 @@ public class Game{
         return projectiles;
     }
 
+    public void setProjectiles(ArrayList<Projectile> projectiles) {
+		this.projectiles = projectiles;
+	}
+
     public ArrayList<Creature> getCreatures() {
         return creatures;
     }
@@ -103,7 +116,11 @@ public class Game{
 		return hero;
 	}
 
-	private void startAI(){
+    public Status getStatus() {
+		return status;
+	}
+
+	public void startAI(){
 		for(Creature creature : this.creatures){
 			if(creature instanceof AICreature){
 				((AICreature) creature).setActive(true);
@@ -123,10 +140,6 @@ public class Game{
 
 	void addCreature(Creature creature){
         this.creatures.add(creature);
-        /*if(creature instanceof AICreature){	// On en a plus besoin vu que c'est fait dans startAI?
-            Thread t = new Thread((AICreature)creature);
-            t.start();
-        }*/
     }
 
     void removeCreature(Creature creature){
@@ -146,64 +159,77 @@ public class Game{
         this.projectiles.remove(projectile);
     }
     
+    public ArrayList<Item> getItems() {
+		return items;
+	}
+
+	public void addItem(Item item) {
+		this.items.add(item);
+	}
+
+	public void removeItem(Item item) {
+		this.items.remove(item);
+	}
 
 	boolean doesCollide(int[] pos){
-        return collisionMap[pos[0]][pos[1]];
+		try{
+			return collisionMap[pos[0]][pos[1]];
+		}catch(ArrayIndexOutOfBoundsException e){
+			return true;	//Any tile outside the map is off-limits
+		}
     }
 
-	int[] closestEnemy(AICreature aiCreature){
-		/*	Return the position of the closest enemy to the AICreature, if there is none,
-		*  returns the creatures' own position */
+	Creature closestEnemy(AICreature aiCreature){
+		/*	Return the closest enemy to the AICreature, if there is none,
+		*  returns null */
 		int[] pos = aiCreature.getPos();
 		int range = 10; //TODO: AJOUTER RANGE DANS LE CONSTRUCTEUR DE CREATURE
 		int behavior= aiCreature.getHostility();
-		int[] enemyPos;
 		if(behavior == AICreature.HOSTILE && getHero().distanceTo(pos) < range) {
-			enemyPos = new int[]{getHero().getPos()[0],getHero().getPos()[1]};
-			return  enemyPos;
+			return  hero;
 		}
 		else if(behavior == AICreature.FRIENDLY) {
-			double[] temp;    //Holds the position of the current ennemy and its distance.
-			double[] tempClosest = null; //Holds the position of the current closest ennemy and its distance.
-			try {
-				for (Creature creature : this.creatures) {
-					temp = new double[]{creature.getPos()[0], creature.getPos()[1], creature.distanceTo(pos)};
-					if (temp[2] < range) {    //temp[2] is the distance to pos
-						if (tempClosest == null) {
-							tempClosest = temp;
-						} else if (temp[2] < tempClosest[2]) {
-							tempClosest = temp;
-						}
-					}
-				}
-				enemyPos = new int[]{(int) tempClosest[0], (int) tempClosest[1]};
-				return enemyPos;
-			} catch (NullPointerException e) {    //In case there are no enemies close and tempClosest is null
-				return pos;
+			double temp = -1;    //Holds the distance of the current closest ennemy and its distance.
+			Creature closestCreature = null;
+			for (Creature creature : this.creatures) {
+				if(!(creature instanceof  Hero) && (creature.getPos() != pos)){
+                    double distance = creature.distanceTo(pos);
+                    if (distance < range) {    //temp is the distance to pos
+                        if (temp == -1 || distance < temp) {
+                            temp = distance;
+                            closestCreature = creature;
+                        }
+                    }
+                }
+
 			}
+			return closestCreature;
 		}
 		else{
-			return pos;		//In this case no movement is made
+			return null;
 		}
-		}
+	}
 
 	public void damage(Projectile projectile) {
 		ArrayList<int[]> aoePos = new ArrayList<int[]>();
-		int[] center = projectile.inFront();
+		int[] center = projectile.getPos();
 		
 		for(int i = -projectile.getAoe() + 1; i < projectile.getAoe(); i++){
 			for(int j = -projectile.getAoe() + 1; j < projectile.getAoe(); j++){
 				int x = center[0] + i;
 				int y = center[1] + j;
 				int[] pos = new int[] {x,y};
-				aoePos.add(pos);
+
+				if( !(x == hero.getPos()[0] && y == hero.getPos()[1])){
+					aoePos.add(pos);
+				}
 			}
 		}
 		
 		for(int[] pos : aoePos){
 			for(int i = 0; i< creatures.size(); i++){
 					if(pos[0] == creatures.get(i).getPos()[0] && pos[1] == creatures.get(i).getPos()[1]){
-					System.out.println("touché par un projectile");
+					System.out.println("touchï¿½ par un projectile");
 					if(creatures.get(i) instanceof AICreature){
 						((AICreature)(creatures.get(i))).setHostility(AICreature.HOSTILE);
 					}
@@ -216,26 +242,41 @@ public class Game{
 							break;
 
 						case "rally" :
+                            creatures.get(i).setStatus("rally");
+                            creatures.get(i).setStatusBegin(System.currentTimeMillis());
+                            creatures.get(i).setStatusDuration(5000f);
 							if(creatures.get(i) instanceof AICreature){
 								((AICreature)(creatures.get(i))).setHostility(AICreature.FRIENDLY);
 							}
+                            if(creatures.get(i) instanceof AICreature){
+                                ((AICreature) creatures.get(i)).setWAIT((int) (((AICreature) creatures.get(i)).getWAITMin()-100));
+
+                            }
+							break;
+
+						case "slow" :
+							creatures.get(i).setStatus("slow");
+							creatures.get(i).setStatusBegin(System.currentTimeMillis());
+							creatures.get(i).setStatusDuration(5000f);
+                            if(creatures.get(i) instanceof AICreature){
+                                ((AICreature) creatures.get(i)).setWAIT((int) (((AICreature) creatures.get(i)).getWAITMin()*5));
+
+                            }
 							break;
 
 						case "stun" :
 							creatures.get(i).setStatus("stun");
 							creatures.get(i).setStatusBegin(System.currentTimeMillis());
 							creatures.get(i).setStatusDuration(5000f);
-							break;
-
-						case "snare" :
-							creatures.get(i).setStatus("snare");
-							creatures.get(i).setStatusBegin(System.currentTimeMillis());
-							creatures.get(i).setStatusDuration(5000f);
+                            if(creatures.get(i) instanceof AICreature){
+                                ((AICreature) creatures.get(i)).setWAIT((int)(creatures.get(i).getStatusDuration()));
+                            }
 							break;
 
 						case "DOT" :
 							creatures.get(i).setStatus("DOT");
-							creatures.get(i).setStatusBegin(System.currentTimeMillis());
+                            creatures.get(i).setDOTDamage((int)projectile.getDamage());
+                            creatures.get(i).setStatusBegin(System.currentTimeMillis());
 							creatures.get(i).setStatusDuration(5000f);
 							break;
 
@@ -247,12 +288,65 @@ public class Game{
 		}
 	}
 	
+	public void damage(Trap trap, Creature creature) {
+		if(trap.getPos()[0] == creature.getPos()[0] && trap.getPos()[1] == creature.getPos()[1]){
+			System.out.println("pris dans un piï¿½ge");
+			if (creature.getStatus() == ""){
+				switch(trap.getEffect()){						
+				case "slow" :
+					creature.setStatus("slow");
+					creature.setStatusBegin(System.currentTimeMillis());
+					creature.setStatusDuration(5000f);
+					break;
+				
+				case "stun" :
+					creature.setStatus("stun");
+					creature.setStatusBegin(System.currentTimeMillis());
+					creature.setStatusDuration(5000f);
+					break;
+				
+				case "DOT" :
+					creature.setStatus("DOT");
+					creature.setStatusBegin(System.currentTimeMillis());
+					creature.setStatusDuration(5000f);
+                    creature.setDOTDamage((int)trap.getDamage());
+					break;
+					
+				}
+			}
+			creature.setHP((int)(creature.getHP() - trap.getDamage()/creature.getDefense()));
+		}
+	}
+	
 	public void damage(Creature attacker){
 		for(int i = 0; i< creatures.size(); i++){
 			if(attacker.inFront()[0] == creatures.get(i).getPos()[0] && attacker.inFront()[1] == creatures.get(i).getPos()[1]){
-				System.out.println("touché au corps à corps");
+				System.out.println("touchï¿½ au corps ï¿½ corps");
 				creatures.get(i).setHP((int)(creatures.get(i).getHP() - attacker.getAttack()/creatures.get(i).getDefense()));
 			}
+		}
+	}
+	
+	public void heal(Potion potion, Creature creature){
+		switch(potion.getStat()){
+		case "PotionHP": creature.setHP(creature.getHP() + potion.getQuantity()); break;
+		case "PotionMana": creature.setMana(creature.getMana() + potion.getQuantity()); break;
+		}
+		
+	}
+
+	public static void save(String filename, Game game) {
+		FileOutputStream file;
+		ObjectOutputStream o;
+
+		try {
+			file = new FileOutputStream(filename);
+			o = new ObjectOutputStream(file);
+			o.writeObject(game);
+			o.close();
+			System.out.println("sauvï¿½");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

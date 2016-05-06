@@ -81,6 +81,7 @@ public class DungeonGeneration {
     private static class Corridor {
         private Terrain type = new Terrain("Floor", false);
         private int[] start, end;
+        private Trap trap = null;
 
         Corridor(Room room1, Room room2){
             this.start = room1.getCenter();
@@ -90,6 +91,14 @@ public class DungeonGeneration {
         void carve(Dungeon dun){
             dun.modifyArea(start, new int[]{start[0], end[1]}, type);
             dun.modifyArea(end, new int[]{start[0], end[1]}, type);
+        }
+
+        void trap(Dungeon dun){
+            Random random = new Random();
+            if(random.nextInt(2) == 0){
+                trap = new Trap(new int[]{start[0], end[1]},5,"DOT");
+                dun.addTrap(trap);
+            }
         }
 
     }
@@ -117,7 +126,7 @@ public class DungeonGeneration {
                 int y = random.nextInt(room.getH())+room.getY1();
                 pos = new int[]{x,y};
             }while(room.isOccupied(pos));
-            creatures[i] = new Ennemy(pos, 3,0,1f,1f);
+            creatures[i] = new Ennemy(pos, 10,0,5f,1f);
         }
         room.setCreatures(creatures);
     }
@@ -129,9 +138,6 @@ public class DungeonGeneration {
 
         int minRoomDim = 5;
         int maxRoomDim = 10;
-
-        int minDunDim = (maxRoomDim)*numberOfRooms;
-        int maxDunDim = (maxRoomDim + 3)*numberOfRooms;
 
 //        int[] dunSize = new int[]{random.nextInt(maxDunDim - minDunDim + 1)+ minDunDim ,
 //                random.nextInt(maxDunDim - minDunDim + 1)+ minDunDim };
@@ -158,6 +164,7 @@ public class DungeonGeneration {
         for(int j = 0; j < numberOfRooms-1; j++){
             corridors[j] = new Corridor(rooms[j],rooms[j+1]);
             corridors[j].carve(dun);
+            corridors[j].trap(dun);
         }
 
         setStart(rooms, dun);

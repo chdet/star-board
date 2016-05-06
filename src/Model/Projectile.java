@@ -3,16 +3,16 @@ package Model;
 public class Projectile extends Moving implements Runnable{
 	private int WAIT = 50;
 	private boolean collided = false;
-	private float damage; //mettre un négatif pour faire un soin.
+	private float damage;
 	protected String effect;
 	//protected ArrayList<int[]> aoe = new ArrayList<int[]>();
 	private int aoe;
 	private int manaCost;
+	private int x;
 
     
 	public Projectile(Game game, int[] pos, int orient, String sprite){
-		super(game, pos, orient);
-		setSprite(sprite);
+		super(game, pos, orient, sprite);
 		setDamage(0);
 		setEffect("");
 		setAoe(1);
@@ -22,21 +22,17 @@ public class Projectile extends Moving implements Runnable{
 	public synchronized void  move(int orient){
 		setOrient(orient);
 		int[] newPos = inFront();
-
-		if(!game.doesCollide(newPos)){
-			this.setPos(newPos);
-		}
-
-		else{
-			this.setPos(newPos);
+		this.setPos(newPos);
+		if(getGame().doesCollide(newPos)){
 			this.endCourse();
 		}
 	}
 	
 	protected void setOrient(int orient) {
         this.orient = orient;
-        
-        if (getSprite() == "Laser"){
+
+        if (getSprite().equals("Laser")){
+        	System.out.println("oui");
         	switch(orient){
         	case Game.LEFT : setSprite("LaserHorizontal"); break;
         	case Game.RIGHT : setSprite("LaserHorizontal"); break;
@@ -44,7 +40,7 @@ public class Projectile extends Moving implements Runnable{
         	case Game.DOWN : setSprite("LaserVertical"); break;
         	}
         }
-        else if (getSprite() == "Spike"){
+        else if (getSprite().equals("Spike")){
         	switch(orient){
         	case Game.LEFT : setSprite("SpikeLeft"); break;
         	case Game.RIGHT : setSprite("SpikeRight"); break;
@@ -97,15 +93,15 @@ public class Projectile extends Moving implements Runnable{
 	}
 
 	public void endCourse(){
-    	game.damage(this);
+    	getGame().damage(this);
     	collided = true;
-    	game.removeProjectile(this);
+    	getGame().removeProjectile(this);
     }
     
 	public void run(){
 		while(!collided){
 			try{
-				if(game.doesCollide(getPos())){
+				if(getGame().doesCollide(getPos())){
 					//TODO: ATTENTION DEGATS APPLIQUES DEVANT A CHANGER
 					endCourse();
 				}

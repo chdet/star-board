@@ -1,10 +1,12 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * Creator :  Charles
  * Date : 18-04-16
  */
-public class Terrain{
+public class Terrain implements Serializable{
     private String sprite;
     private boolean collision;
 

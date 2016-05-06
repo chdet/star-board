@@ -4,7 +4,14 @@ import Model.*;
 
 import javax.swing.*;
 
+import java.awt.*;
 import java.awt.event.KeyListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class Window  implements  Runnable{
@@ -24,25 +31,38 @@ public class Window  implements  Runnable{
 	    frame.setUndecorated(false);
 		frame.setResizable(false);
 		frame.setVisible(true);
+		frame.setBackground(Color.WHITE);
 
 	    frame.getContentPane().add(getMenu());
 	    frame.pack();
 	}
 
     public void run(){
-		while(true){
+		while(game.getHero().isAlive()){
 			try {
 				if(this.currentDungeon != game.getDungeon()){
 					this.currentDungeon= game.getDungeon();
 					buildMap(game.getTerrainMatrix());
 					setCreatures(game.getCreatures());
+					setItems(game.getItems());
 				}
 				refreshMap();
+				refreshInventory();
 				Thread.sleep(1000/FPS);
 			}catch (Exception e){
 				e.printStackTrace();
 			}
 		}
+		map.refresh();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		getFrame().getContentPane().remove(getMap());
+		getFrame().getContentPane().remove(getInventory());
+		getFrame().getContentPane().add(getMenu());
+		getFrame().pack();
 }
 
     public void buildMap(Terrain[][] terrainMatrix){
@@ -65,6 +85,10 @@ public class Window  implements  Runnable{
 		return map;
 	}
 
+	public Game getGame() {
+		return game;
+	}
+
 	public  void setGame(Game game){
 		this.game = game;
 	}
@@ -83,10 +107,19 @@ public class Window  implements  Runnable{
 
 	public void setHero(Hero hero) {
 		this.map.setHero(hero);
+		this.inventory.setHero(hero);
+	}
+	
+	public void setItems(ArrayList<Item> items) {
+		this.map.setItems(items);
 	}
 
     public void refreshMap(){
         this.map.refresh();
+    }
+    
+    public void refreshInventory(){
+        this.inventory.refresh();
     }
 	
 	public void setKeyListener(KeyListener keyboard){
