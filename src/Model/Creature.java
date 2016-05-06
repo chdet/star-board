@@ -230,7 +230,7 @@ public abstract class Creature extends Moving{
 	public void useSpell(){
 		String spell = spellList.get(currentSpell);
 		Projectile projectile = new Projectile(game, inFront(), getOrient(), spell);
-		
+
 		switch (spell){
 		case "Laser" : 
 			projectile.setDamage(/*level * */0);
@@ -256,7 +256,7 @@ public abstract class Creature extends Moving{
 			break;
 		
 		case "Spike":
-			projectile.setDamage(5);
+			projectile.setDamage(0);
 			projectile.setEffect("stun");
 			projectile.setAoe(1);
 			projectile.setManaCost(5);
@@ -281,7 +281,7 @@ public abstract class Creature extends Moving{
 	}
 
 	public double distanceTo(int[] pos){
-		return(Math.sqrt((this.getPos()[0]-pos[0])^2+(this.getPos()[1]-pos[1])^2));
+		return(Math.sqrt((this.getPos()[0]-pos[0])*(this.getPos()[0]-pos[0])+(this.getPos()[1]-pos[1])*(this.getPos()[1]-pos[1])));
 	}
 	
 }

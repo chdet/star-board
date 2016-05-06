@@ -64,6 +64,7 @@ public class Game{
 		this.hero.setPos(dungeon.getStartPoint());
 		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
+		status = new Status(this.creatures);
 		updateColMap();
 		startAI();
 
@@ -148,48 +149,44 @@ public class Game{
     
 
 	boolean doesCollide(int[] pos){
-        return collisionMap[pos[0]][pos[1]];
+		try{
+			return collisionMap[pos[0]][pos[1]];
+		}catch(ArrayIndexOutOfBoundsException e){
+			return true;	//Any tile outside the map is off-limits
+		}
     }
 
-	int[] closestEnemy(AICreature aiCreature){
-		/*	Return the position of the closest enemy to the AICreature, if there is none,
-		*  returns the creatures' own position */
+	Creature closestEnemy(AICreature aiCreature){
+		/*	Return the closest enemy to the AICreature, if there is none,
+		*  returns null */
 		int[] pos = aiCreature.getPos();
 		int range = 10; //TODO: AJOUTER RANGE DANS LE CONSTRUCTEUR DE CREATURE
 		int behavior= aiCreature.getHostility();
-		int[] enemyPos;
 		if(behavior == AICreature.HOSTILE && getHero().distanceTo(pos) < range) {
-			enemyPos = new int[]{getHero().getPos()[0],getHero().getPos()[1]};
-			return  enemyPos;
+			return  hero;
 		}
 		else if(behavior == AICreature.FRIENDLY) {
-			double[] temp;    //Holds the position of the current ennemy and its distance.
-			double[] tempClosest = null; //Holds the position of the current closest ennemy and its distance.
-			try {
-				for (Creature creature : this.creatures) {
-					temp = new double[]{creature.getPos()[0], creature.getPos()[1], creature.distanceTo(pos)};
-					if (temp[2] < range) {    //temp[2] is the distance to pos
-						if (tempClosest == null) {
-							tempClosest = temp;
-						} else if (temp[2] < tempClosest[2]) {
-							tempClosest = temp;
-						}
+			double temp = -1;    //Holds the distance of the current closest ennemy and its distance.
+			Creature closestCreature = null;
+			for (Creature creature : this.creatures) {
+				double distance = creature.distanceTo(pos);
+				if (distance < range) {    //temp is the distance to pos
+					if (temp == -1 || distance < temp) {
+						temp = distance;
+						closestCreature = creature;
 					}
 				}
-				enemyPos = new int[]{(int) tempClosest[0], (int) tempClosest[1]};
-				return enemyPos;
-			} catch (NullPointerException e) {    //In case there are no enemies close and tempClosest is null
-				return pos;
 			}
+			return closestCreature;
 		}
 		else{
-			return pos;		//In this case no movement is made
+			return null;
 		}
-		}
+	}
 
 	public void damage(Projectile projectile) {
 		ArrayList<int[]> aoePos = new ArrayList<int[]>();
-		int[] center = projectile.inFront();
+		int[] center = projectile.getPos();
 		
 		for(int i = -projectile.getAoe() + 1; i < projectile.getAoe(); i++){
 			for(int j = -projectile.getAoe() + 1; j < projectile.getAoe(); j++){
@@ -223,6 +220,7 @@ public class Game{
 
 						case "stun" :
 							creatures.get(i).setStatus("stun");
+							System.out.println(creatures.get(i).getStatus());
 							creatures.get(i).setStatusBegin(System.currentTimeMillis());
 							creatures.get(i).setStatusDuration(5000f);
 							break;

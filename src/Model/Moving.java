@@ -19,25 +19,7 @@ public abstract class Moving extends GameEntity{
 	}
 	
 	protected abstract void setOrient(int orient);		//TODO: Changement de sprite dynamique en fonction de la sprite "basique" (ex: Jedi, Trooper, Laser)
-	
-	public synchronized void  move(int orient){
-        setOrient(orient);
-        int[] pos = getPos();
-        int[] newPos = inFront();
-        
-        if(!game.doesCollide(newPos)){
-            this.setPos(newPos);
-            game.moveColMap(pos, newPos);
-        }
-               
-        else{
-        	if(this instanceof Projectile){
-	            //TODO: Ajouter un check si le proj se trouver SUR un collidable(dans la cas où une Creature se déplace sur le projectile)
-	            ((Projectile)(this)).endCourse();
-	            //TODO: Appeler la méthode de Game qui gère les dégats (newPos et Area of Damage en attribut)
-	        }
-        }
-    }
+
 	
 	public int[] inFront(){
 		int[] pos = getPos();
