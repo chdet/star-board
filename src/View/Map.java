@@ -120,6 +120,11 @@ public class Map extends JPanel{
             int y = items.get(i).getPos()[1];
             g.drawImage(img.get(items.get(i).getSprite()), (x-heroPos[0]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, (y-heroPos[1]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
         }
+        
+        if (!hero.isAlive()){
+        	g.setColor(Color.RED);
+            g.fillRect(0, 0, TILES_PER_AXIS * SPRITESIZE * TILESIZE, TILES_PER_AXIS * SPRITESIZE * TILESIZE);
+        }
     }
 
 	public void buildMap(Terrain[][] terrainMatrix){
@@ -146,5 +151,7 @@ public class Map extends JPanel{
     public void refresh(){
         this.repaint();
     }
+    
+    
 	
 }

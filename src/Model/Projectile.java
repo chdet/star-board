@@ -3,7 +3,7 @@ package Model;
 public class Projectile extends Moving implements Runnable{
 	private int WAIT = 50;
 	private boolean collided = false;
-	private float damage; //mettre un négatif pour faire un soin.
+	private float damage;
 	protected String effect;
 	//protected ArrayList<int[]> aoe = new ArrayList<int[]>();
 	private int aoe;
@@ -12,8 +12,7 @@ public class Projectile extends Moving implements Runnable{
 
     
 	public Projectile(Game game, int[] pos, int orient, String sprite){
-		super(game, pos, orient);
-		setSprite(sprite);
+		super(game, pos, orient, sprite);
 		setDamage(0);
 		setEffect("");
 		setAoe(1);
@@ -35,7 +34,7 @@ public class Projectile extends Moving implements Runnable{
         System.out.println(getSprite());
         System.out.println(getSprite() == "Laser");
         
-        if (getSprite() == "Laser"){
+        if (getSprite().equals("Laser")){
         	System.out.println("oui");
         	switch(orient){
         	case Game.LEFT : setSprite("LaserHorizontal"); break;
@@ -44,7 +43,7 @@ public class Projectile extends Moving implements Runnable{
         	case Game.DOWN : setSprite("LaserVertical"); break;
         	}
         }
-        else if (getSprite() == "Spike"){
+        else if (getSprite().equals("Spike")){
         	switch(orient){
         	case Game.LEFT : setSprite("SpikeLeft"); break;
         	case Game.RIGHT : setSprite("SpikeRight"); break;

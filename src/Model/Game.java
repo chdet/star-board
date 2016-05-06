@@ -1,5 +1,8 @@
 package Model;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -275,7 +278,7 @@ public class Game implements Serializable{
 		if(trap.getPos()[0] == creature.getPos()[0] && trap.getPos()[1] == creature.getPos()[1]){
 			System.out.println("pris dans un piège");
 			if (creature.getStatus() == ""){
-				switch(trap.getEffect()){						
+				switch(trap.getEffect()){
 				case "stun" : 
 					creature.setStatus("stun");
 					creature.setStatusBegin(System.currentTimeMillis());
@@ -315,6 +318,21 @@ public class Game implements Serializable{
 		case "PotionMana": creature.setMana(creature.getMana() + potion.getQuantity()); break;
 		}
 		
+	}
+	
+	public static void save(String filename, Game game) {
+		FileOutputStream file;
+		ObjectOutputStream o;
+		
+		try {
+			file = new FileOutputStream(filename);
+			o = new ObjectOutputStream(file);
+			o.writeObject(game);
+			o.close();
+			System.out.println("sauvé");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
