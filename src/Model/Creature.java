@@ -250,7 +250,7 @@ public abstract class Creature extends Moving{
 	public void useSpell(){
 		String spell = spellList.get(currentSpell);
 		Projectile projectile = new Projectile(getGame(), inFront(), getOrient(), spell);
-		
+		System.out.println("Sort");
 		switch (spell){
 		case "Laser" : 
 			projectile.setDamage(/*level * */0);

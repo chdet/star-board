@@ -1,10 +1,11 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Game{
+public class Game implements Serializable{
     private Hero hero;
-	private ArrayList<Projectile> projectiles = new ArrayList<>();
+	private transient ArrayList<Projectile> projectiles = new ArrayList<>();
 	private ArrayList<Item> items = new ArrayList<>();
 	private boolean[][] collisionMap;
 
@@ -99,7 +100,11 @@ public class Game{
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
     }
-
+    
+    public void setProjectiles(ArrayList<Projectile> projectiles) {
+		this.projectiles = projectiles;
+	}
+    
     public ArrayList<Creature> getCreatures() {
         return creatures;
     }
@@ -107,8 +112,12 @@ public class Game{
     public Hero getHero() {
 		return hero;
 	}
+    
+    public Status getStatus() {
+		return status;
+	}
 
-	private void startAI(){
+	public void startAI(){
 		for(Creature creature : this.creatures){
 			if(creature instanceof AICreature){
 				((AICreature) creature).setActive(true);

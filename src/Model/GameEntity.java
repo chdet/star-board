@@ -1,10 +1,12 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * Creator :  Charles
  * Date : 18-04-16
  */
-public abstract class GameEntity {
+public abstract class GameEntity implements Serializable{
     private Game game;
     
 	private int[] pos;

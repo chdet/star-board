@@ -1,12 +1,13 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Creator :  Charles
  * Date : 01-05-16
  */
-public class Dungeon {
+public class Dungeon implements Serializable{
     private Terrain[][] terrainMatrix;
     private int[] startPoint; //Position the hero starts at
     private ArrayList<Creature> creatures = new ArrayList<>();

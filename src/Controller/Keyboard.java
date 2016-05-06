@@ -2,6 +2,7 @@ package Controller;
 
 import Model.DungeonGeneration;
 import Model.Game;
+import View.Window;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -63,6 +64,10 @@ public class Keyboard implements KeyListener{
 				break;
 			case KeyEvent.VK_F5:
 				game.changeDungeon(DungeonGeneration.generateRandomDungeon(5));
+				break;
+			case KeyEvent.VK_S:
+				Window.save("Save.txt", game);
+				break;
 		}
 	}
 

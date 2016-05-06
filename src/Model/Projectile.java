@@ -8,6 +8,7 @@ public class Projectile extends Moving implements Runnable{
 	//protected ArrayList<int[]> aoe = new ArrayList<int[]>();
 	private int aoe;
 	private int manaCost;
+	private int x;
 
     
 	public Projectile(Game game, int[] pos, int orient, String sprite){
@@ -30,8 +31,12 @@ public class Projectile extends Moving implements Runnable{
 	
 	protected void setOrient(int orient) {
         this.orient = orient;
+        System.out.println("orient changée");
+        System.out.println(getSprite());
+        System.out.println(getSprite() == "Laser");
         
         if (getSprite() == "Laser"){
+        	System.out.println("oui");
         	switch(orient){
         	case Game.LEFT : setSprite("LaserHorizontal"); break;
         	case Game.RIGHT : setSprite("LaserHorizontal"); break;

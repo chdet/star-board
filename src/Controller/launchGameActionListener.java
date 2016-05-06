@@ -2,8 +2,10 @@ package Controller;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import Model.Game;
+import Model.Projectile;
 import View.Button;
 import View.Window;
 
@@ -23,10 +25,34 @@ public class launchGameActionListener implements ActionListener{
 		launchGame(whichGame);
 	}
 
-
 	void launchGame(String whichGame){
 		if(whichGame == "Load Game"){
+			window.load("Save.txt");
 			System.out.println("Load Game");
+			Game game = window.getGame();
+			Keyboard keyboard = new Keyboard(game);
+
+			window.getFrame().getContentPane().remove(window.getMenu());
+
+			window.getFrame().getContentPane().add(window.getMap(), BorderLayout.WEST);
+			window.getFrame().getContentPane().add(window.getInventory(), BorderLayout.EAST);
+			window.getMap().requestFocusInWindow(); //Ne pas oublier
+			
+			window.setGame(game);
+			window.setCurrentDungeon(game.getDungeon());
+			window.buildMap(game.getTerrainMatrix());
+			window.setCreatures(game.getCreatures());
+			
+			ArrayList<Projectile> projectiles = new ArrayList<>();
+			game.setProjectiles(projectiles);
+			window.setProjectiles(new ArrayList<>());
+			window.setItems(game.getItems());
+			window.setHero(game.getHero());
+			window.setKeyListener(keyboard);
+			window.getFrame().pack();
+
+			Thread t = new Thread(window);
+			t.start();
 		}
 		else{
 			if(window.getMenu().getRoomCount() > 0){

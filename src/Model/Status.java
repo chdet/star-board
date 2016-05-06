@@ -1,8 +1,9 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Status implements Runnable{
+public class Status implements Runnable, Serializable{
 	public void setCreatures(ArrayList<Creature> creatures) {
 		this.creatures = creatures;
 	}

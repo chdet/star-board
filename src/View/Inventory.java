@@ -8,13 +8,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Hashtable;
 
 /**
  * Creator :  Charles
  * Date : 05-05-16
  */
-public class Inventory extends JPanel {
+public class Inventory extends JPanel{
     private Hashtable<String, BufferedImage> img = new Hashtable<>();
     private Hero hero;
 

@@ -1,5 +1,7 @@
 package Model;
 
+import java.io.Serializable;
+
 public abstract class Moving extends GameEntity{
 	protected int orient;
 	

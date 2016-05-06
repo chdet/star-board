@@ -5,6 +5,12 @@ import Model.*;
 import javax.swing.*;
 
 import java.awt.event.KeyListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class Window  implements  Runnable{
@@ -67,6 +73,10 @@ public class Window  implements  Runnable{
 		return map;
 	}
 
+	public Game getGame() {
+		return game;
+	}
+
 	public  void setGame(Game game){
 		this.game = game;
 	}
@@ -102,6 +112,48 @@ public class Window  implements  Runnable{
 	
 	public void setKeyListener(KeyListener keyboard){
 	    this.map.addKeyListener(keyboard);
+	}
+	
+	
+	public Game load(String filename){
+		FileInputStream file;
+		ObjectInputStream i;
+		try {
+			file = new FileInputStream(filename);
+			i = new ObjectInputStream(file);
+			game = (Game) i.readObject();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		game.startAI();
+		/*for(Projectile projectile: game.getProjectiles()){
+			Thread t = new Thread(projectile);
+			t.start();
+		}*/
+		
+		Thread t = new Thread(game.getStatus());
+		t.start();
+		
+		return game;
+	}
+
+	public static void save(String filename, Game game) {
+		FileOutputStream file;
+		ObjectOutputStream o;
+		
+		try {
+			file = new FileOutputStream(filename);
+			o = new ObjectOutputStream(file);
+			o.writeObject(game);
+			o.close();
+			System.out.println("sauvé");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
