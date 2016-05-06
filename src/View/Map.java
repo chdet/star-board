@@ -32,7 +32,7 @@ public class Map extends JPanel{
     private ArrayList<Creature> creatures;
     private ArrayList<Projectile> projectiles;
     private ArrayList<Item> items;
-	
+
     
 	public Map(){
 		this.setFocusable(true);
@@ -67,12 +67,12 @@ public class Map extends JPanel{
 			this.img.put("SpikeDown",ImageIO.read(new File("SpikeDown.png")));
 			
 			this.img.put("Ice",ImageIO.read(new File("Ice.png")));
-			
+
 			this.img.put("PotionHP",ImageIO.read(new File("PotionHP.png")));
 			this.img.put("PotionMana",ImageIO.read(new File("PotionMana.png")));
 
 			this.img.put("Trap",ImageIO.read(new File("Trap.png")));
-			
+
 		}
 		catch(IOException e){
         	e.printStackTrace();
@@ -95,7 +95,7 @@ public class Map extends JPanel{
                 }
             }
         }
-        
+
         for(int i = 0; i< creatures.size(); i++){
         	int x = creatures.get(i).getPos()[0];
             int y = creatures.get(i).getPos()[1];
@@ -114,7 +114,7 @@ public class Map extends JPanel{
             int y = projectiles.get(i).getPos()[1];
             g.drawImage(img.get(projectiles.get(i).getSprite()), (x-heroPos[0]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, (y-heroPos[1]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
         }
-        
+
         for(int i = 0; i< items.size(); i++){
         	int x = items.get(i).getPos()[0];
             int y = items.get(i).getPos()[1];

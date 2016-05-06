@@ -16,7 +16,7 @@ public abstract class Creature extends Moving{
 	private String status = "";
     private long statusBegin = 0;
     private float statusDuration = 0;
-    private int DOTStep; // La nombre de fois que des HP ont été retiré par un même DOT
+    private int DOTStep; // La nombre de fois que des HP ont ï¿½tï¿½ retirï¿½ par un mï¿½me DOT
 	
 	private int currentSpell;
 	private ArrayList<String> spellList = new ArrayList<String>();
@@ -55,7 +55,7 @@ public abstract class Creature extends Moving{
 		if(!getGame().doesCollide(newPos)){
 			this.setPos(newPos);
 			getGame().moveColMap(pos, newPos);
-			for(int i = 0; i< getGame().getItems().size(); i++){            	
+			for(int i = 0; i< getGame().getItems().size(); i++){
             	if (this instanceof Creature && getGame().getItems().get(i).getPos()[0] == newPos[0] && getGame().getItems().get(i).getPos()[1] == newPos[1]){
             		walkOn(getGame().getItems().get(i));
             		System.out.println("OBJET RENCONTRE");
@@ -89,7 +89,7 @@ public abstract class Creature extends Moving{
 			this.HPMax = HPMax;
 		}
 		else{
-			System.out.println("HPMax doit être positif");
+			System.out.println("HPMax doit ï¿½tre positif");
 			this.HPMax = 0;
 		}
 	}
@@ -105,7 +105,7 @@ public abstract class Creature extends Moving{
 		else{
 			this.mana = mana;
 		}
-		//le mana n'est jamais sensé être négatif puisqu'on vérifie avant de lancer un sort.
+		//le mana n'est jamais sensï¿½ ï¿½tre nï¿½gatif puisqu'on vï¿½rifie avant de lancer un sort.
 	}
 	
 	public Integer getManaMax() {
@@ -117,7 +117,7 @@ public abstract class Creature extends Moving{
 			this.manaMax = manaMax;
 		}
 		else{
-			System.out.println("manaMax doit être positif");
+			System.out.println("manaMax doit ï¿½tre positif");
 			this.manaMax = 0;
 		}
 	}
@@ -131,7 +131,7 @@ public abstract class Creature extends Moving{
 			this.attack = attack;
 		}
 		else{
-			System.out.println("attack doit être positif");
+			System.out.println("attack doit ï¿½tre positif");
 			this.attack = 0f;
 		}
 	}
@@ -145,7 +145,7 @@ public abstract class Creature extends Moving{
 			this.defense = defense;
 		}
 		else{
-			System.out.println("defense doit être positif et non-nul");
+			System.out.println("defense doit ï¿½tre positif et non-nul");
 			this.defense = 1f;
 		}
 	}
@@ -185,7 +185,7 @@ public abstract class Creature extends Moving{
 			this.DOTStep = DOTStep;
 		}
 		else{
-			System.out.println("Incohérence DOTStep");
+			System.out.println("Incohï¿½rence DOTStep");
 		}
 	}
 	
@@ -211,10 +211,10 @@ public abstract class Creature extends Moving{
 	public boolean isAlive() {
 		return alive;
 	}
-	
+
 	public void die(){
 		this.alive = false;
-		if(!(this instanceof Hero)){	    	
+		if(!(this instanceof Hero)){
 	    	getGame().getHero().setExp((int)(getGame().getHero().getExp() + 25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp
 	    	drop();
 	    	if (getGame().getHero().getExp() > 100/* * game.getHero().getLevel() */){
@@ -224,14 +224,10 @@ public abstract class Creature extends Moving{
 	    		System.out.println("Taille APRES: " + getGame().getHero().getSpellList().size());
 	    	}
 		}
-		else{
-	    	System.out.println("mort");
-			//TODO Retour au menu;
-		}
 		getGame().moveColMap(getPos());
 		getGame().removeCreature(this);
     }
-	
+
 	private void drop() {
 		System.out.println("DROP");
 		double x = Math.random();
@@ -242,7 +238,7 @@ public abstract class Creature extends Moving{
 			this.getGame().addItem(new Potion(this.getPos(), "PotionMana", 50));
 		}
 	}
-	
+
 	public void attack(){
 		getGame().damage(this);
 	}
@@ -299,11 +295,11 @@ public abstract class Creature extends Moving{
 			projectile = null;
 		}
 	}
-	
+
 	public abstract void walkOn(Item item);
 
 	public double distanceTo(int[] pos){
-		return(Math.sqrt((this.getPos()[0]-pos[0])^2+(this.getPos()[1]-pos[1])^2));
+		return(Math.sqrt((this.getPos()[0]-pos[0])*(this.getPos()[0]-pos[0])+(this.getPos()[1]-pos[1])*(this.getPos()[1]-pos[1])));
 	}
 	
 }
