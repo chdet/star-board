@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Status implements Runnable, Serializable{
-	public void setCreatures(ArrayList<Creature> creatures) {
-		this.creatures = creatures;
-	}
 
 	private ArrayList<Creature> creatures;
 	
@@ -15,8 +12,12 @@ public class Status implements Runnable, Serializable{
 		Thread t = new Thread(this);
         t.start();
 	}
-	
-	public ArrayList<Creature> getCreatures() {
+
+	void setCreatures(ArrayList<Creature> creatures) {
+		this.creatures = creatures;
+	}
+
+	private ArrayList<Creature> getCreatures() {
 		return creatures;
 	}
 	

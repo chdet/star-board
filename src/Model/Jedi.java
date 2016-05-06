@@ -1,8 +1,8 @@
 package Model;
 
-public class Jedi extends Hero{
+class Jedi extends Hero{
 	
-	public Jedi(Game game, int[] pos){
+	Jedi(Game game, int[] pos){
 		super(game, pos, 150, 200, 2f,5f);	//hpMax, manaMax, attack, defense
 		setHP(this.getHPMax());
 		setMana(this.getManaMax());

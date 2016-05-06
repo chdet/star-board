@@ -25,7 +25,7 @@ public abstract class Moving extends GameEntity{
 		setOrient(orient);
 	}
 	
-	public int getOrient() {
+	int getOrient() {
 		return orient;
 	}
 	
@@ -33,7 +33,7 @@ public abstract class Moving extends GameEntity{
 	
 	public abstract  void  move(int orient);
 	
-	public int[] inFront(){
+	int[] inFront(){
 		int[] pos = getPos();
 		int[] inFront = pos;
 		switch (orient){
@@ -45,7 +45,7 @@ public abstract class Moving extends GameEntity{
 		return inFront;
 	}
 
-	public int[] inDirection(int orient){
+	int[] inDirection(int orient){
 		int[] pos = getPos();
 		int[] inDirection = pos;
 		switch (orient){

@@ -12,11 +12,11 @@ public class Potion extends Item{
 		setSprite(stat);
 	}
 	
-	public String getStat() {
+	String getStat() {
 		return stat;
 	}
 	
-	public void setStat(String stat) {
+	private void setStat(String stat) {
 		if(stat == "PotionHP" || stat == "PotionMana"){
 			this.stat = stat;
 			System.out.println(stat);
@@ -26,11 +26,11 @@ public class Potion extends Item{
 		}
 	}
 	
-	public int getQuantity() {
+	int getQuantity() {
 		return quantity;
 	}
 	
-	public void setQuantity(int quantity) {
+	private void setQuantity(int quantity) {
 		if (quantity >= 0){
 			this.quantity = quantity;
 		}

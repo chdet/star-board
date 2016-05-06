@@ -114,11 +114,11 @@ public class Window  implements  Runnable{
 		this.map.setItems(items);
 	}
 
-    public void refreshMap(){
+    private void refreshMap(){
         this.map.refresh();
     }
     
-    public void refreshInventory(){
+    private void refreshInventory(){
         this.inventory.refresh();
     }
 	

@@ -11,19 +11,19 @@ public class Trap extends Item{
 		setSprite("Trap");
 	}
 
-	public int getDamage() {
+	int getDamage() {
 		return damage;
 	}
 
-	public void setDamage(int damage) {
+	private void setDamage(int damage) {
 		this.damage = damage;
 	}
 
-	public String getEffect() {
+	String getEffect() {
 		return effect;
 	}
 	
-	public void setEffect(String effect) {
+	private void setEffect(String effect) {
 		if(effect.equals("stun" )|| effect.equals("snare") || effect.equals("DOT")){
 			this.effect = effect;
 		}

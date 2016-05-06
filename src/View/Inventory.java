@@ -15,7 +15,7 @@ import java.util.Hashtable;
  * Creator :  Charles
  * Date : 05-05-16
  */
-public class Inventory extends JPanel{
+class Inventory extends JPanel{
     private Hashtable<String, BufferedImage> img = new Hashtable<>();
     private Hero hero;
 
@@ -26,7 +26,7 @@ public class Inventory extends JPanel{
 
     private final int MENU_TILES_WIDTH = 5;
 
-    public Inventory() {
+    Inventory() {
         this.setPreferredSize(new Dimension(MENU_TILES_WIDTH * SPRITESIZE * TILESIZE, SPRITESIZE * TILES_PER_AXIS));
         try {
 			this.img.put("PotionHP",ImageIO.read(new File("PotionHP.png")));
@@ -87,7 +87,7 @@ public class Inventory extends JPanel{
         }
     }
 
-    public void refresh() {
+    void refresh() {
         this.repaint();
     }
 }

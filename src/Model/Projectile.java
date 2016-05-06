@@ -4,14 +4,14 @@ public class Projectile extends Moving implements Runnable{
 	private int WAIT = 50;
 	private boolean collided = false;
 	private float damage;
-	protected String effect;
+	private String effect;
 	//protected ArrayList<int[]> aoe = new ArrayList<int[]>();
 	private int aoe;
 	private int manaCost;
 	private int x;
 
     
-	public Projectile(Game game, int[] pos, int orient, String sprite){
+	Projectile(Game game, int[] pos, int orient, String sprite){
 		super(game, pos, orient, sprite);
 		setDamage(0);
 		setEffect("");
@@ -50,49 +50,49 @@ public class Projectile extends Moving implements Runnable{
         }
 	}
 	
-	public void setWAIT(int WAIT){// TODO Ramener dans Moving
+	void setWAIT(int WAIT){// TODO Ramener dans Moving
 		if(WAIT >= 0){
 			this.WAIT = WAIT;
 		}
 	}
 	
-	public float getDamage() {
+	float getDamage() {
 		return damage;
 	}
 	
-	public void setDamage(float damage) {
+	void setDamage(float damage) {
 		this.damage = damage;
 	}
 	
-	public String getEffect() {
+	String getEffect() {
 		return effect;
 	}
 	
-	public void setEffect(String effect) {
+	void setEffect(String effect) {
 		this.effect = effect;
 	}
 	
-	public int getAoe() {
+	int getAoe() {
 		return aoe;
 	}
 	
-	public void setAoe(int aoe) {
+	void setAoe(int aoe) {
 		if(aoe > 0){
 			this.aoe = aoe;
 		}
 	}
 	
-	public Integer getManaCost() {
+	Integer getManaCost() {
 		return manaCost;
 	}
 	
-	public void setManaCost(int manaCost) {
+	void setManaCost(int manaCost) {
 		if(manaCost > 0){
 			this.manaCost = manaCost;
 		}
 	}
 
-	public void endCourse(){
+	private void endCourse(){
     	getGame().damage(this);
     	collided = true;
     	getGame().removeProjectile(this);
