@@ -4,7 +4,6 @@ public class Jedi extends Hero{
 	
 	public Jedi(Game game, int[] pos){
 		super(game, pos, 150, 200, 5f,10f);	//hpMax, manaMax, attack, defense
-        addToSpellList("Spike");
 		setHP(this.getHPMax());
 		setMana(this.getManaMax());
 	}

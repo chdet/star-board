@@ -277,7 +277,6 @@ public abstract class Creature extends Moving{
 			break;
 			
 		case "Rally":
-			projectile.setWAIT(0);
 			projectile.setDamage(0);
 			projectile.setEffect("rally");
 			projectile.setAoe(1);

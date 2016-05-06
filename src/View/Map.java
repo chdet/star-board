@@ -67,8 +67,10 @@ public class Map extends JPanel{
 			this.img.put("SpikeDown",ImageIO.read(new File("SpikeDown.png")));
 			
 			this.img.put("Ice",ImageIO.read(new File("Ice.png")));
+            this.img.put("Rally",ImageIO.read(new File("Heart.png")));
 
-			this.img.put("PotionHP",ImageIO.read(new File("PotionHP.png")));
+
+            this.img.put("PotionHP",ImageIO.read(new File("PotionHP.png")));
 			this.img.put("PotionMana",ImageIO.read(new File("PotionMana.png")));
 
 			this.img.put("Trap",ImageIO.read(new File("Trap.png")));
