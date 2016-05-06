@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.lang.Math;
 
 public abstract class Creature extends Moving{
-	boolean alive = true;
+	private boolean alive = true;
 	private  Integer HP;
 	private Integer HPMax;
 	private  Integer mana;
 	private Integer manaMax;
 	private Float attack;
 	private Float defense;
-	private int range; //Vision range
-	
+
 	private String status = "";
     private long statusBegin = 0;
     private float statusDuration = 0;
-    private int DOTStep; // La nombre de fois que des HP ont été retiré par un même DOT
+    private int DOTStep; // La nombre de fois que des HP ont ï¿½tï¿½ retirï¿½ par un mï¿½me DOT
+	private int DOTDamage;
 	
 	private int currentSpell;
 	private ArrayList<String> spellList = new ArrayList<String>();
@@ -52,9 +52,15 @@ public abstract class Creature extends Moving{
 		int[] pos = getPos();
 		int[] newPos = inFront();
 
-		if(!game.doesCollide(newPos)){
+		if(!getGame().doesCollide(newPos)){
 			this.setPos(newPos);
-			game.moveColMap(pos, newPos);
+			getGame().moveColMap(pos, newPos);
+			for(int i = 0; i< getGame().getItems().size(); i++){
+            	if (this instanceof Creature && getGame().getItems().get(i).getPos()[0] == newPos[0] && getGame().getItems().get(i).getPos()[1] == newPos[1]){
+            		walkOn(getGame().getItems().get(i));
+            		System.out.println("OBJET RENCONTRE");
+            	}
+            }
 		}
 	}
 	
@@ -83,7 +89,7 @@ public abstract class Creature extends Moving{
 			this.HPMax = HPMax;
 		}
 		else{
-			System.out.println("HPMax doit être positif");
+			System.out.println("HPMax doit ï¿½tre positif");
 			this.HPMax = 0;
 		}
 	}
@@ -99,7 +105,7 @@ public abstract class Creature extends Moving{
 		else{
 			this.mana = mana;
 		}
-		//le mana n'est jamais sensé être négatif puisqu'on vérifie avant de lancer un sort.
+		//le mana n'est jamais sensï¿½ ï¿½tre nï¿½gatif puisqu'on vï¿½rifie avant de lancer un sort.
 	}
 	
 	public Integer getManaMax() {
@@ -111,7 +117,7 @@ public abstract class Creature extends Moving{
 			this.manaMax = manaMax;
 		}
 		else{
-			System.out.println("manaMax doit être positif");
+			System.out.println("manaMax doit ï¿½tre positif");
 			this.manaMax = 0;
 		}
 	}
@@ -125,7 +131,7 @@ public abstract class Creature extends Moving{
 			this.attack = attack;
 		}
 		else{
-			System.out.println("attack doit être positif");
+			System.out.println("attack doit ï¿½tre positif");
 			this.attack = 0f;
 		}
 	}
@@ -139,7 +145,7 @@ public abstract class Creature extends Moving{
 			this.defense = defense;
 		}
 		else{
-			System.out.println("defense doit être positif et non-nul");
+			System.out.println("defense doit ï¿½tre positif et non-nul");
 			this.defense = 1f;
 		}
 	}
@@ -169,7 +175,15 @@ public abstract class Creature extends Moving{
 			this.statusDuration = statusDuration;
 		}
 	}
-	
+
+	public int getDOTDamage() {
+		return DOTDamage;
+	}
+
+	public void setDOTDamage(int DOTDamage) {
+		this.DOTDamage = DOTDamage;
+	}
+
 	public int getDOTStep() {
 		return DOTStep;
 	}
@@ -179,13 +193,17 @@ public abstract class Creature extends Moving{
 			this.DOTStep = DOTStep;
 		}
 		else{
-			System.out.println("Incohérence DOTStep");
+			System.out.println("Incohï¿½rence DOTStep");
 		}
 	}
-	
-	public void setCurrentSpell(int currentSpell) {
-		if (currentSpell < spellList.size()){
-			this.currentSpell = currentSpell;
+
+    public int getCurrentSpell() {
+        return currentSpell;
+    }
+
+    public void setCurrentSpell(int currentSpell) {
+        if (currentSpell < spellList.size()){
+            this.currentSpell = currentSpell;
 		}
 	}
 	
@@ -194,46 +212,57 @@ public abstract class Creature extends Moving{
 	}
 
 	public void addToSpellList(String spell) {
-		if(spell == "Laser" || spell == "Force" || spell == "Rally" || spell == "Spike" || spell == "Ice"){
-			spellList.add(spell);
+		if(spell.equals("Laser" )|| spell.equals("Force") || spell.equals("Rally") || spell.equals("Spike") || spell.equals("Ice")){
+            System.out.println("Sort ajoutÃ©");
+            spellList.add(spell);
 		}
 		else{
 			System.out.println("Sort incorrect");
 		}
 	}
 	
+	public boolean isAlive() {
+		return alive;
+	}
+
 	public void die(){
 		this.alive = false;
 		if(!(this instanceof Hero)){
-	    	game.moveColMap(getPos());
-	    	game.removeCreature(this);
-	    	game.getHero().setExp((int)(game.getHero().getExp() + 25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp
-	    	if (game.getHero().getExp() > 100/* * game.getHero().getLevel() */){
-	    		System.out.println("Taille AVANT: " + game.getHero().getSpellList().size());
-	    		game.getHero().levelUp();
-	    		System.out.println("LEVEL UP: " + game.getHero().getLevel());
-	    		System.out.println("Taille APRES: " + game.getHero().getSpellList().size());
+	    	getGame().getHero().setExp((int)(getGame().getHero().getExp() + 25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp
+	    	drop();
+	    	if (getGame().getHero().getExp() > 100/* * game.getHero().getLevel() */){
+	    		System.out.println("Taille AVANT: " + getGame().getHero().getSpellList().size());
+	    		getGame().getHero().levelUp();
+	    		System.out.println("LEVEL UP: " + getGame().getHero().getLevel());
+	    		System.out.println("Taille APRES: " + getGame().getHero().getSpellList().size());
 	    	}
 		}
-		else{
-	    	game.moveColMap(getPos());
-	    	game.removeCreature(this);
-	    	System.out.println("mort");
-			//TODO Retour au menu;
-		}	
+		getGame().moveColMap(getPos());
+		getGame().removeCreature(this);
     }
-	
+
+	private void drop() {
+		System.out.println("DROP");
+		double x = Math.random();
+		if (x < 0.25){
+			this.getGame().addItem(new Potion(this.getPos(), "PotionHP", 50));
+		}
+		else if (0.25 < x && x < 0.5){
+			this.getGame().addItem(new Potion(this.getPos(), "PotionMana", 50));
+		}
+	}
+
 	public void attack(){
-		game.damage(this);
+		getGame().damage(this);
 	}
 	
 	public void useSpell(){
 		String spell = spellList.get(currentSpell);
-		Projectile projectile = new Projectile(game, inFront(), getOrient(), spell);
-		
+		Projectile projectile = new Projectile(getGame(), inFront(), getOrient(), spell);
+		System.out.println("Sort");
 		switch (spell){
 		case "Laser" : 
-			projectile.setDamage(/*level * */0);
+			projectile.setDamage(2);
 			projectile.setEffect("DOT");
 			projectile.setAoe(1);
 			projectile.setManaCost(5);
@@ -243,28 +272,28 @@ public abstract class Creature extends Moving{
 			projectile.setWAIT(0);
 			projectile.setDamage(0);
 			projectile.setEffect("push");
-			projectile.setAoe(2);
+			projectile.setAoe(4);
 			projectile.setManaCost(5);
 			break;
 			
 		case "Rally":
 			projectile.setWAIT(0);
 			projectile.setDamage(0);
-			projectile.setEffect("");
+			projectile.setEffect("rally");
 			projectile.setAoe(1);
 			projectile.setManaCost(50);
 			break;
 		
 		case "Spike":
-			projectile.setDamage(5);
-			projectile.setEffect("stun");
+			projectile.setDamage(0);
+			projectile.setEffect("slow");
 			projectile.setAoe(1);
 			projectile.setManaCost(5);
 			break;
 		
 		case "Ice":
 			projectile.setDamage(0);
-			projectile.setEffect("snare");
+			projectile.setEffect("stun");
 			projectile.setAoe(2);
 			projectile.setManaCost(5);
 			break;
@@ -273,15 +302,17 @@ public abstract class Creature extends Moving{
 		
 		if(mana >= projectile.getManaCost()){
 			mana -= projectile.getManaCost();
-			game.addProjectile(projectile);
+			getGame().addProjectile(projectile);
 		}
 		else{
 			projectile = null;
 		}
 	}
 
+	public abstract void walkOn(Item item);
+
 	public double distanceTo(int[] pos){
-		return(Math.sqrt((this.getPos()[0]-pos[0])^2+(this.getPos()[1]-pos[1])^2));
+		return(Math.sqrt((this.getPos()[0]-pos[0])*(this.getPos()[0]-pos[0])+(this.getPos()[1]-pos[1])*(this.getPos()[1]-pos[1])));
 	}
 	
 }
