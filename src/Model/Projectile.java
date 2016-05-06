@@ -30,10 +30,7 @@ public class Projectile extends Moving implements Runnable{
 	
 	protected void setOrient(int orient) {
         this.orient = orient;
-        System.out.println("orient changée");
-        System.out.println(getSprite());
-        System.out.println(getSprite() == "Laser");
-        
+
         if (getSprite().equals("Laser")){
         	System.out.println("oui");
         	switch(orient){

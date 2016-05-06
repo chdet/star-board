@@ -41,8 +41,7 @@ public class Game implements Serializable{
 		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
 
-		int[] pos = {dungeon.getStartPoint()[0], dungeon.getStartPoint()[1] - 2};
-		this.addItem(new Trap(pos, 1, "snare"));
+		this.items.addAll(dungeon.getTraps());
 
 		status = new Status(this.creatures);
 
@@ -74,6 +73,7 @@ public class Game implements Serializable{
 		this.addCreature(hero);
 		status.setCreatures(this.creatures);
 		this.items.clear();
+        this.items.addAll(dungeon.getTraps());
 		updateColMap();
 		startAI();
 	}
@@ -192,13 +192,16 @@ public class Game implements Serializable{
 			double temp = -1;    //Holds the distance of the current closest ennemy and its distance.
 			Creature closestCreature = null;
 			for (Creature creature : this.creatures) {
-				double distance = creature.distanceTo(pos);
-				if (distance < range) {    //temp is the distance to pos
-					if (temp == -1 || distance < temp) {
-						temp = distance;
-						closestCreature = creature;
-					}
-				}
+				if(!(creature instanceof  Hero) && (creature.getPos() != pos)){
+                    double distance = creature.distanceTo(pos);
+                    if (distance < range) {    //temp is the distance to pos
+                        if (temp == -1 || distance < temp) {
+                            temp = distance;
+                            closestCreature = creature;
+                        }
+                    }
+                }
+
 			}
 			return closestCreature;
 		}
@@ -239,26 +242,41 @@ public class Game implements Serializable{
 							break;
 
 						case "rally" :
+                            creatures.get(i).setStatus("rally");
+                            creatures.get(i).setStatusBegin(System.currentTimeMillis());
+                            creatures.get(i).setStatusDuration(5000f);
 							if(creatures.get(i) instanceof AICreature){
 								((AICreature)(creatures.get(i))).setHostility(AICreature.FRIENDLY);
 							}
+                            if(creatures.get(i) instanceof AICreature){
+                                ((AICreature) creatures.get(i)).setWAIT((int) (((AICreature) creatures.get(i)).getWAITMin()-100));
+
+                            }
+							break;
+
+						case "slow" :
+							creatures.get(i).setStatus("slow");
+							creatures.get(i).setStatusBegin(System.currentTimeMillis());
+							creatures.get(i).setStatusDuration(5000f);
+                            if(creatures.get(i) instanceof AICreature){
+                                ((AICreature) creatures.get(i)).setWAIT((int) (((AICreature) creatures.get(i)).getWAITMin()*5));
+
+                            }
 							break;
 
 						case "stun" :
 							creatures.get(i).setStatus("stun");
 							creatures.get(i).setStatusBegin(System.currentTimeMillis());
 							creatures.get(i).setStatusDuration(5000f);
-							break;
-
-						case "snare" :
-							creatures.get(i).setStatus("snare");
-							creatures.get(i).setStatusBegin(System.currentTimeMillis());
-							creatures.get(i).setStatusDuration(5000f);
+                            if(creatures.get(i) instanceof AICreature){
+                                ((AICreature) creatures.get(i)).setWAIT((int)(creatures.get(i).getStatusDuration()));
+                            }
 							break;
 
 						case "DOT" :
 							creatures.get(i).setStatus("DOT");
-							creatures.get(i).setStatusBegin(System.currentTimeMillis());
+                            creatures.get(i).setDOTDamage((int)projectile.getDamage());
+                            creatures.get(i).setStatusBegin(System.currentTimeMillis());
 							creatures.get(i).setStatusDuration(5000f);
 							break;
 
@@ -275,14 +293,14 @@ public class Game implements Serializable{
 			System.out.println("pris dans un pi�ge");
 			if (creature.getStatus() == ""){
 				switch(trap.getEffect()){						
-				case "stun" : 
-					creature.setStatus("stun");
+				case "slow" :
+					creature.setStatus("slow");
 					creature.setStatusBegin(System.currentTimeMillis());
 					creature.setStatusDuration(5000f);
 					break;
 				
-				case "snare" :
-					creature.setStatus("snare");
+				case "stun" :
+					creature.setStatus("stun");
 					creature.setStatusBegin(System.currentTimeMillis());
 					creature.setStatusDuration(5000f);
 					break;
@@ -291,6 +309,7 @@ public class Game implements Serializable{
 					creature.setStatus("DOT");
 					creature.setStatusBegin(System.currentTimeMillis());
 					creature.setStatusDuration(5000f);
+                    creature.setDOTDamage((int)trap.getDamage());
 					break;
 					
 				}

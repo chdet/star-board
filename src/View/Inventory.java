@@ -57,6 +57,26 @@ public class Inventory extends JPanel{
 	        for(int i = 0; i < hero.getInventory().size(); i++){
 	        	g.drawImage(img.get(hero.getInventory().get(i).getSprite()), 2 * SPRITESIZE * TILESIZE, (3 + i) * SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
 	        }
+
+            g.setColor(Color.WHITE);
+            g.drawString("Level", SPRITESIZE*TILESIZE,10*SPRITESIZE*TILESIZE);
+            g.setColor(Color.CYAN);
+            g.drawString(String.valueOf(hero.getLevel()), SPRITESIZE*TILESIZE+40,10*SPRITESIZE*TILESIZE);
+
+
+            g.setColor(Color.WHITE);
+            g.drawString("Selected spell:", SPRITESIZE*TILESIZE,11*SPRITESIZE*TILESIZE);
+            g.setColor(Color.GREEN);
+            g.drawString(hero.getSpellList().get(hero.getCurrentSpell()), SPRITESIZE*TILESIZE,12*SPRITESIZE*TILESIZE);
+
+            g.setColor(Color.WHITE);
+            g.drawString("Number of spells :", SPRITESIZE*TILESIZE,13*SPRITESIZE*TILESIZE);
+            g.setColor(Color.MAGENTA);
+            g.drawString(String.valueOf(hero.getSpellList().size()), SPRITESIZE*TILESIZE,14*SPRITESIZE*TILESIZE);
+
+
+
+
         } catch (Exception e) {
             System.out.println("ERREUR d'affichage du menu");
             e.printStackTrace();

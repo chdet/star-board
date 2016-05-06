@@ -24,7 +24,7 @@ public class Trap extends Item{
 	}
 	
 	public void setEffect(String effect) {
-		if(effect == "stun" || effect == "snare" || effect == "DOT"){
+		if(effect.equals("stun" )|| effect.equals("snare") || effect.equals("DOT")){
 			this.effect = effect;
 		}
 		else{

@@ -4,6 +4,7 @@ import Model.*;
 
 import javax.swing.*;
 
+import java.awt.*;
 import java.awt.event.KeyListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,6 +31,7 @@ public class Window  implements  Runnable{
 	    frame.setUndecorated(false);
 		frame.setResizable(false);
 		frame.setVisible(true);
+		frame.setBackground(Color.WHITE);
 
 	    frame.getContentPane().add(getMenu());
 	    frame.pack();

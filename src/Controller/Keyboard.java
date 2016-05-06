@@ -35,16 +35,16 @@ public class Keyboard implements KeyListener{
 			case KeyEvent.VK_SPACE:
 				game.getHero().attack();
 				break;
-			case KeyEvent.VK_1:
+			case KeyEvent.VK_U:
 				game.getHero().setCurrentSpell(0);
 				break;
-			case KeyEvent.VK_2:
+			case KeyEvent.VK_I:
 				game.getHero().setCurrentSpell(1);
 				break;
-			case KeyEvent.VK_3:
+			case KeyEvent.VK_O:
 				game.getHero().setCurrentSpell(2);
 				break;
-			case KeyEvent.VK_4:
+			case KeyEvent.VK_P:
 				game.getHero().setCurrentSpell(3);
 				break;
 			case KeyEvent.VK_5:

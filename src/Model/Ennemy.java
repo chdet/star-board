@@ -36,7 +36,8 @@ public class Ennemy extends AICreature{
 		int[] pos = getPos();
 		int[] enemyPos = null;
 		try{
-			enemyPos = game.closestEnemy(this).getPos();
+			enemyPos = getGame().closestEnemy(this).getPos();
+			System.out.println(enemyPos[0]);
 
 		}catch(NullPointerException e){}	//No close enemies
 		if(enemyPos != null){
@@ -79,14 +80,14 @@ public class Ennemy extends AICreature{
 				int direction = 0;
 				do{
 					direction = random.nextInt(4);	//4 Directions (the argument of nextInt is exclusive)
-				}while(game.doesCollide(this.inDirection(direction)));
+				}while(getGame().doesCollide(this.inDirection(direction)));
 				this.move(direction);
 			}
 		}else{
 			int direction = 0;
 			do{
 				direction = random.nextInt(4);	//4 Directions (the argument of nextInt is exclusive)
-			}while(game.doesCollide(this.inDirection(direction)));
+			}while(getGame().doesCollide(this.inDirection(direction)));
 			this.move(direction);
 		}
 
@@ -96,19 +97,19 @@ public class Ennemy extends AICreature{
 		if(dX !=0){
 			for(int i = 1; i < Math.abs(dX); i++){
 				if(dX > 0){
-					if(game.doesCollide(new int[]{getPos()[0]+i,getPos()[1]})){return true;}
+					if(getGame().doesCollide(new int[]{getPos()[0]+i,getPos()[1]})){return true;}
 				}else if (dX < 0){
-					if(game.doesCollide(new int[]{getPos()[0]-i,getPos()[1]})){return true;}
+					if(getGame().doesCollide(new int[]{getPos()[0]-i,getPos()[1]})){return true;}
 				}
 			}
 		}
 		if(dY != 0){
 			for(int i = 1; i < Math.abs(dY); i++){
 				if(dY > 0){
-					if(game.doesCollide(new int[]{getPos()[0],getPos()[1]+i})){return true;}
+					if(getGame().doesCollide(new int[]{getPos()[0],getPos()[1]+i})){return true;}
 
 				}else if (dY < 0){
-					if(game.doesCollide(new int[]{getPos()[0],getPos()[1]-i})){return true;}
+					if(getGame().doesCollide(new int[]{getPos()[0],getPos()[1]-i})){return true;}
 				}
 			}
 		}

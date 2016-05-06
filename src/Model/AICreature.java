@@ -5,8 +5,8 @@ package Model;
  * Date : 29-04-16
  */
 public abstract class AICreature extends Creature implements Runnable {
-	private int WAIT = 250;
-    private int WAITMin = 250;
+	private int WAIT = 300;
+    private int WAITMin = 300;
     private boolean active = true;
 	
     private int hostility;          //0 is neutral; 1 is hostile; 2 is friendly

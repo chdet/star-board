@@ -11,6 +11,7 @@ public class Dungeon implements Serializable{
     private Terrain[][] terrainMatrix;
     private int[] startPoint; //Position the hero starts at
     private ArrayList<Creature> creatures = new ArrayList<>();
+    private ArrayList<Trap> traps = new ArrayList<>();
     private int roomCount;
 
     public Dungeon(int[] size){
@@ -69,10 +70,18 @@ public class Dungeon implements Serializable{
         return creatures;
     }
 
+    public ArrayList<Trap> getTraps() {    //Called when Game loads Dungeon
+        return traps;
+    }
+
     public void addCreatures(Creature[] creatures) {
         for(Creature creature : creatures){
             this.creatures.add(creature);
         }
+    }
+
+    public void addTrap(Trap trap) {
+        this.traps.add(trap);
     }
 
     public int[] getStartPoint() {

@@ -11,12 +11,12 @@ public abstract class Creature extends Moving{
 	private Integer manaMax;
 	private Float attack;
 	private Float defense;
-	private int range; //Vision range
-	
+
 	private String status = "";
     private long statusBegin = 0;
     private float statusDuration = 0;
     private int DOTStep; // La nombre de fois que des HP ont �t� retir� par un m�me DOT
+	private int DOTDamage;
 	
 	private int currentSpell;
 	private ArrayList<String> spellList = new ArrayList<String>();
@@ -175,7 +175,15 @@ public abstract class Creature extends Moving{
 			this.statusDuration = statusDuration;
 		}
 	}
-	
+
+	public int getDOTDamage() {
+		return DOTDamage;
+	}
+
+	public void setDOTDamage(int DOTDamage) {
+		this.DOTDamage = DOTDamage;
+	}
+
 	public int getDOTStep() {
 		return DOTStep;
 	}
@@ -188,10 +196,14 @@ public abstract class Creature extends Moving{
 			System.out.println("Incoh�rence DOTStep");
 		}
 	}
-	
-	public void setCurrentSpell(int currentSpell) {
-		if (currentSpell < spellList.size()){
-			this.currentSpell = currentSpell;
+
+    public int getCurrentSpell() {
+        return currentSpell;
+    }
+
+    public void setCurrentSpell(int currentSpell) {
+        if (currentSpell < spellList.size()){
+            this.currentSpell = currentSpell;
 		}
 	}
 	
@@ -200,8 +212,9 @@ public abstract class Creature extends Moving{
 	}
 
 	public void addToSpellList(String spell) {
-		if(spell == "Laser" || spell == "Force" || spell == "Rally" || spell == "Spike" || spell == "Ice"){
-			spellList.add(spell);
+		if(spell.equals("Laser" )|| spell.equals("Force") || spell.equals("Rally") || spell.equals("Spike") || spell.equals("Ice")){
+            System.out.println("Sort ajouté");
+            spellList.add(spell);
 		}
 		else{
 			System.out.println("Sort incorrect");
@@ -249,7 +262,7 @@ public abstract class Creature extends Moving{
 		System.out.println("Sort");
 		switch (spell){
 		case "Laser" : 
-			projectile.setDamage(/*level * */0);
+			projectile.setDamage(2);
 			projectile.setEffect("DOT");
 			projectile.setAoe(1);
 			projectile.setManaCost(5);
@@ -259,7 +272,7 @@ public abstract class Creature extends Moving{
 			projectile.setWAIT(0);
 			projectile.setDamage(0);
 			projectile.setEffect("push");
-			projectile.setAoe(2);
+			projectile.setAoe(4);
 			projectile.setManaCost(5);
 			break;
 			
@@ -273,14 +286,14 @@ public abstract class Creature extends Moving{
 		
 		case "Spike":
 			projectile.setDamage(0);
-			projectile.setEffect("stun");
+			projectile.setEffect("slow");
 			projectile.setAoe(1);
 			projectile.setManaCost(5);
 			break;
 		
 		case "Ice":
 			projectile.setDamage(0);
-			projectile.setEffect("snare");
+			projectile.setEffect("stun");
 			projectile.setAoe(2);
 			projectile.setManaCost(5);
 			break;
