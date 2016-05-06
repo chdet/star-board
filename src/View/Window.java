@@ -3,37 +3,45 @@ package View;
 import Model.*;
 
 import javax.swing.*;
-import java.awt.*;
+
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class Window  implements  Runnable{
+	private JFrame frame = new JFrame("StarBoard");
+	private Game game;
+	private Menu menu = new Menu(this);
 	private Map map = new Map();
-	
+	private Inventory inventory = new Inventory();
+	private Dungeon currentDungeon;
+
     private static final int FPS = 60; //Frames per second
 
-	public Window(Game game){
-	    JFrame frame = new JFrame("StarBoard");
+	public Window(){
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.getContentPane().add(this.map);
 
 //	    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	    frame.setUndecorated(false);
 		frame.setResizable(false);
-	    frame.setVisible(true);
-	    buildMap(game.getTerrainMatrix());
-		setCreatures(game.getCreatures());
-		setProjectiles(game.getProjectiles());
-		setHero(game.getHero());
-		frame.pack();
+		frame.setVisible(true);
+
+	    frame.getContentPane().add(getMenu());
+	    frame.pack();
 	}
 
     public void run(){
 		while(true){
 			try {
+				if(this.currentDungeon != game.getDungeon()){
+					this.currentDungeon= game.getDungeon();
+					buildMap(game.getTerrainMatrix());
+					setCreatures(game.getCreatures());
+				}
 				refreshMap();
 				Thread.sleep(1000/FPS);
-			}catch (Exception e){}
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 }
 
@@ -41,7 +49,31 @@ public class Window  implements  Runnable{
 		this.map.buildMap(terrainMatrix);
 	}
 
-    public void setCreatures(ArrayList<Creature> creatures){
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public Inventory getInventory() {
+		return inventory;
+	}
+
+	public Map getMap() {
+		return map;
+	}
+
+	public  void setGame(Game game){
+		this.game = game;
+	}
+
+	public void setCurrentDungeon(Dungeon dungeon){
+		this.currentDungeon = dungeon;
+	}
+
+	public void setCreatures(ArrayList<Creature> creatures){
         this.map.setCreatures(creatures);
     }
 
@@ -60,4 +92,5 @@ public class Window  implements  Runnable{
 	public void setKeyListener(KeyListener keyboard){
 	    this.map.addKeyListener(keyboard);
 	}
+
 }

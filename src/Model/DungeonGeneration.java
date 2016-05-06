@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.Random;
+import java.lang.Math;
 
 /**
  * Creator :  Charles
@@ -9,6 +10,7 @@ import java.util.Random;
 public class DungeonGeneration {
     private static class Room {
         private Terrain type = new Terrain("Floor", false);
+        private Creature[] creatures;
         private int x1,x2,y1,y2;
 
         private int w;
@@ -17,6 +19,7 @@ public class DungeonGeneration {
         private int[] center;
 
         Room(int x1, int y1, int w, int h) {
+
             this.x1 = x1;
             this.x2 = x1 + w;
             this.y1 = y1;
@@ -30,6 +33,35 @@ public class DungeonGeneration {
             return center;
         }
 
+        public int getX1() {
+            return x1;
+        }
+
+        public int getY1() {
+            return y1;
+        }
+
+        public int getW() {
+            return w;
+        }
+
+        public int getH() {
+            return h;
+        }
+
+        void setCreatures(Creature[] creatures) {
+            this.creatures = creatures;
+        }
+
+        boolean isOccupied(int[] pos){
+            if(creatures != null){
+                for(Creature creature : creatures){
+                    if(creature.getPos() == pos){return true;}
+                }
+            }
+            return  false;
+        }
+
         boolean intersects(Room room){
             return (x1 <= room.x2 && x2 >= room.x1 &&
                     y1 <= room.y2 && room.y2 >= room.y1);
@@ -37,6 +69,12 @@ public class DungeonGeneration {
 
         void carve(Dungeon dun){
             dun.modifyArea(new int[]{x1,y1}, new int[]{x2,y2}, type);
+        }
+
+        void populate(Dungeon dun){
+            if(creatures != null){
+                dun.addCreatures(creatures);
+            }
         }
     }
 
@@ -68,6 +106,22 @@ public class DungeonGeneration {
         dungeon.setStartPoint(rooms[0].center);
     }
 
+    private static void populateRoom(Room room){
+        Random random = new Random();
+        int creatureCount = Math.round((room.getW()*room.getH())/25);   //1 Creature in minimum sized room (5*5)
+        Creature[] creatures = new Creature[creatureCount];
+        for(int i = 0; i < creatureCount; i++){
+            int[] pos;
+            do{
+                int x = random.nextInt(room.getW())+room.getX1();
+                int y = random.nextInt(room.getH())+room.getY1();
+                pos = new int[]{x,y};
+            }while(room.isOccupied(pos));
+            creatures[i] = new Ennemy(pos, 3,0,1f,1f);
+        }
+        room.setCreatures(creatures);
+    }
+
     public static Dungeon generateRandomDungeon(int numberOfRooms){
         Random random = new Random();
         Room[] rooms = new Room[numberOfRooms];
@@ -94,7 +148,11 @@ public class DungeonGeneration {
                 int roomY = random.nextInt(dunSize[1]-roomH-1)+1;
                 rooms[i] = new Room(roomX,roomY, roomW, roomH);
             }while(intersectsPreviousRooms(rooms, i));
+            if(i > 0){
+                populateRoom(rooms[i]);
+            }
             rooms[i].carve(dun);
+            rooms[i].populate(dun);
         }
 
         for(int j = 0; j < numberOfRooms-1; j++){
@@ -103,7 +161,7 @@ public class DungeonGeneration {
         }
 
         setStart(rooms, dun);
-
+        dun.setRoomCount(numberOfRooms);
         return dun;
     }
 }

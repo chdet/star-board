@@ -2,39 +2,44 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Game implements Runnable{
-	private Dungeon dungeon;
+public class Game{
     private Hero hero;
 	private ArrayList<Projectile> projectiles = new ArrayList<>();
 	private boolean[][] collisionMap;
 
 	//Dungeon
+	private Dungeon dungeon;
 	private ArrayList<Creature> creatures;
     private Terrain[][] terrainMatrix;
+
+    private Status status;
 
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
 	public static final int UP = 2;
 	public static final int DOWN = 3;
 
-	public Game(Dungeon dungeon){
-		this.dungeon = dungeon;
+	public Game(String heroClass, int roomCount){
+		dungeon = DungeonGeneration.generateRandomDungeon(roomCount);
         this.terrainMatrix = dungeon.getTerrainMatrix();
         this.collisionMap = new boolean[terrainMatrix.length][terrainMatrix[0].length];
-		this.hero = new Hero(this, 150, 150000, 5f, 1500f);
-		this.hero.setPos(dungeon.getStartPoint());
-		this.creatures = dungeon.getCreatures(this);	//Sets the Creatures "Game" attribute to this instance
-        this.addCreature(hero);
 
-        //this.addCreature(new Ennemy(this, new int[]{1,1}, 15, 15,1f, 1500f));
-		//this.addCreature(new Ennemy(this, new int[]{2,1}, 15, 0,1f, 1f));
-		//this.addCreature(new Ennemy(this, new int[]{3,1}, 15, 0,1f, 1f));
+        switch(heroClass){
+        case "New Game: Jedi":
+        	this.hero = new Jedi(this, dungeon.getStartPoint());
+        	break;
+        case "New Game: Sith":
+        	this.hero = new Sith(this, dungeon.getStartPoint());
+        	break;
+        }
 
-        updateColMap();
-		startAI();  //ATTENTION startAI APRES updateColMap sinon les IA marchent dans les murs
+		this.creatures = dungeon.getCreatures(this);
+		this.addCreature(hero);
 
-        Thread t = new Thread(this);
-        t.start();
+		status = new Status(this.creatures);
+
+		updateColMap();
+        startAI();
 	}
 
 	void updateColMap(){
@@ -60,12 +65,13 @@ public class Game implements Runnable{
 		this.creatures = dungeon.getCreatures(this);
 		this.addCreature(hero);
 		updateColMap();
-        startAI(); //ATTENTION startAI APRES updateColMap sinon les IA marchent dans les murs
+		startAI();
+
 	}
 
     void moveColMap(int[] pos, int[] newPos){
         collisionMap[pos[0]][pos[1]] = terrainMatrix[pos[0]][pos[1]].getCollision();
-        //Il ne faut pas gï¿½nï¿½rer un moving sur une entitï¿½, sinon elle n'est plus pris en compte aprï¿½s.
+        //Il ne faut pas générer un moving sur une entité, sinon elle n'est plus pris en compte après.
         collisionMap[newPos[0]][newPos[1]] = true;
     }
     
@@ -126,7 +132,7 @@ public class Game implements Runnable{
     void removeCreature(Creature creature){
         this.creatures.remove(creature);
 		if(this.creatures.size() == 1 && this.creatures.contains(this.hero)){
-			changeDungeon(DungeonGeneration.generateRandomDungeon(5));
+			changeDungeon(DungeonGeneration.generateRandomDungeon(dungeon.getRoomCount()+1));
 		}
     }
     
@@ -145,6 +151,42 @@ public class Game implements Runnable{
         return collisionMap[pos[0]][pos[1]];
     }
 
+	int[] closestEnemy(AICreature aiCreature){
+		/*	Return the position of the closest enemy to the AICreature, if there is none,
+		*  returns the creatures' own position */
+		int[] pos = aiCreature.getPos();
+		int range = 10; //TODO: AJOUTER RANGE DANS LE CONSTRUCTEUR DE CREATURE
+		int behavior= aiCreature.getHostility();
+		int[] enemyPos;
+		if(behavior == AICreature.HOSTILE && getHero().distanceTo(pos) < range) {
+			enemyPos = new int[]{getHero().getPos()[0],getHero().getPos()[1]};
+			return  enemyPos;
+		}
+		else if(behavior == AICreature.FRIENDLY) {
+			double[] temp;    //Holds the position of the current ennemy and its distance.
+			double[] tempClosest = null; //Holds the position of the current closest ennemy and its distance.
+			try {
+				for (Creature creature : this.creatures) {
+					temp = new double[]{creature.getPos()[0], creature.getPos()[1], creature.distanceTo(pos)};
+					if (temp[2] < range) {    //temp[2] is the distance to pos
+						if (tempClosest == null) {
+							tempClosest = temp;
+						} else if (temp[2] < tempClosest[2]) {
+							tempClosest = temp;
+						}
+					}
+				}
+				enemyPos = new int[]{(int) tempClosest[0], (int) tempClosest[1]};
+				return enemyPos;
+			} catch (NullPointerException e) {    //In case there are no enemies close and tempClosest is null
+				return pos;
+			}
+		}
+		else{
+			return pos;		//In this case no movement is made
+		}
+		}
+
 	public void damage(Projectile projectile) {
 		ArrayList<int[]> aoePos = new ArrayList<int[]>();
 		int[] center = projectile.inFront();
@@ -161,44 +203,43 @@ public class Game implements Runnable{
 		for(int[] pos : aoePos){
 			for(int i = 0; i< creatures.size(); i++){
 					if(pos[0] == creatures.get(i).getPos()[0] && pos[1] == creatures.get(i).getPos()[1]){
-					System.out.println("touchï¿½ par un projectile");
+					System.out.println("touché par un projectile");
 					if(creatures.get(i) instanceof AICreature){
 						((AICreature)(creatures.get(i))).setHostility(AICreature.HOSTILE);
 					}
-					creatures.get(i).setHP((int)(creatures.get(i).getHP() - projectile.getDamage()/creatures.get(i).getDefense()));
-					
-										
-					switch(projectile.getEffect()){
-					case "push" :
-						for(int j = 0; j < 5; j++){
-							creatures.get(i).move(projectile.getOrient());
+					if (creatures.get(i).getStatus() == ""){
+						switch(projectile.getEffect()){
+						case "push" :
+							for(int j = 0; j < 5; j++){
+								creatures.get(i).move(projectile.getOrient());
+							}
+							break;
+
+						case "rally" :
+							if(creatures.get(i) instanceof AICreature){
+								((AICreature)(creatures.get(i))).setHostility(AICreature.FRIENDLY);
+							}
+							break;
+
+						case "stun" :
+							creatures.get(i).setStatus("stun");
+							creatures.get(i).setStatusBegin(System.currentTimeMillis());
+							creatures.get(i).setStatusDuration(5000f);
+							break;
+
+						case "snare" :
+							creatures.get(i).setStatus("snare");
+							creatures.get(i).setStatusBegin(System.currentTimeMillis());
+							creatures.get(i).setStatusDuration(5000f);
+							break;
+
+						case "DOT" :
+							creatures.get(i).setStatus("DOT");
+							creatures.get(i).setStatusBegin(System.currentTimeMillis());
+							creatures.get(i).setStatusDuration(5000f);
+							break;
+
 						}
-						break;
-						
-					case "rally" : 
-						if(creatures.get(i) instanceof AICreature){
-							((AICreature)(creatures.get(i))).setHostility(AICreature.FRIENDLY);
-						}
-						break;
-					
-					case "stun" : 
-						creatures.get(i).setStatus("stun");
-						creatures.get(i).setStatusBegin(System.currentTimeMillis());
-						creatures.get(i).setStatusDuration(20000f);
-						break;
-					
-					case "snare" :
-						creatures.get(i).setStatus("snare");
-						creatures.get(i).setStatusBegin(System.currentTimeMillis());
-						creatures.get(i).setStatusDuration(5000f);
-						break;
-					
-					case "DOT" :
-						creatures.get(i).setStatus("DOT");
-						creatures.get(i).setStatusBegin(System.currentTimeMillis());
-						creatures.get(i).setStatusDuration(5000f);
-						break;
-					
 					}
 					creatures.get(i).setHP((int)(creatures.get(i).getHP() - projectile.getDamage()/creatures.get(i).getDefense()));
 				}
@@ -209,85 +250,8 @@ public class Game implements Runnable{
 	public void damage(Creature attacker){
 		for(int i = 0; i< creatures.size(); i++){
 			if(attacker.inFront()[0] == creatures.get(i).getPos()[0] && attacker.inFront()[1] == creatures.get(i).getPos()[1]){
-				System.out.println("touchï¿½ au corps ï¿½ corps");
+				System.out.println("touché au corps à corps");
 				creatures.get(i).setHP((int)(creatures.get(i).getHP() - attacker.getAttack()/creatures.get(i).getDefense()));
-			}
-		}
-	}
-	
-	private void checkStatus() { //TODO Si on veut que le hero subisse aussi des statuts faut que ce soit un thread (on implement Runnable dans Moving et y met tous les getWAIT,... et on rtire les cast)
-		for(int i = 1 /*0*/; i < creatures.size(); i++){
-			if(creatures.get(i).getStatus() != ""){
-				if(creatures.get(i).getStatusDuration() + 50 >= System.currentTimeMillis() - creatures.get(i).getStatusBegin()){
-					switch(creatures.get(i).getStatus()){
-					case "stun": 
-						((AICreature) creatures.get(i)).setWAIT((int) (((AICreature) creatures.get(i)).getWAIT()*1.05));
-						break;
-						
-					case "snare": 
-						((AICreature) creatures.get(i)).setWAIT((int)(creatures.get(i).getStatusDuration()));
-						break;
-					
-					case "DOT":
-						float x = 3f; //nombre de fois qu'on va subir des dï¿½gï¿½ts
-						if(creatures.get(i).getDOTStep() < x){
-							if((System.currentTimeMillis() - creatures.get(i).getStatusBegin())/creatures.get(i).getStatusDuration() >= (creatures.get(i).getDOTStep() + 1)/x){
-								creatures.get(i).setDOTStep(creatures.get(i).getDOTStep() + 1);
-								creatures.get(i).setHP((int) (creatures.get(i).getHP() - 0.2*creatures.get(i).getHPMax()));
-								try{
-									System.out.println("HP: " + creatures.get(i).getHP());
-									System.out.println("STEP: " + creatures.get(i).getDOTStep());
-									System.out.println("Ecoulï¿½: " + ( System.currentTimeMillis() - creatures.get(i).getStatusBegin() ));
-									System.out.println("Portion: " + ( System.currentTimeMillis() - creatures.get(i).getStatusBegin() )/creatures.get(i).getStatusDuration());
-									System.out.println("Duration: " + creatures.get(i).getStatusDuration());
-								}
-								catch(Exception e){
-									System.out.println("L'ennemi est surement deja mort");
-									e.printStackTrace();  
-								}
-								
-							}
-						}
-						/*
-						if(creatures.get(i).getStatusDuration()/3 >= (System.currentTimeMillis() - creatures.get(i).getStatusBegin())%3){
-							creatures.get(i).setLastDOT(System.currentTimeMillis());
-							creatures.get(i).setHP((int) (creatures.get(i).getHP() - 0.05*creatures.get(i).getHPMax()));
-							//System.out.println(creatures.get(i).getHP());
-						}*/
-						
-						break;
-					}
-				}
-				else{
-					try{
-						System.out.println("FIN: " + ( System.currentTimeMillis() - creatures.get(i).getStatusBegin() ));
-						System.out.println("HP: " + creatures.get(i).getHP());
-						creatures.get(i).setStatus("");
-						creatures.get(i).setStatusBegin(0);
-						creatures.get(i).setStatusDuration(0);
-						((AICreature) creatures.get(i)).setWAIT(((AICreature) creatures.get(i)).getWAITMin());
-						creatures.get(i).setDOTStep(0);
-						System.out.println("Fin d'effet");
-					}
-					catch(Exception e){
-						System.out.println("L'ennemi est surement deja mort");
-						e.printStackTrace();  
-					}
-					
-				}
-			}
-		}
-	}
-
-	@Override
-	public void run() {
-		while(getHero().alive){
-			try {
-				checkStatus();
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				System.out.println("ERREUR STATUS");
-				e.printStackTrace();
 			}
 		}
 	}

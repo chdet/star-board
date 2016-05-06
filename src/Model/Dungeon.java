@@ -10,6 +10,7 @@ public class Dungeon {
     private Terrain[][] terrainMatrix;
     private int[] startPoint; //Position the hero starts at
     private ArrayList<Creature> creatures = new ArrayList<>();
+    private int roomCount;
 
     public Dungeon(int[] size){
         Terrain wall = new Terrain("Wall", true);
@@ -48,12 +49,29 @@ public class Dungeon {
         }
     }
 
+    public int getRoomCount() {
+        return roomCount;
+    }
+
+    public void setRoomCount(int roomCount) {
+        this.roomCount = roomCount;
+    }
+
     public Terrain[][] getTerrainMatrix() {
         return terrainMatrix;
     }
 
-    public ArrayList<Creature> getCreatures() {
+    public ArrayList<Creature> getCreatures(Game game) {    //Called when Game loads Dungeon
+        for(Creature creature : this.creatures){
+            creature.setGame(game);
+        }
         return creatures;
+    }
+
+    public void addCreatures(Creature[] creatures) {
+        for(Creature creature : creatures){
+            this.creatures.add(creature);
+        }
     }
 
     public int[] getStartPoint() {

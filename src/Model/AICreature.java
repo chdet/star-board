@@ -7,6 +7,7 @@ package Model;
 public abstract class AICreature extends Creature implements Runnable {
 	private int WAIT = 250;
     private int WAITMin = 250;
+    private boolean active = true;
 	
     private int hostility;          //0 is neutral; 1 is hostile; 2 is friendly
 
@@ -17,6 +18,10 @@ public abstract class AICreature extends Creature implements Runnable {
 
     public AICreature(Game game, int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
         super(game, pos, HPMax, manaMax, attack, defense);
+    }
+
+    public AICreature(int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
+        super(pos, HPMax, manaMax, attack, defense);
     }
     
     public int getWAIT() {
@@ -47,11 +52,15 @@ public abstract class AICreature extends Creature implements Runnable {
         this.hostility = hostility;
     }
 
+    public void setActive(boolean active){
+        this.active = active;
+    }
+
     protected abstract void nextAction();       //Problème d'accès ici. Pour redéfinir nextAction dans les sous-classes, la méthode doit être au plus protected -> tout Model peut acceder à nextAction -> Problème
 
     @Override
     public void run(){
-        while(alive){
+        while(alive && active){
             try{
                 nextAction();
                 Thread.sleep(WAIT);

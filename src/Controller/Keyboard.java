@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.DungeonGeneration;
 import Model.Game;
 import Model.Projectile;
 
@@ -52,6 +53,8 @@ public class Keyboard implements KeyListener{
 			case KeyEvent.VK_CONTROL:
 				game.getHero().useSpell();
 				break;
+			case KeyEvent.VK_F5:
+				game.changeDungeon(DungeonGeneration.generateRandomDungeon(5));
 		}
 	}
 

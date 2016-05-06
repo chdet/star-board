@@ -7,9 +7,18 @@ public class Ennemy extends AICreature{
 		setHostility(HOSTILE);
 		setSprite("TrooperDown");
 	}
+
+	public Ennemy(int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
+		super(pos, HPMax, manaMax, attack, defense);
+		setHostility(HOSTILE);
+		setSprite("TrooperDown");
+	}
+
 	
 	protected void setOrient(int orient) {
-        this.orient = orient;
+		if(0 <= orient && orient < 4){
+			this.orient = orient;
+		}
         
         switch(orient){
         case Game.LEFT: setSprite("TrooperLeft"); break;

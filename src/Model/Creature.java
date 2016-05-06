@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.lang.Math;
 
 public abstract class Creature extends Moving{
 	boolean alive = true;
@@ -10,6 +11,7 @@ public abstract class Creature extends Moving{
 	private Integer manaMax;
 	private Float attack;
 	private Float defense;
+	private int range; //Vision range
 	
 	private String status = "";
     private long statusBegin = 0;
@@ -17,7 +19,7 @@ public abstract class Creature extends Moving{
     private int DOTStep; // La nombre de fois que des HP ont été retiré par un même DOT
 	
 	private int currentSpell;
-	protected ArrayList<String> spellList = new ArrayList<String>();
+	private ArrayList<String> spellList = new ArrayList<String>();
     
 	public Creature(Game game, int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){
 		super(game, pos, Game.DOWN);
@@ -27,17 +29,34 @@ public abstract class Creature extends Moving{
 		setMana(this.manaMax);
 		setAttack(attack);
 		setDefense(defense);
-		
+
 		spellList.add("Laser");
-		if(this instanceof Hero){ //à changer
-			spellList.add("Force");
-			spellList.add("Rally");	
-			spellList.add("Spike");
-			spellList.add("Ice");
-		}
 		setCurrentSpell(0);
 	}
 
+	public Creature(int[] pos, Integer HPMax, Integer manaMax, Float attack, Float defense){	//Used to generate dungeons
+		super(pos, Game.DOWN);
+		setHPMax(HPMax);
+		setHP(this.HPMax);
+		setManaMax(manaMax);
+		setMana(this.manaMax);
+		setAttack(attack);
+		setDefense(defense);
+
+		spellList.add("Laser");
+		setCurrentSpell(0);
+	}
+
+	public synchronized void  move(int orient){
+		setOrient(orient);
+		int[] pos = getPos();
+		int[] newPos = inFront();
+
+		if(!game.doesCollide(newPos)){
+			this.setPos(newPos);
+			game.moveColMap(pos, newPos);
+		}
+	}
 	
     public  Integer getHP() {
 		return HP;
@@ -101,7 +120,6 @@ public abstract class Creature extends Moving{
 		return attack;
 	}
 
-
 	public void setAttack(Float attack) {
 		if(attack >= 0){
 			this.attack = attack;
@@ -156,9 +174,13 @@ public abstract class Creature extends Moving{
 		return DOTStep;
 	}
 
-
 	public void setDOTStep(int DOTStep) {
-		this.DOTStep = DOTStep;
+		if(DOTStep >= 0){
+			this.DOTStep = DOTStep;
+		}
+		else{
+			System.out.println("Incohérence DOTStep");
+		}
 	}
 	
 	public void setCurrentSpell(int currentSpell) {
@@ -166,15 +188,34 @@ public abstract class Creature extends Moving{
 			this.currentSpell = currentSpell;
 		}
 	}
-		
-	public void die(){
-		if(!(this instanceof Hero)){
-			this.alive = false;
-	    	game.moveColMap(getPos());
-	    	game.removeCreature(this);
+	
+	public ArrayList<String> getSpellList() {
+		return spellList;
+	}
+
+	public void addToSpellList(String spell) {
+		if(spell == "Laser" || spell == "Force" || spell == "Rally" || spell == "Spike" || spell == "Ice"){
+			spellList.add(spell);
 		}
 		else{
-			this.alive = false;
+			System.out.println("Sort incorrect");
+		}
+	}
+	
+	public void die(){
+		this.alive = false;
+		if(!(this instanceof Hero)){
+	    	game.moveColMap(getPos());
+	    	game.removeCreature(this);
+	    	game.getHero().setExp((int)(game.getHero().getExp() + 25)); //Si on a le temps: des ennemis plus fort donnent plus d'exp
+	    	if (game.getHero().getExp() > 100/* * game.getHero().getLevel() */){
+	    		System.out.println("Taille AVANT: " + game.getHero().getSpellList().size());
+	    		game.getHero().levelUp();
+	    		System.out.println("LEVEL UP: " + game.getHero().getLevel());
+	    		System.out.println("Taille APRES: " + game.getHero().getSpellList().size());
+	    	}
+		}
+		else{
 	    	game.moveColMap(getPos());
 	    	game.removeCreature(this);
 	    	System.out.println("mort");
@@ -188,7 +229,7 @@ public abstract class Creature extends Moving{
 	
 	public void useSpell(){
 		String spell = spellList.get(currentSpell);
-		Projectile projectile = new Projectile(game, getPos(), getOrient(), spell);
+		Projectile projectile = new Projectile(game, inFront(), getOrient(), spell);
 		
 		switch (spell){
 		case "Laser" : 
@@ -207,14 +248,15 @@ public abstract class Creature extends Moving{
 			break;
 			
 		case "Rally":
+			projectile.setWAIT(0);
 			projectile.setDamage(0);
 			projectile.setEffect("");
-			projectile.setAoe(2);
-			projectile.setManaCost(5);
+			projectile.setAoe(1);
+			projectile.setManaCost(50);
 			break;
 		
 		case "Spike":
-			projectile.setDamage(3);
+			projectile.setDamage(5);
 			projectile.setEffect("stun");
 			projectile.setAoe(1);
 			projectile.setManaCost(5);
@@ -236,6 +278,10 @@ public abstract class Creature extends Moving{
 		else{
 			projectile = null;
 		}
+	}
+
+	public double distanceTo(int[] pos){
+		return(Math.sqrt((this.getPos()[0]-pos[0])^2+(this.getPos()[1]-pos[1])^2));
 	}
 	
 }

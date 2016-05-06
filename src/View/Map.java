@@ -40,10 +40,16 @@ public class Map extends JPanel{
 		try{
 			this.img.put("Floor",ImageIO.read(new File("Floor.png")));
 			this.img.put("Wall",ImageIO.read(new File("Wall.png")));
+			
 			this.img.put("JediLeft",ImageIO.read(new File("JediLeft.png")));
 			this.img.put("JediRight",ImageIO.read(new File("JediRight.png")));
 			this.img.put("JediUp",ImageIO.read(new File("JediUp.png")));
 			this.img.put("JediDown",ImageIO.read(new File("JediDown.png")));
+			
+			this.img.put("SithLeft",ImageIO.read(new File("SithLeft.png")));
+			this.img.put("SithRight",ImageIO.read(new File("SithRight.png")));
+			this.img.put("SithUp",ImageIO.read(new File("SithUp.png")));
+			this.img.put("SithDown",ImageIO.read(new File("SithDown.png")));
 			
 			this.img.put("TrooperDown",ImageIO.read(new File("TrooperDown.png")));
             this.img.put("TrooperUp",ImageIO.read(new File("TrooperUp.png")));
@@ -92,6 +98,13 @@ public class Map extends JPanel{
         	int x = creatures.get(i).getPos()[0];
             int y = creatures.get(i).getPos()[1];
             g.drawImage(img.get(creatures.get(i).getSprite()), (x-heroPos[0]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, (y-heroPos[1]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE), SPRITESIZE * TILESIZE, SPRITESIZE * TILESIZE, null);
+            g.setColor(Color.RED);
+            g.fillRect((x-heroPos[0]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, (y-heroPos[1]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE) - 15, SPRITESIZE*TILESIZE*(creatures.get(i).getHP())/(creatures.get(i).getHPMax()), 5);
+            g.setColor(Color.BLUE);
+            if(creatures.get(i).getManaMax() > 0){
+                g.fillRect((x-heroPos[0]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE, (y-heroPos[1]+(TILES_PER_AXIS/2)) * SPRITESIZE * TILESIZE - (HEROHEIGHT - SPRITESIZE) - 10, SPRITESIZE*TILESIZE*(creatures.get(i).getMana())/(creatures.get(i).getManaMax()), 5);
+
+            }
         }
         
         for(int i = 0; i< projectiles.size(); i++){
